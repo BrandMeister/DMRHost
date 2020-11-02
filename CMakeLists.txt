@@ -6,7 +6,6 @@ set(APP_NAME "MMDVMHost")
 project(${APP_NAME} CXX)
 
 option(ENABLE_OLED "Enable OLED support" OFF)
-option(ENABLE_ADAFRUIT "Enable Adafruit RGB LCD Shield support" OFF)
 
 if(GIT_VERSION)
   set(GIT_HASH ${GIT_VERSION})
@@ -38,14 +37,6 @@ else()
   list(REMOVE_ITEM SOURCES ${CMAKE_SOURCE_DIR}/OLED.cpp)
   list(REMOVE_ITEM HEADERS ${CMAKE_SOURCE_DIR}/OLED.h)
 endif()
-
-# meh.
-list(REMOVE_ITEM SOURCES ${CMAKE_SOURCE_DIR}/HD44780.cpp)
-list(REMOVE_ITEM HEADERS ${CMAKE_SOURCE_DIR}/HD44780.h)
-
-# more meh
-list(REMOVE_ITEM SOURCES ${CMAKE_SOURCE_DIR}/RemoteCommand.cpp)
-list(REMOVE_ITEM HEADERS ${CMAKE_SOURCE_DIR}/RemoteCommand.h)
 
 add_executable(${APP_NAME} ${SOURCES} ${HEADERS})
 target_link_libraries(${APP_NAME} ${DEPLIBS})

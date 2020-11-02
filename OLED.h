@@ -34,7 +34,6 @@
 #include <string>
 
 #include "ArduiPi_OLED_lib.h"
-#include "Adafruit_GFX.h"
 #include "ArduiPi_OLED.h"
 #include "NetworkInfo.h"
 
@@ -51,24 +50,10 @@ public:
   virtual void setErrorInt(const char* text);
   virtual void setLockoutInt();
   virtual void setQuitInt();
-  virtual void setFMInt();
-  
-  virtual void writeDStarInt(const char* my1, const char* my2, const char* your, const char* type, const char* reflector);
-  virtual void clearDStarInt();
 
   virtual void writeDMRInt(unsigned int slotNo, const std::string& src, bool group, const std::string& dst, const char* type);
   virtual int writeDMRIntEx(unsigned int slotNo, const class CUserDBentry& src, bool group, const std::string& dst, const char* type);
   virtual void clearDMRInt(unsigned int slotNo);
-
-  virtual void writeFusionInt(const char* source, const char* dest, unsigned char dgid, const char* type, const char* origin);
-  virtual void clearFusionInt();
-
-  virtual void writeP25Int(const char* source, bool group, unsigned int dest, const char* type);
-  virtual void clearP25Int();
-
-  virtual void writeNXDNInt(const char* source, bool group, unsigned int dest, const char* type);
-  virtual int writeNXDNIntEx(const class CUserDBentry& source, bool group, unsigned int dest, const char* type);
-  virtual void clearNXDNInt();
 
   virtual void writePOCSAGInt(uint32_t ric, const std::string& message);
   virtual void clearPOCSAGInt();

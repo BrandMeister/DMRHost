@@ -18,31 +18,6 @@
 
 #include "Mutex.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-
-CMutex::CMutex() :
-m_handle()
-{
-	m_handle = ::CreateMutex(NULL, FALSE, NULL);
-}
-
-CMutex::~CMutex()
-{
-	::CloseHandle(m_handle);
-}
-
-void CMutex::lock()
-{
-	::WaitForSingleObject(m_handle, INFINITE);
-}
-
-void CMutex::unlock()
-{
-	::ReleaseMutex(m_handle);
-}
-
-#else
-
 CMutex::CMutex() :
 m_mutex(PTHREAD_MUTEX_INITIALIZER)
 {
@@ -61,5 +36,3 @@ void CMutex::unlock()
 {
 	::pthread_mutex_unlock(&m_mutex);
 }
-
-#endif

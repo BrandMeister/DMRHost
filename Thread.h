@@ -19,11 +19,7 @@
 #if !defined(THREAD_H)
 #define	THREAD_H
 
-#if defined(_WIN32) || defined(_WIN64)
-#include <windows.h>
-#else
 #include <pthread.h>
-#endif
 
 class CThread
 {
@@ -40,17 +36,9 @@ public:
   static void sleep(unsigned int ms);
 
 private:
-#if defined(_WIN32) || defined(_WIN64)
-  HANDLE    m_handle;
-#else
   pthread_t m_thread;
-#endif
 
-#if defined(_WIN32) || defined(_WIN64)
-  static DWORD __stdcall helper(LPVOID arg);
-#else
   static void* helper(void* arg);
-#endif
 };
 
 #endif

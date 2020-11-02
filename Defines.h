@@ -20,14 +20,8 @@
 #define	Defines_H
 
 const unsigned char MODE_IDLE    = 0U;
-const unsigned char MODE_DSTAR   = 1U;
 const unsigned char MODE_DMR     = 2U;
-const unsigned char MODE_YSF     = 3U;
-const unsigned char MODE_P25     = 4U;
-const unsigned char MODE_NXDN    = 5U;
 const unsigned char MODE_POCSAG  = 6U;
-
-const unsigned char MODE_FM      = 10U;
 
 const unsigned char MODE_CW      = 98U;
 const unsigned char MODE_LOCKOUT = 99U;
@@ -70,8 +64,7 @@ enum RPT_NET_STATE {
 
 enum DMR_BEACONS {
 	DMR_BEACONS_OFF,
-	DMR_BEACONS_NETWORK,
-	DMR_BEACONS_TIMED
+	DMR_BEACONS_NETWORK
 };
 
 enum DMR_OVCM_TYPES {

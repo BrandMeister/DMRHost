@@ -24,39 +24,6 @@
 #include <cassert>
 
 #include <sys/types.h>
-
-#if defined(_WIN32) || defined(_WIN64)
-
-#include <setupapi.h>
-#include <winioctl.h>
-
-CI2CController::CI2CController(const std::string& device, SERIAL_SPEED speed, unsigned int address, bool assertRTS) :
-CSerialController(device, speed, assertRTS),
-m_address(address)
-{
-}
-
-CI2CController::~CI2CController()
-{
-}
-
-bool CI2CController::open()
-{
-	return CSerialController::open();
-}
-
-int CI2CController::read(unsigned char* buffer, unsigned int length)
-{
-	return CSerialController::read(buffer, length);
-}
-
-int CI2CController::write(const unsigned char* buffer, unsigned int length)
-{
-	return CSerialController::write(buffer, length);
-}
-
-#else
-
 #include <sys/ioctl.h>
 #include <sys/stat.h>
 #include <cerrno>
@@ -161,5 +128,3 @@ int CI2CController::write(const unsigned char* buffer, unsigned int length)
 
 	return length;
 }
-
-#endif

@@ -26,14 +26,7 @@ public:
 
 	unsigned int regenerateDMR(unsigned char* bytes) const;
 
-	unsigned int regenerateDStar(unsigned char* bytes) const;
-
-	unsigned int regenerateYSFDN(unsigned char* bytes) const;
-
-	unsigned int regenerateIMBE(unsigned char* bytes) const;
-
 private:
-	unsigned int regenerateDStar(unsigned int& a, unsigned int& b) const;
 	unsigned int regenerateDMR(unsigned int& a, unsigned int& b,unsigned int& c) const;
 };
 

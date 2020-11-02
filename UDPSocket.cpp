@@ -19,19 +19,9 @@
 #include "UDPSocket.h"
 
 #include <cassert>
-
-#if !defined(_WIN32) && !defined(_WIN64)
 #include <cerrno>
 #include <cstring>
-#endif
-
-#if defined(HAVE_LOG_H)
 #include "Log.h"
-#else
-#define LogMessage(fmt, ...)	::fprintf(stderr, fmt "\n", ## __VA_ARGS__)
-#define LogError(fmt, ...)	::fprintf(stderr, fmt "\n", ## __VA_ARGS__)
-#define LogInfo(fmt, ...)	::fprintf(stderr, fmt "\n", ## __VA_ARGS__)
-#endif
 
 CUDPSocket::CUDPSocket(const std::string& address, unsigned int port) :
 m_address_save(address),
@@ -65,19 +55,10 @@ CUDPSocket::~CUDPSocket()
 
 void CUDPSocket::startup()
 {
-#if defined(_WIN32) || defined(_WIN64)
-	WSAData data;
-	int wsaRet = ::WSAStartup(MAKEWORD(2, 2), &data);
-	if (wsaRet != 0)
-		LogError("Error from WSAStartup");
-#endif
 }
 
 void CUDPSocket::shutdown()
 {
-#if defined(_WIN32) || defined(_WIN64)
-	::WSACleanup();
-#endif
 }
 
 int CUDPSocket::lookup(const std::string& hostname, unsigned int port, sockaddr_storage& addr, unsigned int& address_length)
@@ -190,11 +171,7 @@ bool CUDPSocket::open(const unsigned int index, const unsigned int af, const std
 
 	int fd = ::socket(addr.ss_family, SOCK_DGRAM, 0);
 	if (fd < 0) {
-#if defined(_WIN32) || defined(_WIN64)
-		LogError("Cannot create the UDP socket, err: %lu", ::GetLastError());
-#else
 		LogError("Cannot create the UDP socket, err: %d", errno);
-#endif
 		return false;
 	}
 
@@ -206,20 +183,12 @@ bool CUDPSocket::open(const unsigned int index, const unsigned int af, const std
 	if (port > 0U) {
 		int reuse = 1;
 		if (::setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *)&reuse, sizeof(reuse)) == -1) {
-#if defined(_WIN32) || defined(_WIN64)
-			LogError("Cannot set the UDP socket option, err: %lu", ::GetLastError());
-#else
 			LogError("Cannot set the UDP socket option, err: %d", errno);
-#endif
 			return false;
 		}
 
 		if (::bind(fd, (sockaddr*)&addr, addrlen) == -1) {
-#if defined(_WIN32) || defined(_WIN64)
-			LogError("Cannot bind the UDP address, err: %lu", ::GetLastError());
-#else
 			LogError("Cannot bind the UDP address, err: %d", errno);
-#endif
 			return false;
 		}
 
@@ -250,17 +219,9 @@ int CUDPSocket::read(unsigned char* buffer, unsigned int length, sockaddr_storag
 		return 0;
 
 	// Return immediately
-#if defined(_WIN32) || defined(_WIN64)
-	int ret = WSAPoll(pfd, n, 0);
-#else
 	int ret = ::poll(pfd, n, 0);
-#endif
 	if (ret < 0) {
-#if defined(_WIN32) || defined(_WIN64)
-		LogError("Error returned from UDP poll, err: %lu", ::GetLastError());
-#else
 		LogError("Error returned from UDP poll, err: %d", errno);
-#endif
 		return -1;
 	}
 
@@ -274,29 +235,17 @@ int CUDPSocket::read(unsigned char* buffer, unsigned int length, sockaddr_storag
 	if (i == n)
 		return 0;
 
-#if defined(_WIN32) || defined(_WIN64)
-	int size = sizeof(sockaddr_storage);
-#else
 	socklen_t size = sizeof(sockaddr_storage);
-#endif
 
-#if defined(_WIN32) || defined(_WIN64)
-	int len = ::recvfrom(pfd[index].fd, (char*)buffer, length, 0, (sockaddr *)&address, &size);
-#else
 	ssize_t len = ::recvfrom(pfd[index].fd, (char*)buffer, length, 0, (sockaddr *)&address, &size);
-#endif
 	if (len <= 0) {
-#if defined(_WIN32) || defined(_WIN64)
-		LogError("Error returned from recvfrom, err: %lu", ::GetLastError());
-#else
 		LogError("Error returned from recvfrom, err: %d", errno);
 
 		if (len == -1 && errno == ENOTSOCK) {
-			LogMessage("Re-opening UDP port on %u", m_port);
+			LogMessage("Re-opening UDP port on %hn", m_port);
 			close();
 			open();
 		}
-#endif
 		return -1;
 	}
 
@@ -316,26 +265,13 @@ bool CUDPSocket::write(const unsigned char* buffer, unsigned int length, const s
 		if (m_fd[i] < 0 || m_af[i] != address.ss_family)
 			continue;
 
-#if defined(_WIN32) || defined(_WIN64)
-		int ret = ::sendto(m_fd[i], (char *)buffer, length, 0, (sockaddr *)&address, address_length);
-#else
 		ssize_t ret = ::sendto(m_fd[i], (char *)buffer, length, 0, (sockaddr *)&address, address_length);
-#endif
 
 		if (ret < 0) {
-#if defined(_WIN32) || defined(_WIN64)
-			LogError("Error returned from sendto, err: %lu", ::GetLastError());
-#else
 			LogError("Error returned from sendto, err: %d", errno);
-#endif
 		} else {
-#if defined(_WIN32) || defined(_WIN64)
-			if (ret == int(length))
-				result = true;
-#else
 			if (ret == ssize_t(length))
 				result = true;
-#endif
 		}
 	}
 
@@ -351,11 +287,7 @@ void CUDPSocket::close()
 void CUDPSocket::close(const unsigned int index)
 {
  	if (m_fd[index] >= 0) {
-#if defined(_WIN32) || defined(_WIN64)
-		::closesocket(m_fd[index]);
-#else
 		::close(m_fd[index]);
-#endif
 		m_fd[index] = -1;
 	}
 }

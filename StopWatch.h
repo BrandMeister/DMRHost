@@ -19,11 +19,7 @@
 #if !defined(STOPWATCH_H)
 #define	STOPWATCH_H
 
-#if defined(_WIN32) || defined(_WIN64)
-#include <windows.h>
-#else
 #include <sys/time.h>
-#endif
 
 class CStopWatch
 {
@@ -37,13 +33,6 @@ public:
 	unsigned int       elapsed();
 
 private:
-#if defined(_WIN32) || defined(_WIN64)
-	LARGE_INTEGER  m_frequencyS;
-	LARGE_INTEGER  m_frequencyMS;
-	LARGE_INTEGER  m_start;
-#else
 	unsigned long long m_startMS;
-#endif
 };
-
 #endif

@@ -74,11 +74,7 @@ enum LcdColour {
 
 #define STR_CRLF		"\x0D\x0A"
 #define STR_DMR			"DMR"
-#define STR_DSTAR		"D-STAR"
 #define STR_MMDVM		"MMDVM"
-#define STR_NXDN		"NXDN"
-#define STR_P25			"P25"
-#define STR_YSF			"SystemFusion"
 
 CTFTSurenoo::CTFTSurenoo(const std::string& callsign, unsigned int dmrid, ISerialPort* serial, unsigned int brightness, bool duplex) :
 CDisplay(),
@@ -174,46 +170,6 @@ void CTFTSurenoo::setQuitInt()
 	m_mode = MODE_QUIT;
 }
 
-void CTFTSurenoo::setFMInt()
-{
-	setModeLine(STR_MMDVM);
-	setStatusLine(statusLineNo(1), "FM");
-
-	m_mode = MODE_FM;
-}
-
-void CTFTSurenoo::writeDStarInt(const char* my1, const char* my2, const char* your, const char* type, const char* reflector)
-{
-	assert(my1 != NULL);
-	assert(my2 != NULL);
-	assert(your != NULL);
-	assert(type != NULL);
-	assert(reflector != NULL);
-
-	setModeLine(STR_MMDVM);
-
-	::snprintf(m_temp, sizeof(m_temp), "%s %s/%s", type, my1, my2);
-	setStatusLine(statusLineNo(0), m_temp);
-
-	::snprintf(m_temp, sizeof(m_temp), "%s", your);
-	setStatusLine(statusLineNo(1), m_temp);
-
-	if (::strcmp(reflector, "        ") != 0)
-		::snprintf(m_temp, sizeof(m_temp), "via %s", reflector);
-	else
-		::strcpy(m_temp, "");
-	setStatusLine(statusLineNo(2), m_temp);
-
-	m_mode = MODE_DSTAR;
-}
-
-void CTFTSurenoo::clearDStarInt()
-{
-	setStatusLine(statusLineNo(0), "Listening");
-	for (int i = 1; i < STATUS_LINES; i++)
-		setStatusLine(statusLineNo(i), "");
-}
-
 void CTFTSurenoo::writeDMRInt(unsigned int slotNo, const std::string& src, bool group, const std::string& dst, const char* type)
 {
 	assert(type != NULL);
@@ -269,93 +225,6 @@ void CTFTSurenoo::clearDMRInt(unsigned int slotNo)
 		for (int i = 1; i < STATUS_LINES; i++)
 			setStatusLine(statusLineNo(i), "");
 	}
-}
-
-void CTFTSurenoo::writeFusionInt(const char* source, const char* dest, unsigned char dgid, const char* type, const char* origin)
-{
-	assert(source != NULL);
-	assert(dest != NULL);
-	assert(type != NULL);
-	assert(origin != NULL);
-
-	setModeLine(STR_YSF);
-
-	::snprintf(m_temp, sizeof(m_temp), "%s %s", type, source);
-	setStatusLine(statusLineNo(0), m_temp);
-
-	::snprintf(m_temp, sizeof(m_temp), "DG-ID %u", dgid);
-	setStatusLine(statusLineNo(1), m_temp);
-
-	if (::strcmp(origin, "          ") != 0)
-		::snprintf(m_temp, sizeof(m_temp), "at %s", origin);
-	else
-		::strcpy(m_temp, "");
-	setStatusLine(statusLineNo(2), m_temp);
-
-	m_mode = MODE_YSF;
-}
-
-void CTFTSurenoo::clearFusionInt()
-{
-	clearDStarInt();
-}
-
-void CTFTSurenoo::writeP25Int(const char* source, bool group, unsigned int dest, const char* type)
-{
-	assert(source != NULL);
-	assert(type != NULL);
-
-	setModeLine(STR_P25);
-
-	::snprintf(m_temp, sizeof(m_temp), "%s %s", type, source);
-	setStatusLine(statusLineNo(0), m_temp);
-
-	::snprintf(m_temp, sizeof(m_temp), "%s%u", group ? "TG" : "", dest);
-	setStatusLine(statusLineNo(1), m_temp);
-
-	m_mode = MODE_P25;
-}
-
-void CTFTSurenoo::clearP25Int()
-{
-	clearDStarInt();
-}
-
-void CTFTSurenoo::writeNXDNInt(const char* source, bool group, unsigned int dest, const char* type)
-{
-	assert(source != NULL);
-	assert(type != NULL);
-
-	if (m_mode != MODE_NXDN)
-		setModeLine(STR_NXDN);
-
-	::snprintf(m_temp, sizeof(m_temp), "%s %s", type, source);
-	setStatusLine(statusLineNo(0), m_temp);
-
-	::snprintf(m_temp, sizeof(m_temp), "%s%u", group ? "TG" : "", dest);
-	setStatusLine(statusLineNo(1), m_temp);
-
-	m_mode = MODE_NXDN;
-}
-
-int CTFTSurenoo::writeNXDNIntEx(const class CUserDBentry& source, bool group, unsigned int dest, const char* type)
-{
-	assert(type != NULL);
-
-	setModeLine(STR_NXDN);
-	setStatusLine(statusLineNo(2), (source.get(keyFIRST_NAME) + " " + source.get(keyLAST_NAME)).c_str());
-	setStatusLine(statusLineNo(3), source.get(keyCITY).c_str());
-	setStatusLine(statusLineNo(4), source.get(keySTATE).c_str());
-	setStatusLine(statusLineNo(5), source.get(keyCOUNTRY).c_str());
-
-	m_mode = MODE_NXDN;
-
-	return 1;
-}
-
-void CTFTSurenoo::clearNXDNInt()
-{
-	clearDStarInt();
 }
 
 void CTFTSurenoo::writePOCSAGInt(uint32_t ric, const std::string& message)

@@ -1,5 +1,0 @@
-[Timer]
-OnStartupSec=45
-
-[Install]
-WantedBy=multi-user.target

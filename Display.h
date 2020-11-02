@@ -42,12 +42,6 @@ public:
 	void setLockout();
 	void setError(const char* text);
 	void setQuit();
-	void setFM();
-
-	void writeDStar(const char* my1, const char* my2, const char* your, const char* type, const char* reflector);
-	void writeDStarRSSI(unsigned char rssi);
-	void writeDStarBER(float ber);
-	void clearDStar();
 
 	void writeDMR(unsigned int slotNo, const std::string& src, bool group, const std::string& dst, const char* type);
 	void writeDMR(unsigned int slotNo, const class CUserDBentry& src, bool group, const std::string& dst, const char* type);
@@ -55,22 +49,6 @@ public:
 	void writeDMRBER(unsigned int slotNo, float ber);
 	void writeDMRTA(unsigned int slotNo, unsigned char* talkerAlias, const char* type);
 	void clearDMR(unsigned int slotNo);
-
-	void writeFusion(const char* source, const char* dest, unsigned char dgid, const char* type, const char* origin);
-	void writeFusionRSSI(unsigned char rssi);
-	void writeFusionBER(float ber);
-	void clearFusion();
-
-	void writeP25(const char* source, bool group, unsigned int dest, const char* type);
-	void writeP25RSSI(unsigned char rssi);
-	void writeP25BER(float ber);
-	void clearP25();
-
-	void writeNXDN(const char* source, bool group, unsigned int dest, const char* type);
-	void writeNXDN(const class CUserDBentry& source, bool group, unsigned int dest, const char* type);
-	void writeNXDNRSSI(unsigned char rssi);
-	void writeNXDNBER(float ber);
-	void clearNXDN();
 
 	void writePOCSAG(uint32_t ric, const std::string& message);
 	void clearPOCSAG();
@@ -88,12 +66,6 @@ protected:
 	virtual void setLockoutInt() = 0;
 	virtual void setErrorInt(const char* text) = 0;
 	virtual void setQuitInt() = 0;
-	virtual void setFMInt() = 0;
-
-	virtual void writeDStarInt(const char* my1, const char* my2, const char* your, const char* type, const char* reflector) = 0;
-	virtual void writeDStarRSSIInt(unsigned char rssi);
-	virtual void writeDStarBERInt(float ber);
-	virtual void clearDStarInt() = 0;
 
 	virtual void writeDMRInt(unsigned int slotNo, const std::string& src, bool group, const std::string& dst, const char* type) = 0;
 	virtual int  writeDMRIntEx(unsigned int slotNo, const class CUserDBentry& src, bool group, const std::string& dst, const char* type);
@@ -101,22 +73,6 @@ protected:
 	virtual void writeDMRTAInt(unsigned int slotNo, unsigned char* talkerAlias, const char* type);
 	virtual void writeDMRBERInt(unsigned int slotNo, float ber);
 	virtual void clearDMRInt(unsigned int slotNo) = 0;
-
-	virtual void writeFusionInt(const char* source, const char* dest, unsigned char dgid, const char* type, const char* origin) = 0;
-	virtual void writeFusionRSSIInt(unsigned char rssi);
-	virtual void writeFusionBERInt(float ber);
-	virtual void clearFusionInt() = 0;
-
-	virtual void writeP25Int(const char* source, bool group, unsigned int dest, const char* type) = 0;
-	virtual void writeP25RSSIInt(unsigned char rssi);
-	virtual void writeP25BERInt(float ber);
-	virtual void clearP25Int() = 0;
-
-  	virtual void writeNXDNInt(const char* source, bool group, unsigned int dest, const char* type) = 0;
-	virtual int  writeNXDNIntEx(const class CUserDBentry& source, bool group, unsigned int dest, const char* type);
-	virtual void writeNXDNRSSIInt(unsigned char rssi);
-	virtual void writeNXDNBERInt(float ber);
-	virtual void clearNXDNInt() = 0;
 
 	virtual void writePOCSAGInt(uint32_t ric, const std::string& message) = 0;
 	virtual void clearPOCSAGInt() = 0;

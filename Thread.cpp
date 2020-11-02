@@ -17,50 +17,6 @@
  */
 
 #include "Thread.h"
-
-#if defined(_WIN32) || defined(_WIN64)
-
-CThread::CThread() :
-m_handle()
-{
-}
-
-CThread::~CThread()
-{
-}
-
-bool CThread::run()
-{
-	m_handle = ::CreateThread(NULL, 0, &helper, this, 0, NULL);
-
-	return m_handle != NULL;
-}
-
-
-void CThread::wait()
-{
-	::WaitForSingleObject(m_handle, INFINITE);
-
-	::CloseHandle(m_handle);
-}
-
-
-DWORD CThread::helper(LPVOID arg)
-{
-	CThread* p = (CThread*)arg;
-
-	p->entry();
-
-	return 0UL;
-}
-
-void CThread::sleep(unsigned int ms)
-{
-	::Sleep(ms);
-}
-
-#else
-
 #include <unistd.h>
 
 CThread::CThread() :
@@ -102,6 +58,4 @@ void CThread::sleep(unsigned int ms)
 
 	::nanosleep(&ts, NULL);
 }
-
-#endif
 

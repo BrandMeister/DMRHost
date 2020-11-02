@@ -76,20 +76,6 @@ void CCASTInfo::setQuitInt()
 {
 }
 
-void CCASTInfo::setFMInt()
-{
-}
-
-void CCASTInfo::writeDStarInt(const char* my1, const char* my2, const char* your, const char* type, const char* reflector)
-{
-   if (m_modem != NULL)
-        m_modem->writeDStarInfo(my1, my2, your, type, reflector);
-}
-
-void CCASTInfo::clearDStarInt()
-{
-}
-
 void CCASTInfo::writeDMRInt(unsigned int slotNo, const std::string& src, bool group, const std::string& dst, const char* type)
 {
    if (m_modem != NULL)
@@ -97,36 +83,6 @@ void CCASTInfo::writeDMRInt(unsigned int slotNo, const std::string& src, bool gr
 }
 
 void CCASTInfo::clearDMRInt(unsigned int slotNo)
-{
-}
-
-void CCASTInfo::writeFusionInt(const char* source, const char* dest, unsigned char dgid, const char* type, const char* origin)
-{
-    if (m_modem != NULL)
-        m_modem->writeYSFInfo(source, dest, dgid, type, origin);
-}
-
-void CCASTInfo::clearFusionInt()
-{
-}
-
-void CCASTInfo::writeP25Int(const char* source, bool group, unsigned int dest, const char* type)
-{
-    if (m_modem != NULL)
-        m_modem->writeP25Info(source, group, dest, type);
-}
-
-void CCASTInfo::clearP25Int()
-{
-}
-
-void CCASTInfo::writeNXDNInt(const char* source, bool group, unsigned int dest, const char* type)
-{
-    if (m_modem != NULL)
-        m_modem->writeNXDNInfo(source, group, dest, type);
-}
-
-void CCASTInfo::clearNXDNInt()
 {
 }
 

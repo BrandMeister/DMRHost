@@ -17,51 +17,6 @@
  */
 
 #include "StopWatch.h"
-
-#if defined(_WIN32) || defined(_WIN64)
-
-CStopWatch::CStopWatch() :
-m_frequencyS(),
-m_frequencyMS(),
-m_start()
-{
-	::QueryPerformanceFrequency(&m_frequencyS);
-
-	m_frequencyMS.QuadPart = m_frequencyS.QuadPart / 1000ULL;
-}
-
-CStopWatch::~CStopWatch()
-{
-}
-
-unsigned long long CStopWatch::time() const
-{
-	LARGE_INTEGER now;
-	::QueryPerformanceCounter(&now);
-
-	return (unsigned long long)(now.QuadPart / m_frequencyMS.QuadPart);
-}
-
-unsigned long long CStopWatch::start()
-{
-	::QueryPerformanceCounter(&m_start);
-
-	return (unsigned long long)(m_start.QuadPart / m_frequencyS.QuadPart);
-}
-
-unsigned int CStopWatch::elapsed()
-{
-	LARGE_INTEGER now;
-	::QueryPerformanceCounter(&now);
-
-	LARGE_INTEGER temp;
-	temp.QuadPart = (now.QuadPart - m_start.QuadPart) * 1000;
-
-	return (unsigned int)(temp.QuadPart / m_frequencyS.QuadPart);
-}
-
-#else
-
 #include <cstdio>
 #include <ctime>
 
@@ -101,5 +56,3 @@ unsigned int CStopWatch::elapsed()
 
 	return nowMS - m_startMS;
 }
-
-#endif

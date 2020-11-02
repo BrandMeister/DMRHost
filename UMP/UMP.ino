@@ -24,11 +24,7 @@
 #define PIN_LED     13
 #endif
 
-#define PIN_DSTAR   3
 #define PIN_DMR     4
-#define PIN_YSF     5
-#define PIN_P25     6
-#define PIN_NXDN    7
 #define PIN_POCSAG  8
 
 #define PIN_TX      10
@@ -60,21 +56,13 @@ void setup()
 #endif
 
   pinMode(PIN_LED,     OUTPUT);
-  pinMode(PIN_DSTAR,   OUTPUT);
   pinMode(PIN_DMR,     OUTPUT);
-  pinMode(PIN_YSF,     OUTPUT);
-  pinMode(PIN_P25,     OUTPUT);
-  pinMode(PIN_NXDN,    OUTPUT);
   pinMode(PIN_POCSAG,  OUTPUT);
   pinMode(PIN_TX,      OUTPUT);
   pinMode(PIN_CD,      OUTPUT);
   pinMode(PIN_LOCKOUT, INPUT);
 
-  digitalWrite(PIN_DSTAR,  LOW);
   digitalWrite(PIN_DMR,    LOW);
-  digitalWrite(PIN_YSF,    LOW);
-  digitalWrite(PIN_P25,    LOW);
-  digitalWrite(PIN_NXDN,   LOW);
   digitalWrite(PIN_POCSAG, LOW);
   digitalWrite(PIN_TX,     LOW);
   digitalWrite(PIN_CD,     LOW);
@@ -93,11 +81,7 @@ void setup()
 #define UMP_STATUS        0x50U
 
 #define MODE_IDLE   0U
-#define MODE_DSTAR  1U
 #define MODE_DMR    2U
-#define MODE_YSF    3U
-#define MODE_P25    4U
-#define MODE_NXDN   5U
 #define MODE_POCSAG 6U
 
 bool     m_started = false;
@@ -133,11 +117,7 @@ void loop()
           m_started = true;
           break;
         case UMP_SET_MODE:
-          digitalWrite(PIN_DSTAR,  m_buffer[3U] == MODE_DSTAR  ? HIGH : LOW);
           digitalWrite(PIN_DMR,    m_buffer[3U] == MODE_DMR    ? HIGH : LOW);
-          digitalWrite(PIN_YSF,    m_buffer[3U] == MODE_YSF    ? HIGH : LOW);
-          digitalWrite(PIN_P25,    m_buffer[3U] == MODE_P25    ? HIGH : LOW);
-          digitalWrite(PIN_NXDN,   m_buffer[3U] == MODE_NXDN   ? HIGH : LOW);
           digitalWrite(PIN_POCSAG, m_buffer[3U] == MODE_POCSAG ? HIGH : LOW);
           break;
         case UMP_SET_TX:
