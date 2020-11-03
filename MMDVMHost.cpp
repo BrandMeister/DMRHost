@@ -1348,20 +1348,38 @@ bool CMMDVMHost::createDMRNetwork()
 	LogInfo("    Slot 2: %s", slot2 ? "enabled" : "disabled");
 	LogInfo("    Mode Hang: %us", m_dmrNetModeHang);
 
-	m_dmrNetwork = new CDMRNetwork(address, port, local, id, m_duplex, VERSION, debug, slot1, slot2, hwType);
+	m_dmrNetwork = new CDMRNetwork(address, port, local, id, password, m_duplex, VERSION, debug, slot1, slot2, hwType);
+
+	std::string options = m_conf.getDMRNetworkOptions();
+	if (!options.empty()) {
+		LogInfo("    Options: %s", options.c_str());
+		m_dmrNetwork->setOptions(options);
+	}
 
 	unsigned int rxFrequency = m_conf.getRXFrequency();
 	unsigned int txFrequency = m_conf.getTXFrequency();
 	unsigned int power       = m_conf.getPower();
 	unsigned int colorCode   = m_conf.getDMRColorCode();
+	float latitude           = m_conf.getLatitude();
+	float longitude          = m_conf.getLongitude();
+	int height               = m_conf.getHeight();
+	std::string location     = m_conf.getLocation();
+	std::string description  = m_conf.getDescription();
+	std::string url          = m_conf.getURL();
 
 	LogInfo("Info Parameters");
 	LogInfo("    Callsign: %s", m_callsign.c_str());
 	LogInfo("    RX Frequency: %uHz", rxFrequency);
 	LogInfo("    TX Frequency: %uHz", txFrequency);
 	LogInfo("    Power: %uW", power);
+	LogInfo("    Latitude: %fdeg N", latitude);
+	LogInfo("    Longitude: %fdeg E", longitude);
+	LogInfo("    Height: %um", height);
+	LogInfo("    Location: \"%s\"", location.c_str());
+	LogInfo("    Description: \"%s\"", description.c_str());
+	LogInfo("    URL: \"%s\"", url.c_str());
 
-	m_dmrNetwork->setConfig(m_callsign, rxFrequency, txFrequency, power, colorCode);
+	m_dmrNetwork->setConfig(m_callsign, rxFrequency, txFrequency, power, colorCode, latitude, longitude, height, location, description, url);
 
 	bool ret = m_dmrNetwork->open();
 	if (!ret) {
