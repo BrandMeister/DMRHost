@@ -42,7 +42,3 @@ The OLED display needs an extra library see OLED.md
 The LCDproc support enables the use of a multitude of other LCD screens. See
 the [supported devices](http://lcdproc.omnipotent.net/hardware.php3) page on
 the LCDproc website for more info.
-
-This software is licenced under the GPL v2 and is intended for amateur and
-educational use only. Use of this software for commercial purposes is strictly
-forbidden.

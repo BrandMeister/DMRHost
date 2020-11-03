@@ -58,11 +58,6 @@ static void sigHandler(int signum)
 }
 #endif
 
-const char* HEADER1 = "This software is for use on amateur radio networks only,";
-const char* HEADER2 = "it is to be used for educational purposes only. Its use on";
-const char* HEADER3 = "commercial networks is strictly prohibited.";
-const char* HEADER4 = "Copyright(C) 2015-2020 by Jonathan Naylor, G4KLX and others";
-
 int main(int argc, char** argv)
 {
 	const char* iniFile = DEFAULT_INI_FILE;
@@ -256,11 +251,6 @@ int CMMDVMHost::run()
 		::close(STDOUT_FILENO);
 	}
 #endif
-
-	LogInfo(HEADER1);
-	LogInfo(HEADER2);
-	LogInfo(HEADER3);
-	LogInfo(HEADER4);
 
 	LogMessage("MMDVMHost-%s is starting", VERSION);
 	LogMessage("Built %s %s (GitID #%.7s)", __TIME__, __DATE__, gitversion);
