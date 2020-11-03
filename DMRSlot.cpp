@@ -47,9 +47,6 @@ DMR_OVCM_TYPES CDMRSlot::m_ovcm = DMR_OVCM_OFF;
 
 CRSSIInterpolator* CDMRSlot::m_rssiMapper = NULL;
 
-unsigned int   CDMRSlot::m_jitterTime  = 360U;
-unsigned int   CDMRSlot::m_jitterSlots = 6U;
-
 unsigned char* CDMRSlot::m_idle = NULL;
 
 FLCO           CDMRSlot::m_flco1;
@@ -996,7 +993,6 @@ void CDMRSlot::writeEndNet(bool writeEnd)
 
 	m_networkWatchdog.stop();
 	m_netTimeoutTimer.stop();
-	m_packetTimer.stop();
 	m_netTimeout = false;
 
 	m_netFrames = 0U;
@@ -1092,9 +1088,6 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 			m_modem->writeDMRAbort(m_slotNo);
 		}
 
-		for (unsigned int i = 0U; i < m_jitterSlots; i++)
-			writeQueueNet(m_idle);
-
 		if (m_duplex) {
 			for (unsigned int i = 0U; i < NO_HEADERS_DUPLEX; i++)
 				writeQueueNet(data);
@@ -1137,9 +1130,6 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 				m_queue.clear();
 				m_modem->writeDMRAbort(m_slotNo);
 			}
-
-			for (unsigned int i = 0U; i < m_jitterSlots; i++)
-				writeQueueNet(m_idle);
 
 			// Create a dummy start frame
 			unsigned char start[DMR_FRAME_LENGTH_BYTES + 2U];
@@ -1330,9 +1320,6 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 				m_modem->writeDMRAbort(m_slotNo);
 			}
 
-			for (unsigned int i = 0U; i < m_jitterSlots; i++)
-				writeQueueNet(m_idle);
-
 			// Create a dummy start frame
 			unsigned char start[DMR_FRAME_LENGTH_BYTES + 2U];
 
@@ -1412,9 +1399,6 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 			m_netEmbeddedWriteN = (m_netEmbeddedWriteN + 1U) % 2U;
 
 			m_netEmbeddedData[m_netEmbeddedWriteN].reset();
-
-			m_packetTimer.start();
-			m_elapsed.start();
 
 			m_netFrames++;
 
@@ -1559,9 +1543,6 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 			if (!m_netTimeout)
 				writeQueueNet(data);
 		}
-
-		m_packetTimer.start();
-		m_elapsed.start();
 
 		m_netFrames++;
 
@@ -1808,21 +1789,6 @@ void CDMRSlot::clock()
 			}
 		}
 	}
-
-	if (m_netState == RS_NET_AUDIO) {
-		m_packetTimer.clock(ms);
-
-		if (m_packetTimer.isRunning() && m_packetTimer.hasExpired()) {
-			unsigned int elapsed = m_elapsed.elapsed();
-			if (elapsed >= m_jitterTime) {
-				LogDebug("DMR Slot %u, lost audio for %ums filling in", m_slotNo, elapsed);
-				insertSilence(m_jitterSlots);
-				m_elapsed.start();
-			}
-
-			m_packetTimer.start();
-		}
-	}
 }
 
 void CDMRSlot::writeQueueRF(const unsigned char *data)
@@ -1915,11 +1881,6 @@ void CDMRSlot::init(unsigned int colorCode, bool embeddedLCOnly, bool dumpTAData
 	m_ovcm           = ovcm;
 
 	m_rssiMapper     = rssiMapper;
-
-	m_jitterTime     = jitter;
-	
-	float jitter_tmp = float(jitter) / 360.0F;
-	m_jitterSlots    = (unsigned int) (std::ceil(jitter_tmp) * 6.0F);
 
 	m_idle = new unsigned char[DMR_FRAME_LENGTH_BYTES + 2U];
 	::memcpy(m_idle, DMR_IDLE_DATA, DMR_FRAME_LENGTH_BYTES + 2U);
@@ -2176,7 +2137,6 @@ void CDMRSlot::enable(bool enabled)
 
 		m_networkWatchdog.stop();
 		m_netTimeoutTimer.stop();
-		m_packetTimer.stop();
 		m_netTimeout = false;
 
 		m_netFrames = 0U;

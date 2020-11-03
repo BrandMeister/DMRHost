@@ -127,9 +127,6 @@ private:
 
 	static CRSSIInterpolator*  m_rssiMapper;
 
-	static unsigned int        m_jitterTime;
-	static unsigned int        m_jitterSlots;
-
 	static unsigned char*      m_idle;
 
     static FLCO                m_flco1;
