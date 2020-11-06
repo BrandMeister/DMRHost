@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-set(APP_NAME "MMDVMHost")
+set(APP_NAME "DMRHost")
 project(${APP_NAME} CXX)
 
 option(ENABLE_OLED "Enable OLED support" OFF)

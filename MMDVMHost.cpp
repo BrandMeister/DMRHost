@@ -55,10 +55,10 @@ int main(int argc, char** argv)
  		for (int currentArg = 1; currentArg < argc; ++currentArg) {
 			std::string arg = argv[currentArg];
 			if ((arg == "-v") || (arg == "--version")) {
-				::fprintf(stdout, "MMDVMHost version %s git #%.7s\n", VERSION, gitversion);
+				::fprintf(stdout, "DMRHost version %s git #%.7s\n", VERSION, gitversion);
 				return 0;
 			} else if (arg.substr(0,1) == "-") {
-				::fprintf(stderr, "Usage: MMDVMHost [-v|--version] [filename]\n");
+				::fprintf(stderr, "Usage: DMRHost [-v|--version] [filename]\n");
 				return 1;
 			} else {
 				iniFile = argv[currentArg];
@@ -81,13 +81,13 @@ int main(int argc, char** argv)
 		delete host;
 
 		if (m_signal == 2)
-			::LogInfo("MMDVMHost-%s exited on receipt of SIGINT", VERSION);
+			::LogInfo("DMRHost-%s exited on receipt of SIGINT", VERSION);
 
 		if (m_signal == 15)
-			::LogInfo("MMDVMHost-%s exited on receipt of SIGTERM", VERSION);
+			::LogInfo("DMRHost-%s exited on receipt of SIGTERM", VERSION);
 
 		if (m_signal == 1)
-			::LogInfo("MMDVMHost-%s is restarting on receipt of SIGHUP", VERSION);
+			::LogInfo("DMRHost-%s is restarting on receipt of SIGHUP", VERSION);
 	} while (m_signal == 1);
 
 	::LogFinalise();
@@ -134,18 +134,18 @@ int CMMDVMHost::run()
 {
 	bool ret = m_conf.read();
 	if (!ret) {
-		::fprintf(stderr, "MMDVMHost: cannot read the .ini file\n");
+		::fprintf(stderr, "DMRHost: cannot read the .ini file\n");
 		return 1;
 	}
 
 	ret = ::LogInitialise(m_conf.getLogFilePath(), m_conf.getLogFileRoot(), m_conf.getLogFileLevel(), m_conf.getLogDisplayLevel(), m_conf.getLogFileRotate());
 
 	if (!ret) {
-		::fprintf(stderr, "MMDVMHost: unable to open the log file\n");
+		::fprintf(stderr, "DMRHost: unable to open the log file\n");
 		return 1;
 	}
 
-	LogMessage("MMDVMHost-%s is starting", VERSION);
+	LogMessage("DMRHost-%s is starting", VERSION);
 	LogMessage("Built %s %s (GitID #%.7s)", __TIME__, __DATE__, gitversion);
 
 	readParams();
@@ -354,7 +354,7 @@ int CMMDVMHost::run()
 
 	setMode(MODE_IDLE);
 
-	LogMessage("MMDVMHost-%s is running", VERSION);
+	LogMessage("DMRHost-%s is running", VERSION);
 
 	while (!m_killed) {
 		bool lockout1 = m_modem->hasLockout();

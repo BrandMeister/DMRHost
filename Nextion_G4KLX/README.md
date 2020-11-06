@@ -2,7 +2,7 @@
 
 This directory contains a simple python script which you can use to update the
 Nextion displays. All you need is a compiled .tft file which is written to the
-display's flash memory. The precompiled .tft files with the MMDVMHost default
+display's flash memory. The precompiled .tft files with the DMRHost default
 layout are to be found in this directory as well.
 
 To update the Nextion display you just need to know the serial port the display

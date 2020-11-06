@@ -1,4 +1,4 @@
-Nextion Display Layouts by ON7LDS (for MMDVMHost)
+Nextion Display Layouts by ON7LDS (for DMRHost)
 =================================================
 
 		################################
@@ -19,7 +19,7 @@ There are some other changes:
   This happens on-the-fly: as the parts of the TA arrive, they will immediately
   be shown.
 * If you want to change my screen layout, the only thing to keep in mind is
-  that the MMDVMHost program will select following font numbers:
+  that the DMRHost program will select following font numbers:
         default font for the TA field : font 4
         TA >16 characters             : font 3
         TA >20 characters             : font 2

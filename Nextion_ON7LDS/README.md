@@ -1,4 +1,4 @@
-Nextion Display Layouts by ON7LDS (for MMDVMHost)
+Nextion Display Layouts by ON7LDS (for DMRHost)
 =================================================
 
 The screenlayout has to be selected with the parameter **ScreenLayout** in the
@@ -20,6 +20,6 @@ More information about the layouts can be found in
   * README-L3 for the screenLayout 3 and 4 settings
 
   
-When you want extra control over what has to be sent to the Nextion display, you could consider the program 'NextionDriver' at https://github.com/on7lds/NextionDriver as a companion to MMDVMHost.
-This program sends extra information about the host to the display, can do callsign lookup with extended information (name, city, country) and can do more processing which would not be the task of MMDVMHost (for example: with the help of this program, it is possible to use buttons on the display to do actions on the host itself).  
-In verbose mode, this program shows you all communication between MMDVMHost and the display.
+When you want extra control over what has to be sent to the Nextion display, you could consider the program 'NextionDriver' at https://github.com/on7lds/NextionDriver as a companion to DMRHost.
+This program sends extra information about the host to the display, can do callsign lookup with extended information (name, city, country) and can do more processing which would not be the task of DMRHost (for example: with the help of this program, it is possible to use buttons on the display to do actions on the host itself).  
+In verbose mode, this program shows you all communication between DMRHost and the display.

@@ -1,8 +1,8 @@
-These are the source files for building the MMDVMHost, the program that
+These are the source files for building the DMRHost, the program that
 interfaces to the MMDVM or DVMega on the one side, and a suitable network on
 the other. DMR, and POCSAG on the MMDVM, and DMR on the DVMega.
 
-MMDVMHost can connect to BrandMeister, DMR+, TGIF, HB Link, or XLX.
+DMRHost can connect to BrandMeister, DMR+, TGIF, HB Link, or XLX.
 It uses the DAPNET Gateway to access DAPNET to receive paging messages.
 
 It builds on 32-bit and 64-bit Linux. It can optionally control
