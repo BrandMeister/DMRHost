@@ -1,0 +1,37 @@
+# This makefile is for use with the Raspberry Pi. The wiringpi library is needed.
+
+CC      = gcc
+CXX     = g++
+CFLAGS  = -g -O3 -Wall -std=c++0x -pthread -DRASPBERRY_PI -I/usr/local/include
+LIBS    = -lwiringPi -lwiringPiDev -lpthread
+
+LDFLAGS = -g -L/usr/local/lib
+
+OBJECTS = \
+		AMBEFEC.o BCH.o BPTC19696.o CASTInfo.o Conf.o CRC.o Display.o DMRControl.o DMRCSBK.o DMRData.o DMRDataHeader.o DMREMB.o DMREmbeddedData.o DMRFullLC.o \
+		DMRLookup.o DMRLC.o DMRNetwork.o DMRShortLC.o DMRSlot.o DMRSlotType.o DMRAccessControl.o DMRTA.o DMRTrellis.o \
+		Golay2087.o Golay24128.o Hamming.o I2CController.o Log.o MMDVMHost.o Modem.o ModemSerialPort.o Mutex.o \
+		NetworkInfo.o Nextion.o NullDisplay.o NullModem.o \
+		POCSAGControl.o POCSAGNetwork.o QR1676.o RS129.o RSSIInterpolator.o SerialController.o SerialPort.o \
+		SHA256.o StopWatch.o Sync.o TFTSerial.o TFTSurenoo.o Thread.o Timer.o UDPSocket.o UMP.o UserDB.o UserDBentry.o Utils.o
+
+all:		DMRHost
+
+DMRHost:	GitVersion.h $(OBJECTS) 
+		$(CXX) $(OBJECTS) $(CFLAGS) $(LIBS) -o DMRHost
+
+%.o: %.cpp
+		$(CXX) $(CFLAGS) -c -o $@ $<
+
+install:
+		install -m 755 DMRHost /usr/local/bin/
+
+clean:
+		$(RM) DMRHost *.o *.d *.bak *~ GitVersion.h
+
+GitVersion.h:
+ifneq ("$(wildcard .git/index)","")
+	echo "const char *gitversion = \"$(shell git rev-parse HEAD)\";" > $@ 
+else
+	echo "const char *gitversion = \"0000000000000000000000000000000000000000\";" > $@
+endif
