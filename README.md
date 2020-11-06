@@ -21,3 +21,11 @@ The Hobbytronics TFT Display, which is a Pi-Hat, connects to the UART on the
 Raspbery Pi.
 
 The OLED display needs an extra library see OLED.md
+
+DMRHost uses CMake as its building system:
+```
+mkdir build
+cd build
+cmake ..
+make
+```
