@@ -116,7 +116,6 @@ m_timeout(180U),
 m_dmrEnabled(false),
 m_pocsagEnabled(false),
 m_cwIdTime(0U),
-m_dmrLookup(NULL),
 m_callsign(),
 m_id(0U),
 m_cwCallsign(),
@@ -239,20 +238,6 @@ int CMMDVMHost::run()
 		rssi->load(rssiMappingFile);
 	}
 
-	// For DMR we try to map IDs to callsigns
-	if (m_dmrEnabled) {
-		std::string lookupFile  = m_conf.getDMRIdLookupFile();
-		unsigned int reloadTime = m_conf.getDMRIdLookupTime();
-
-		LogInfo("DMR Id Lookups");
-		LogInfo("    File: %s", lookupFile.length() > 0U ? lookupFile.c_str() : "None");
-		if (reloadTime > 0U)
-			LogInfo("    Reload: %u hours", reloadTime);
-
-		m_dmrLookup = new CDMRLookup(lookupFile, reloadTime);
-		m_dmrLookup->read();
-	}
-
 	CStopWatch stopWatch;
 	stopWatch.start();
 
@@ -333,7 +318,7 @@ int CMMDVMHost::run()
 				break;
 		}
 
-		m_dmr = new CDMRControl(id, colorCode, callHang, selfOnly, embeddedLCOnly, dumpTAData, prefixes, blackList, whiteList, slot1TGWhiteList, slot2TGWhiteList, m_timeout, m_modem, m_dmrNetwork, m_display, m_duplex, m_dmrLookup, rssi, jitter, ovcm);
+		m_dmr = new CDMRControl(id, colorCode, callHang, selfOnly, embeddedLCOnly, dumpTAData, prefixes, blackList, whiteList, slot1TGWhiteList, slot2TGWhiteList, m_timeout, m_modem, m_dmrNetwork, m_display, m_duplex, rssi, jitter, ovcm);
 
 		m_dmrTXTimer.setTimeout(txHang);
 	}
@@ -628,9 +613,6 @@ int CMMDVMHost::run()
 		m_ump->close();
 		delete m_ump;
 	}
-
-	if (m_dmrLookup != NULL)
-		m_dmrLookup->stop();
 
 	if (m_dmrNetwork != NULL) {
 		m_dmrNetwork->close();

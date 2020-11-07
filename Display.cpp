@@ -22,17 +22,12 @@
 #include "ModemSerialPort.h"
 #include "NullDisplay.h"
 #include "TFTSerial.h"
-#include "TFTSurenoo.h"
 #include "Nextion.h"
 #include "CASTInfo.h"
 #include "Conf.h"
 #include "Modem.h"
 #include "UMP.h"
 #include "Log.h"
-
-#if defined(OLED)
-#include "OLED.h"
-#endif
 
 #include <cstdio>
 #include <cassert>
@@ -107,30 +102,8 @@ void CDisplay::writeDMR(unsigned int slotNo, const std::string& src, bool group,
 		m_timer2.start();
 		m_mode2 = MODE_IDLE;
 	}
+
 	writeDMRInt(slotNo, src, group, dst, type);
-}
-
-void CDisplay::writeDMR(unsigned int slotNo, const class CUserDBentry& src, bool group, const std::string& dst, const char* type)
-{
-	assert(type != NULL);
-
-	if (slotNo == 1U) {
-		m_timer1.start();
-		m_mode1 = MODE_IDLE;
-	} else {
-		m_timer2.start();
-		m_mode2 = MODE_IDLE;
-	}
-
-	if (int err = writeDMRIntEx(slotNo, src, group, dst, type)) {
-		std::string src_str = src.get(keyCALLSIGN);
-		if (err < 0 && !src.get(keyFIRST_NAME).empty()) {
-		  	// emulate the result of old CDMRLookup::findWithName()
-			//  (it returned callsign and firstname)
-			src_str += " " + src.get(keyFIRST_NAME);
-		}
-		writeDMRInt(slotNo, src_str, group, dst, type);
-	}
 }
 
 void CDisplay::writeDMRRSSI(unsigned int slotNo, unsigned char rssi)
@@ -240,20 +213,6 @@ void CDisplay::clockInt(unsigned int ms)
 {
 }
 
-int CDisplay::writeDMRIntEx(unsigned int slotNo, const class CUserDBentry& src, bool group, const std::string& dst, const char* type)
-{
-	/*
-	 * return value:
-	 *	< 0	error condition (i.e. not supported)
-	 *		-> call writeXXXXInt() to display
-	 *	= 0	no error, writeXXXXIntEx() displayed whole status
-	 *	= 1	no error, writeXXXXIntEx() displayed partial status
-	 *		-> call writeXXXXInt() to display remain part
-	 *	> 1	reserved for future use
-	 */
-	return -1;	// not supported
-}
-
 void CDisplay::writeDMRRSSIInt(unsigned int slotNo, unsigned char rssi)
 {
 }
@@ -290,10 +249,7 @@ CDisplay* CDisplay::createDisplay(const CConf& conf, CUMP* ump, CModem* modem)
 		else
 			serial = new CSerialController(port, (type == "TFT Serial") ? SERIAL_9600 : SERIAL_115200);
 
-		if (type == "TFT Surenoo")
-			display = new CTFTSurenoo(conf.getCallsign(), dmrid, serial, brightness, conf.getDuplex());
-		else
-			display = new CTFTSerial(conf.getCallsign(), dmrid, serial, brightness);
+		display = new CTFTSerial(conf.getCallsign(), dmrid, serial, brightness);
 	} else if (type == "Nextion") {
 		std::string port            = conf.getNextionPort();
 		unsigned int brightness     = conf.getNextionBrightness();
@@ -350,17 +306,6 @@ CDisplay* CDisplay::createDisplay(const CConf& conf, CUMP* ump, CModem* modem)
 			ISerialPort* serial = new CSerialController(port, baudrate);
 			display = new CNextion(conf.getCallsign(), dmrid, serial, brightness, displayClock, utc, idleBrightness, screenLayout, txFrequency, rxFrequency, displayTempInF);
 		}
-#if defined(OLED)
-	} else if (type == "OLED") {
-	        unsigned char type       = conf.getOLEDType();
-	        unsigned char brightness = conf.getOLEDBrightness();
-	        bool          invert     = conf.getOLEDInvert();
-	        bool          scroll     = conf.getOLEDScroll();
-		bool          rotate     = conf.getOLEDRotate();
-		bool          logosaver  = conf.getOLEDLogoScreensaver();
-
-		display = new COLED(type, brightness, invert, scroll, rotate, logosaver, conf.getDMRNetworkSlot1(), conf.getDMRNetworkSlot2());
-#endif
 	} else if (type == "CAST") {
 		display = new CCASTInfo(modem);
 	} else {

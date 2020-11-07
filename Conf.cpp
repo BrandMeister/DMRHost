@@ -33,7 +33,6 @@ enum SECTION {
   SECTION_INFO,
   SECTION_LOG,
   SECTION_CWID,
-  SECTION_DMRID_LOOKUP,
   SECTION_MODEM,
   SECTION_TRANSPARENT,
   SECTION_UMP,
@@ -42,8 +41,7 @@ enum SECTION {
   SECTION_DMR_NETWORK,
   SECTION_POCSAG_NETWORK,
   SECTION_TFTSERIAL,
-  SECTION_NEXTION,
-  SECTION_OLED
+  SECTION_NEXTION
 };
 
 CConf::CConf(const std::string& file) :
@@ -70,8 +68,6 @@ m_logFileRotate(true),
 m_cwIdEnabled(false),
 m_cwIdTime(10U),
 m_cwIdCallsign(),
-m_dmrIdLookupFile(),
-m_dmrIdLookupTime(0U),
 m_modemPort(),
 m_modemProtocol("uart"),
 m_modemAddress(0x22),
@@ -144,13 +140,7 @@ m_nextionDisplayClock(false),
 m_nextionUTC(false),
 m_nextionIdleBrightness(20U),
 m_nextionScreenLayout(0U),
-m_nextionTempInFahrenheit(false),
-m_oledType(3U),
-m_oledBrightness(0U),
-m_oledInvert(false),
-m_oledScroll(false),
-m_oledRotate(false),
-m_oledLogoScreensaver(true)
+m_nextionTempInFahrenheit(false)
 {
 }
 
@@ -182,8 +172,6 @@ bool CConf::read()
 		  section = SECTION_LOG;
 	  else if (::strncmp(buffer, "[CW Id]", 7U) == 0)
 		  section = SECTION_CWID;
-	  else if (::strncmp(buffer, "[DMR Id Lookup]", 15U) == 0)
-		  section = SECTION_DMRID_LOOKUP;
 	  else if (::strncmp(buffer, "[Modem]", 7U) == 0)
 		  section = SECTION_MODEM;
 	  else if (::strncmp(buffer, "[Transparent Data]", 18U) == 0)
@@ -202,8 +190,6 @@ bool CConf::read()
 		  section = SECTION_TFTSERIAL;
 	  else if (::strncmp(buffer, "[Nextion]", 9U) == 0)
 		  section = SECTION_NEXTION;
-	  else if (::strncmp(buffer, "[OLED]", 6U) == 0)
-		  section = SECTION_OLED;
 	  else
 		  section = SECTION_NONE;
 
@@ -297,11 +283,6 @@ bool CConf::read()
 				value[i] = ::toupper(value[i]);
 			m_cwIdCallsign = value;
 		}
-	} else if (section == SECTION_DMRID_LOOKUP) {
-		if (::strcmp(key, "File") == 0)
-			m_dmrIdLookupFile = value;
-		else if (::strcmp(key, "Time") == 0)
-			m_dmrIdLookupTime = (unsigned int)::atoi(value);
 	} else if (section == SECTION_MODEM) {
 		if (::strcmp(key, "Port") == 0)
 			m_modemPort = value;
@@ -502,19 +483,6 @@ bool CConf::read()
 			m_nextionScreenLayout = (unsigned int)::strtoul(value, NULL, 0);
 		else if (::strcmp(key, "DisplayTempInFahrenheit") == 0)
 			m_nextionTempInFahrenheit = ::atoi(value) == 1;
-	} else if (section == SECTION_OLED) {
-		if (::strcmp(key, "Type") == 0)
-			m_oledType = (unsigned char)::atoi(value);
-		else if (::strcmp(key, "Brightness") == 0)
-			m_oledBrightness = (unsigned char)::atoi(value);
-		else if (::strcmp(key, "Invert") == 0)
-			m_oledInvert = ::atoi(value) == 1;
-		else if (::strcmp(key, "Scroll") == 0)
-			m_oledScroll = ::atoi(value) == 1;
-		else if (::strcmp(key, "Rotate") == 0)
-			m_oledRotate = ::atoi(value) == 1;
-		else if (::strcmp(key, "LogoScreensaver") == 0)
-			m_oledLogoScreensaver = ::atoi(value) == 1;
 	}
   }
 
@@ -631,16 +599,6 @@ unsigned int CConf::getCWIdTime() const
 std::string CConf::getCWIdCallsign() const
 {
 	return m_cwIdCallsign;
-}
-
-std::string CConf::getDMRIdLookupFile() const
-{
-	return m_dmrIdLookupFile;
-}
-
-unsigned int CConf::getDMRIdLookupTime() const
-{
-	return m_dmrIdLookupTime;
 }
 
 std::string CConf::getModemPort() const
@@ -1001,36 +959,6 @@ unsigned int CConf::getNextionIdleBrightness() const
 unsigned int CConf::getNextionScreenLayout() const
 {
 	return m_nextionScreenLayout;
-}
-
-unsigned char CConf::getOLEDType() const
-{
-	return m_oledType;
-}
-
-unsigned char CConf::getOLEDBrightness() const
-{
-	return m_oledBrightness;
-}
-
-bool CConf::getOLEDInvert() const
-{
-	return m_oledInvert;
-}
-
-bool CConf::getOLEDScroll() const
-{
-	return m_oledScroll;
-}
-
-bool CConf::getOLEDRotate() const
-{
-	return m_oledRotate;
-}
-
-bool CConf::getOLEDLogoScreensaver() const
-{
-	return m_oledLogoScreensaver;
 }
 
 bool CConf::getNextionTempInFahrenheit() const

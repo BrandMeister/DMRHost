@@ -1,4 +1,0 @@
-find_library(I2C_LIBRARIES i2c)
-
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(I2C DEFAULT_MSG I2C_LIBRARIES)

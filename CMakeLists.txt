@@ -5,8 +5,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 set(APP_NAME "DMRHost")
 project(${APP_NAME} CXX)
 
-option(ENABLE_OLED "Enable OLED support" OFF)
-
 if(GIT_VERSION)
   set(GIT_HASH ${GIT_VERSION})
 else()
@@ -22,21 +20,6 @@ set(DEPLIBS "")
 
 find_package(Threads REQUIRED QUIET)
 list(APPEND DEPLIBS ${CMAKE_THREAD_LIBS_INIT})
-
-if(ENABLE_OLED)
-  find_package(ArduiPi_OLED REQUIRED)
-  include_directories(${ARDUIPI_OLED_INCLUDE_DIRS})
-  list(APPEND DEPLIBS ${ARDUIPI_OLED_LIBRARIES})
-
-  find_package(I2c REQUIRED)
-  include_directories(${I2C_INCLUDE_DIRS})
-  list(APPEND DEPLIBS ${I2C_LIBRARIES})
-
-  add_definitions(-DOLED)
-else()
-  list(REMOVE_ITEM SOURCES ${CMAKE_SOURCE_DIR}/OLED.cpp)
-  list(REMOVE_ITEM HEADERS ${CMAKE_SOURCE_DIR}/OLED.h)
-endif()
 
 add_executable(${APP_NAME} ${SOURCES} ${HEADERS})
 target_link_libraries(${APP_NAME} ${DEPLIBS})

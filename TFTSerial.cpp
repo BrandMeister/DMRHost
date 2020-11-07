@@ -321,43 +321,6 @@ void CTFTSerial::gotoPosPixel(unsigned char x, unsigned char y)
 	m_serial->write((unsigned char*)"\xFF", 1U);
 }
 
-void CTFTSerial::drawLine(unsigned char x1, unsigned char y1, unsigned char x2, unsigned char y2)
-{
-	m_serial->write((unsigned char*)"\x1B\x08", 2U);
-	m_serial->write(&x1, 1U);
-	m_serial->write(&y1, 1U);
-	m_serial->write(&x2, 1U);
-	m_serial->write(&y2, 1U);
-	m_serial->write((unsigned char*)"\xFF", 1U);
-}
-
-void CTFTSerial::drawBox(unsigned char x1, unsigned char y1, unsigned char x2, unsigned char y2, bool filled)
-{
-	if (filled)
-		m_serial->write((unsigned char*)"\x1B\x0A", 2U);
-	else
-		m_serial->write((unsigned char*)"\x1B\x09", 2U);
-
-	m_serial->write(&x1, 1U);
-	m_serial->write(&y1, 1U);
-	m_serial->write(&x2, 1U);
-	m_serial->write(&y2, 1U);
-	m_serial->write((unsigned char*)"\xFF", 1U);
-}
-
-void CTFTSerial::drawCircle(unsigned char x, unsigned char y, unsigned char radius, bool filled)
-{
-	if (filled)
-		m_serial->write((unsigned char*)"\x1B\x0C", 2U);
-	else
-		m_serial->write((unsigned char*)"\x1B\x0B", 2U);
-
-	m_serial->write(&x, 1U);
-	m_serial->write(&y, 1U);
-	m_serial->write(&radius, 1U);
-	m_serial->write((unsigned char*)"\xFF", 1U);
-}
-
 void CTFTSerial::displayBitmap(unsigned char x, unsigned char y, const char* filename)
 {
 	assert(filename != NULL);

@@ -23,7 +23,6 @@
 #include "POCSAGControl.h"
 #include "DMRControl.h"
 #include "DMRNetwork.h"
-#include "DMRLookup.h"
 #include "Display.h"
 #include "Timer.h"
 #include "Modem.h"
@@ -62,7 +61,6 @@ private:
   bool            m_dmrEnabled;
   bool            m_pocsagEnabled;
   unsigned int    m_cwIdTime;
-  CDMRLookup*     m_dmrLookup;
   std::string     m_callsign;
   unsigned int    m_id;
   std::string     m_cwCallsign;

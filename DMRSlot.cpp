@@ -41,7 +41,6 @@ CModem*        CDMRSlot::m_modem = NULL;
 CDMRNetwork*   CDMRSlot::m_network = NULL;
 CDisplay*      CDMRSlot::m_display = NULL;
 bool           CDMRSlot::m_duplex = true;
-CDMRLookup*    CDMRSlot::m_lookup = NULL;
 unsigned int   CDMRSlot::m_hangCount = 3U * 17U;
 DMR_OVCM_TYPES CDMRSlot::m_ovcm = DMR_OVCM_OFF;
 
@@ -139,8 +138,8 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 		return false;
 
 	if (data[0U] == TAG_LOST && m_rfState == RS_RF_AUDIO) {
-		std::string src = m_lookup->find(m_rfLC->getSrcId());
-		std::string dst = m_lookup->find(m_rfLC->getDstId());
+		std::string src = std::to_string(m_rfLC->getSrcId());
+		std::string dst = std::to_string(m_rfLC->getDstId());
 		FLCO flco       = m_rfLC->getFLCO();
 
 		if (m_rssi != 0U)
@@ -157,8 +156,8 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 	}
 
 	if (data[0U] == TAG_LOST && m_rfState == RS_RF_DATA) {
-		std::string src = m_lookup->find(m_rfLC->getSrcId());
-		std::string dst = m_lookup->find(m_rfLC->getDstId());
+		std::string src = std::to_string(m_rfLC->getSrcId());
+		std::string dst = std::to_string(m_rfLC->getDstId());
 		FLCO flco       = m_rfLC->getFLCO();
 
 		LogMessage("DMR Slot %u, RF data transmission lost from %s to %s%s", m_slotNo, src.c_str(), flco == FLCO_GROUP ? "TG " : "", dst.c_str());
@@ -279,8 +278,8 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 
 			m_rfState = RS_RF_AUDIO;
 
-			std::string src = m_lookup->find(srcId);
-			std::string dst = m_lookup->find(dstId);
+			std::string src = std::to_string(srcId);
+			std::string dst = std::to_string(dstId);
 
 			if (m_netState == RS_NET_IDLE) {
 				setShortLC(m_slotNo, dstId, flco, ACTIVITY_VOICE);
@@ -342,8 +341,8 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 				}
 			}
 
-			std::string src = m_lookup->find(m_rfLC->getSrcId());
-			std::string dst = m_lookup->find(m_rfLC->getDstId());
+			std::string src = std::to_string(m_rfLC->getSrcId());
+			std::string dst = std::to_string(m_rfLC->getDstId());
 			FLCO flco       = m_rfLC->getFLCO();
 
 			if (m_rssi != 0U)
@@ -406,8 +405,8 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 
 			m_rfState = RS_RF_DATA;
 
-			std::string src = m_lookup->find(srcId);
-			std::string dst = m_lookup->find(dstId);
+			std::string src = std::to_string(srcId);
+			std::string dst = std::to_string(dstId);
 
 			if (m_netState == RS_NET_IDLE) {
 				setShortLC(m_slotNo, dstId, gi ? FLCO_GROUP : FLCO_USER_USER, ACTIVITY_DATA);
@@ -469,8 +468,8 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 
 			writeNetworkRF(data, DT_CSBK, gi ? FLCO_GROUP : FLCO_USER_USER, srcId, dstId);
 
-			std::string src = m_lookup->find(srcId);
-			std::string dst = m_lookup->find(dstId);
+			std::string src = std::to_string(srcId);
+			std::string dst = std::to_string(dstId);
 
 			switch (csbko) {
 			case CSBKO_UUVREQ:
@@ -874,8 +873,8 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 
 				m_rfState = RS_RF_AUDIO;
 
-				std::string src = m_lookup->find(srcId);
-				std::string dst = m_lookup->find(dstId);
+				std::string src = std::to_string(srcId);
+				std::string dst = std::to_string(dstId);
 
 				if (m_netState == RS_NET_IDLE) {
 					setShortLC(m_slotNo, dstId, flco, ACTIVITY_VOICE);
@@ -1099,11 +1098,10 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 		m_netState = RS_NET_AUDIO;
 
 		setShortLC(m_slotNo, dstId, flco, ACTIVITY_VOICE);
-		std::string src = m_lookup->find(srcId);
-		std::string dst = m_lookup->find(dstId);
-		class CUserDBentry cn;
-		m_lookup->findWithName(srcId, &cn);
-		m_display->writeDMR(m_slotNo, cn, flco == FLCO_GROUP, dst, "N");
+		std::string src = std::to_string(srcId);
+		std::string dst = std::to_string(dstId);
+
+		m_display->writeDMR(m_slotNo, src, flco == FLCO_GROUP, dst, "N");
 
 #if defined(DUMP_DMR)
 		openFile();
@@ -1166,12 +1164,10 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 			m_netState = RS_NET_AUDIO;
 
 			setShortLC(m_slotNo, dstId, m_netLC->getFLCO(), ACTIVITY_VOICE);
-			std::string src = m_lookup->find(srcId);
-			std::string dst = m_lookup->find(dstId);
-			class CUserDBentry cn;
-			m_lookup->findWithName(srcId, &cn);
+			std::string src = std::to_string(srcId);
+			std::string dst = std::to_string(dstId);
 
-			m_display->writeDMR(m_slotNo, cn, m_netLC->getFLCO() == FLCO_GROUP, dst, "N");
+			m_display->writeDMR(m_slotNo, src, m_netLC->getFLCO() == FLCO_GROUP, dst, "N");
 
 			LogMessage("DMR Slot %u, received network late entry from %s to %s%s", m_slotNo, src.c_str(), m_netLC->getFLCO() == FLCO_GROUP ? "TG " : "", dst.c_str());
 		}
@@ -1233,8 +1229,8 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 		writeFile(data);
 		closeFile();
 #endif
-		std::string src = m_lookup->find(m_netLC->getSrcId());
-		std::string dst = m_lookup->find(m_netLC->getDstId());
+		std::string src = std::to_string(m_netLC->getSrcId());
+		std::string dst = std::to_string(m_netLC->getDstId());
 		FLCO flco       = m_netLC->getFLCO();
 
 		// We've received the voice header and terminator haven't we?
@@ -1284,8 +1280,8 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 
 		setShortLC(m_slotNo, dstId, gi ? FLCO_GROUP : FLCO_USER_USER, ACTIVITY_DATA);
 
-		std::string src = m_lookup->find(srcId);
-		std::string dst = m_lookup->find(dstId);
+		std::string src = std::to_string(srcId);
+		std::string dst = std::to_string(dstId);
 
 		m_display->writeDMR(m_slotNo, src, gi, dst, "N");
 
@@ -1360,12 +1356,10 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 
 			setShortLC(m_slotNo, dstId, m_netLC->getFLCO(), ACTIVITY_VOICE);
 	
-			std::string src = m_lookup->find(srcId);
-			std::string dst = m_lookup->find(dstId);
-			class CUserDBentry cn;
-			m_lookup->findWithName(srcId, &cn);
+			std::string src = std::to_string(srcId);
+			std::string dst = std::to_string(dstId);
 
-			m_display->writeDMR(m_slotNo, cn, m_netLC->getFLCO() == FLCO_GROUP, dst, "N");
+			m_display->writeDMR(m_slotNo, src, m_netLC->getFLCO() == FLCO_GROUP, dst, "N");
 
 			LogMessage("DMR Slot %u, received network late entry from %s to %s%s", m_slotNo, src.c_str(), m_netLC->getFLCO() == FLCO_GROUP ? "TG " : "", dst.c_str());
 		}
@@ -1615,8 +1609,8 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 		closeFile();
 #endif
 
-		std::string src = m_lookup->find(srcId);
-		std::string dst = m_lookup->find(dstId);
+		std::string src = std::to_string(srcId);
+		std::string dst = std::to_string(dstId);
 
 		switch (csbko) {
 		case CSBKO_UUVREQ:
@@ -1862,11 +1856,10 @@ void CDMRSlot::writeQueueNet(const unsigned char *data)
 	m_queue.addData(data, len);
 }
 
-void CDMRSlot::init(unsigned int colorCode, bool embeddedLCOnly, bool dumpTAData, unsigned int callHang, CModem* modem, CDMRNetwork* network, CDisplay* display, bool duplex, CDMRLookup* lookup, CRSSIInterpolator* rssiMapper, unsigned int jitter, DMR_OVCM_TYPES ovcm)
+void CDMRSlot::init(unsigned int colorCode, bool embeddedLCOnly, bool dumpTAData, unsigned int callHang, CModem* modem, CDMRNetwork* network, CDisplay* display, bool duplex, CRSSIInterpolator* rssiMapper, unsigned int jitter, DMR_OVCM_TYPES ovcm)
 {
 	assert(modem != NULL);
 	assert(display != NULL);
-	assert(lookup != NULL);
 	assert(rssiMapper != NULL);
 
 	m_colorCode      = colorCode;
@@ -1876,7 +1869,6 @@ void CDMRSlot::init(unsigned int colorCode, bool embeddedLCOnly, bool dumpTAData
 	m_network        = network;
 	m_display        = display;
 	m_duplex         = duplex;
-	m_lookup         = lookup;
 	m_hangCount      = callHang * 17U;
 	m_ovcm           = ovcm;
 

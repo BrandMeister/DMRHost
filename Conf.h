@@ -60,10 +60,6 @@ public:
   unsigned int getCWIdTime() const;
   std::string  getCWIdCallsign() const;
 
-  // The DMR Id section
-  std::string  getDMRIdLookupFile() const;
-  unsigned int getDMRIdLookupTime() const;
-
   // The Modem section
   std::string  getModemPort() const;
   std::string  getModemProtocol() const;
@@ -155,14 +151,6 @@ public:
   unsigned int getNextionScreenLayout() const;
   bool         getNextionTempInFahrenheit() const;
 
-  // The OLED section
-  unsigned char  getOLEDType() const;
-  unsigned char  getOLEDBrightness() const;
-  bool           getOLEDInvert() const;
-  bool           getOLEDScroll() const;
-  bool           getOLEDRotate() const;
-  bool           getOLEDLogoScreensaver() const;
-
 private:
   std::string  m_file;
   std::string  m_callsign;
@@ -190,9 +178,6 @@ private:
   bool         m_cwIdEnabled;
   unsigned int m_cwIdTime;
   std::string  m_cwIdCallsign;
-
-  std::string  m_dmrIdLookupFile;
-  unsigned int m_dmrIdLookupTime;
 
   std::string  m_modemPort;
   std::string  m_modemProtocol;
@@ -275,13 +260,6 @@ private:
   unsigned int m_nextionIdleBrightness;
   unsigned int m_nextionScreenLayout;
   bool         m_nextionTempInFahrenheit;
-  
-  unsigned char m_oledType;
-  unsigned char m_oledBrightness;
-  bool          m_oledInvert;
-  bool          m_oledScroll;
-  bool          m_oledRotate;
-  bool          m_oledLogoScreensaver;
 };
 
 #endif
