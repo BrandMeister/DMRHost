@@ -390,8 +390,8 @@ void CDMRNetwork::clock(unsigned int ms)
 		return;
 	}
 
-	// if (m_debug && length > 0)
-	//	CUtils::dump(1U, "Network Received", m_buffer, length);
+	if (m_debug && length > 0)
+		CUtils::dump(1U, "Network Received", m_buffer, length);
 
 	if (length > 0 && CUDPSocket::match(m_addr, address)) {
 		if (::memcmp(m_buffer, "DMRD", 4U) == 0) {
