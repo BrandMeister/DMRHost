@@ -1,0 +1,13 @@
+Source: dmrhost
+Section: misc
+Build-Depends: debhelper (>=9)
+Standards-Version: 3.9.4
+Homepage: https://brandmeister.network/
+Maintainer: Stefan Saraev <stefan@saraev.ca>
+Priority: optional
+
+Package: dmrhost
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: DMRHost
+ DMRHost

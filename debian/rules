@@ -1,0 +1,22 @@
+#!/usr/bin/make -f
+
+include /usr/share/dpkg/architecture.mk
+
+# support cross compile
+ifneq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
+export CROSS_COMPILE ?= $(DEB_HOST_GNU_TYPE)-
+endif
+
+# support parallel build
+ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+  DEB_UBOOT_FLAGS += -j$(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+endif
+
+%:
+	dh $@ --buildsystem=cmake --with-systemd
+
+override_dh_auto_configure:
+	dh_auto_configure -- -DCMAKE_BUILD_TYPE=Relese
+
+override_dh_installinit:
+	dh_systemd_enable --name=dmrhost dmrhost.service

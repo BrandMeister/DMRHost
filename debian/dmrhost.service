@@ -1,0 +1,15 @@
+[Unit]
+Description=DMRHost
+After=multi-user.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/DMRHost
+User=seo
+TimeoutStopSec=1
+Restart=always
+RestartSec=5
+StartLimitInterval=0
+
+[Install]
+WantedBy=multi-user.target
