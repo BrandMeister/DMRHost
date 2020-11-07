@@ -40,3 +40,7 @@ endif()
 
 add_executable(${APP_NAME} ${SOURCES} ${HEADERS})
 target_link_libraries(${APP_NAME} ${DEPLIBS})
+
+include(GNUInstallDirs)
+install (TARGETS ${APP_NAME} RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+install (FILES ${PROJECT_SOURCE_DIR}/MMDVM.ini DESTINATION "${CMAKE_INSTALL_SYSCONFDIR}")
