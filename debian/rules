@@ -16,7 +16,7 @@ endif
 	dh $@ --buildsystem=cmake --with-systemd
 
 override_dh_auto_configure:
-	dh_auto_configure -- -DCMAKE_BUILD_TYPE=Relese
+	dh_auto_configure -- -DCMAKE_BUILD_TYPE=Release
 
 override_dh_installinit:
 	dh_systemd_enable --name=dmrhost dmrhost.service

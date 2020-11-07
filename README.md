@@ -26,6 +26,6 @@ DMRHost uses CMake as its building system:
 ```
 mkdir build
 cd build
-cmake ..
+cmake -DCMAKE_BUILD_TYPE=Release ..
 make
 ```
