@@ -218,7 +218,7 @@ int CUDPSocket::read(unsigned char* buffer, unsigned int length, sockaddr_storag
 		return -1;
 	}
 
-	int index;
+	int index = 0;
 	for (i = 0; i < n; i++) {
 		// round robin
 	  	index = (i + m_counter) % n;
