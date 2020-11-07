@@ -1,0 +1,41 @@
+default:
+  image: dmrhost-amd64-runner
+
+stages:
+  - binary
+
+.build:
+  script:
+    - ./debian/make_debian_changelog.sh
+    - PATH=$PATH:/opt/$CROSS-cross/bin CXXFLAGS="$CXXFLAGS" DEB_BUILD_OPTIONS=parallel=$(nproc) dpkg-buildpackage --post-clean --no-sign -a$ARCH -t $CROSS -i -I -b
+    - mkdir build
+    - mv ../*.deb build/
+  tags:
+    - dmrhost-build
+  artifacts:
+    paths:
+      - build/*
+
+package:amd64:
+  stage: binary
+  extends: .build
+  variables:
+    ARCH: amd64
+    CROSS: x86_64-linux-musl
+    CXXFLAGS: -static
+
+package:arm:
+  stage: binary
+  extends: .build
+  variables:
+    ARCH: arm
+    CROSS: arm-linux-musleabihf
+    CXXFLAGS: -march=armv6zk -mcpu=arm1176jzf-s -static
+
+package:arm64:
+  stage: binary
+  extends: .build
+  variables:
+    ARCH: arm64
+    CROSS: aarch64-linux-musl
+    CXXFLAGS: -static
