@@ -3,6 +3,7 @@ default:
 
 stages:
   - binary
+  - deploy
 
 .build:
   script:
@@ -15,6 +16,7 @@ stages:
   artifacts:
     paths:
       - build/*
+  cache: {}
 
 package:amd64:
   stage: binary
@@ -39,3 +41,12 @@ package:arm64:
     ARCH: arm64
     CROSS: aarch64-linux-musl
     CXXFLAGS: -static
+
+deploy:
+  stage: deploy
+  script:
+    - reprepro -b /var/www/repo/dmrhost --ignore=wrongdistribution includedeb stable build/dmrhost_*.deb
+  tags:
+    - deploy-dmrhost
+  cache: {}
+  when: manual

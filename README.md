@@ -20,7 +20,7 @@ on the UMP.
 The Hobbytronics TFT Display, which is a Pi-Hat, connects to the UART on the
 Raspbery Pi.
 
-The OLED display needs an extra library see OLED.md
+The OLED display needs an extra library: https://github.com/hallard/ArduiPi_OLED
 
 DMRHost uses CMake as its building system:
 ```
@@ -28,4 +28,12 @@ mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 make
+```
+
+Debian / Ubuntu packages can be found at our repo:
+```
+echo "deb http://repo.test.net.in/dmrhost stable main" > /etc/apt/sources.list.d/dmrhost.list
+wget http://repo.test.net.in/dmrhost/public.key -O - | apt-key add -
+apt-get update
+apt-get install dmrhost
 ```
