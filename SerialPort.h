@@ -16,8 +16,7 @@
 *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef SerialPort_H
-#define SerialPort_H
+#pragma once
 
 class ISerialPort {
 public:
@@ -33,5 +32,3 @@ public:
 
 private:
 };
-
-#endif

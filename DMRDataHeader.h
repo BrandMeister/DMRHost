@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef DMRDataHeader_H
-#define DMRDataHeader_H
+#pragma once
 
 class CDMRDataHeader
 {
@@ -49,6 +48,3 @@ private:
 	bool           m_S;
 	unsigned char  m_Ns;
 };
-
-#endif
-

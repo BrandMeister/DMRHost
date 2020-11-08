@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(TFTSERIAL_H)
-#define	TFTSERIAL_H
+#pragma once
 
 #include "Display.h"
 #include "Defines.h"
@@ -69,5 +68,3 @@ private:
   void setBrightness(unsigned char brightness);
   void displayText(const char* text);
 };
-
-#endif

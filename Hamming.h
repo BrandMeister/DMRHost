@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef	Hamming_H
-#define	Hamming_H
+#pragma once
 
 class CHamming {
 public:
@@ -39,5 +38,3 @@ public:
 	static void encode17123(bool* d);
 	static bool decode17123(bool* d);
 };
-
-#endif

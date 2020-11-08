@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef UDPSocket_H
-#define UDPSocket_H
+#pragma once
 
 #include <string>
 
@@ -73,5 +72,3 @@ private:
 	int            m_fd[UDP_SOCKET_MAX];
 	unsigned int   m_counter;
 };
-
-#endif

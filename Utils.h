@@ -11,8 +11,7 @@
  *	GNU General Public License for more details.
  */
 
-#ifndef	Utils_H
-#define	Utils_H
+#pragma once
 
 #include <string>
 
@@ -34,5 +33,3 @@ public:
 
 private:
 };
-
-#endif

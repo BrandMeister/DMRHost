@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef Golay2087_H
-#define Golay2087_H
+#pragma once
 
 class CGolay2087 {
 public:
@@ -28,5 +27,3 @@ public:
 private:
 	static unsigned int getSyndrome1987(unsigned int pattern);
 };
-
-#endif

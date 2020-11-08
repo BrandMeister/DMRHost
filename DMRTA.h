@@ -12,8 +12,7 @@
 *	GNU General Public License for more details.
 */
 
-#ifndef	DMRTA_H
-#define	DMRTA_H
+#pragma once
 
 class CDMRTA {
 public:
@@ -31,5 +30,3 @@ private:
     char            m_TA[32];
     unsigned char   m_buf[32];
 };
-
-#endif

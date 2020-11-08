@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef RingBuffer_H
-#define RingBuffer_H
+#pragma once
 
 #include "Log.h"
 
@@ -150,5 +149,3 @@ private:
 	unsigned int m_iPtr;
 	unsigned int m_oPtr;
 };
-
-#endif

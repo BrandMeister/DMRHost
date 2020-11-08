@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(MMDVMHOST_H)
-#define	MMDVMHOST_H
+#pragma once
 
 #include "POCSAGNetwork.h"
 #include "POCSAGControl.h"
@@ -73,5 +72,3 @@ private:
 
   void setMode(unsigned char mode);
 };
-
-#endif

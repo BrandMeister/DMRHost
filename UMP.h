@@ -16,8 +16,7 @@
 *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#if !defined(UMP_H)
-#define	UMP_H
+#pragma once
 
 #include "SerialController.h"
 #include "SerialPort.h"
@@ -59,5 +58,3 @@ private:
 	bool              m_tx;
 	bool              m_cd;
 };
-
-#endif

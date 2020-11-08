@@ -16,8 +16,7 @@
 *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#if !defined(POCSAGDEFINES_H)
-#define  POCSAGDEFINES_H
+#pragma once
 
 #include <cstdint>
 
@@ -31,5 +30,3 @@ const unsigned int POCSAG_FRAME_ADDRESSES = 8U;
 const uint32_t POCSAG_SYNC_WORD = 0x7CD215D8U;
 
 const uint32_t POCSAG_IDLE_WORD = 0x7A89C197U;
-
-#endif

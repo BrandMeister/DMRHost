@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef DMREmbeddedData_H
-#define DMREmbeddedData_H
+#pragma once
 
 #include "DMRDefines.h"
 #include "DMRLC.h"
@@ -59,5 +58,3 @@ private:
 	void decodeEmbeddedData();
 	void encodeEmbeddedData();
 };
-
-#endif

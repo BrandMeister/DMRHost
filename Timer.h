@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef	Timer_H
-#define	Timer_H
+#pragma once
 
 class CTimer {
 public:
@@ -85,5 +84,3 @@ private:
 	unsigned int m_timeout;
 	unsigned int m_timer;
 };
-
-#endif

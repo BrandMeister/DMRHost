@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef DMRFullLC_H
-#define DMRFullLC_H
+#pragma once
 
 #include "DMRLC.h"
 #include "DMRSlotType.h"
@@ -37,6 +36,3 @@ public:
 private:
 	CBPTC19696 m_bptc;
 };
-
-#endif
-

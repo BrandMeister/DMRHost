@@ -17,8 +17,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef SerialController_H
-#define SerialController_H
+#pragma once
 
 #include "SerialPort.h"
 
@@ -60,5 +59,3 @@ protected:
 	int            m_fd;
 	bool canWrite();
 };
-
-#endif

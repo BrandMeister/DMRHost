@@ -17,8 +17,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef SHA256_H
-#define SHA256_H
+#pragma once
 
 #include <cstdint>
 
@@ -69,5 +68,3 @@ private:
 	void init();
 	void conclude();
 };
-
-#endif

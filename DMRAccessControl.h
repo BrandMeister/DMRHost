@@ -15,8 +15,8 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program; if not, write to the Free Software
  */
-#if !defined(DMRAccessControl_H)
-#define	DMRAccessControl_H
+
+#pragma once
 
 #include <vector>
 
@@ -40,5 +40,3 @@ private:
 	static bool m_selfOnly;
 	static unsigned int m_id;
 };
-
-#endif

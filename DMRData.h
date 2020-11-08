@@ -11,8 +11,7 @@
  *	GNU General Public License for more details.
  */
 
-#ifndef DMRData_H
-#define	DMRData_H
+#pragma once
 
 #include "DMRDefines.h"
 
@@ -66,5 +65,3 @@ private:
 	unsigned char  m_ber;
 	unsigned char  m_rssi;
 };
-
-#endif

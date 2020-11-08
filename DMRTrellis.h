@@ -11,8 +11,7 @@
 *	GNU General Public License for more details.
 */
 
-#ifndef	DMRTrellis_H
-#define	DMRTrellis_H
+#pragma once
 
 class CDMRTrellis {
 public:
@@ -32,5 +31,3 @@ private:
 	bool fixCode(unsigned char* points, unsigned int failPos, unsigned char* payload) const;
 	unsigned int checkCode(const unsigned char* points, unsigned char* tribits) const;
 };
-
-#endif

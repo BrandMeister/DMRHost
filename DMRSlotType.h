@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(DMRSLOTTYPE_H)
-#define DMRSLOTTYPE_H
+#pragma once
 
 class CDMRSlotType
 {
@@ -38,5 +37,3 @@ private:
 	unsigned char m_colorCode;
 	unsigned char m_dataType;
 };
-
-#endif

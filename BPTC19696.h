@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(BPTC19696_H)
-#define	BPTC19696_H
+#pragma once
 
 class CBPTC19696
 {
@@ -43,5 +42,3 @@ private:
 	void encodeErrorCheck();
 	void encodeExtractBinary(unsigned char* data);
 };
-
-#endif

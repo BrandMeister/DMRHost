@@ -16,8 +16,7 @@
 *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#if !defined(POCSAGControl_H)
-#define	POCSAGControl_H
+#pragma once
 
 #include "POCSAGNetwork.h"
 #include "POCSAGDefines.h"
@@ -82,5 +81,3 @@ private:
 	bool writeFile(const unsigned char* data);
 	void closeFile();
 };
-
-#endif

@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef	NULLMODEM_H
-#define	NULLMODEM_H
+#pragma once
 
 #include "Modem.h"
 #include "Defines.h"
@@ -84,5 +83,3 @@ public:
 private:
 	HW_TYPE                    m_hwType;
 };
-
-#endif

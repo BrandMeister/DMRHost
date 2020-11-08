@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(CRC_H)
-#define	CRC_H
+#pragma once
 
 class CCRC
 {
@@ -33,5 +32,3 @@ public:
 
 	static unsigned char crc8(const unsigned char* in, unsigned int length);
 };
-
-#endif

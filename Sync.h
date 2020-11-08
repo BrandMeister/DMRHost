@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(SYNC_H)
-#define	SYNC_H
+#pragma once
 
 class CSync
 {
@@ -27,5 +26,3 @@ public:
 
 private:
 };
-
-#endif

@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(DMRCSBK_H)
-#define DMRCSBK_H
+#pragma once
 
 #include "DMRDefines.h"
 
@@ -76,5 +75,3 @@ private:
 	bool           m_dataContent;
 	unsigned char  m_CBF;
 };
-
-#endif

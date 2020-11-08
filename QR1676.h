@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef QR1676_H
-#define QR1676_H
+#pragma once
 
 class CQR1676 {
 public:
@@ -28,5 +27,3 @@ public:
 private:
 	static unsigned int getSyndrome1576(unsigned int pattern);
 };
-
-#endif

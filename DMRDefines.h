@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(DMRDefines_H)
-#define	DMRDefines_H
+#pragma once
 
 #include "Defines.h"		// For TAG_DATA
 
@@ -119,5 +118,3 @@ enum FLCO {
 	FLCO_TALKER_ALIAS_BLOCK3 = 7,
 	FLCO_GPS_INFO            = 8
 };
-
-#endif

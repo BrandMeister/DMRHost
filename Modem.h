@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef	MODEM_H
-#define	MODEM_H
+#pragma once
 
 #include "SerialController.h"
 #include "RingBuffer.h"
@@ -151,5 +150,3 @@ private:
 
 	RESP_TYPE_MMDVM getResponse();
 };
-
-#endif

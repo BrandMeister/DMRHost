@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(LOG_H)
-#define	LOG_H
+#pragma once
 
 #include <string>
 
@@ -32,5 +31,3 @@ extern void Log(unsigned int level, const char* fmt, ...);
 
 extern bool LogInitialise(const std::string& filePath, const std::string& fileRoot, unsigned int fileLevel, unsigned int displayLevel, bool rotate);
 extern void LogFinalise();
-
-#endif

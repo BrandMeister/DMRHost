@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(AMBEFEC_H)
-#define	AMBEFEC_H
+#pragma once
 
 class CAMBEFEC {
 public:
@@ -29,5 +28,3 @@ public:
 private:
 	unsigned int regenerateDMR(unsigned int& a, unsigned int& b,unsigned int& c) const;
 };
-
-#endif

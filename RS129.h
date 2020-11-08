@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(RS129_H)
-#define	RS129_H
+#pragma once
 
 class CRS129
 {
@@ -26,5 +25,3 @@ public:
 
 	static void encode(const unsigned char* msg, unsigned int nbytes, unsigned char* parity);
 };
-
-#endif

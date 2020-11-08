@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(Defines_H)
-#define	Defines_H
+#pragma once
 
 const unsigned char MODE_IDLE    = 0U;
 const unsigned char MODE_DMR     = 2U;
@@ -73,5 +72,3 @@ enum DMR_OVCM_TYPES {
 	DMR_OVCM_TX_ON,
 	DMR_OVCM_ON
 };
-
-#endif

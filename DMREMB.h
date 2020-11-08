@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(DMREMB_H)
-#define DMREMB_H
+#pragma once
 
 class CDMREMB
 {
@@ -42,5 +41,3 @@ private:
 	bool          m_PI;
 	unsigned char m_LCSS;
 };
-
-#endif

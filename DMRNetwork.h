@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(DMRNetwork_H)
-#define	DMRNetwork_H
+#pragma once
 
 #include "UDPSocket.h"
 #include "Timer.h"
@@ -113,5 +112,3 @@ private:
 
 	bool write(const unsigned char* data, unsigned int length);
 };
-
-#endif

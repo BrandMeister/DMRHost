@@ -16,8 +16,7 @@
 *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef ModemSerialPort_H
-#define ModemSerialPort_H
+#pragma once
 
 #include "SerialPort.h"
 #include "Modem.h"
@@ -38,5 +37,3 @@ public:
 private:
 	CModem* m_modem;
 };
-
-#endif

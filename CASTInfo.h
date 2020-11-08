@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(CASTINFO_H)
-#define	CASTINFO_H
+#pragma once
 
 #include "Display.h"
 
@@ -54,5 +53,3 @@ private:
   	CModem*		m_modem;
 	std::string	m_ipaddress;
 };
-
-#endif

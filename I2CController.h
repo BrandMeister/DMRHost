@@ -17,8 +17,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef I2CController_H
-#define I2CController_H
+#pragma once
 
 #include "SerialController.h"
 
@@ -36,5 +35,3 @@ public:
 private:
 	unsigned int m_address;
 };
-
-#endif

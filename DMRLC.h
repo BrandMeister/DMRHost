@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(DMRLC_H)
-#define DMRLC_H
+#pragma once
 
 #include "DMRDefines.h"
 
@@ -60,6 +59,3 @@ private:
 	unsigned int  m_srcId;
 	unsigned int  m_dstId;
 };
-
-#endif
-

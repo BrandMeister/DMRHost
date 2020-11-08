@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(CONF_H)
-#define	CONF_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -259,5 +258,3 @@ private:
   unsigned int m_nextionScreenLayout;
   bool         m_nextionTempInFahrenheit;
 };
-
-#endif

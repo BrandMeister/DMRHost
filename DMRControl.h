@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(DMRControl_H)
-#define	DMRControl_H
+#pragma once
 
 #include "RSSIInterpolator.h"
 #include "DMRNetwork.h"
@@ -54,5 +53,3 @@ private:
 	CDMRSlot     m_slot1;
 	CDMRSlot     m_slot2;
 };
-
-#endif

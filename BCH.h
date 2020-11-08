@@ -16,8 +16,7 @@
 *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#if !defined(BCH_H)
-#define	BCH_H
+#pragma once
 
 class CBCH {
 public:
@@ -29,5 +28,3 @@ public:
 private:
 	void encode(const int* data, int* bb);
 };
-
-#endif

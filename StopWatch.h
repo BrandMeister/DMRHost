@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(STOPWATCH_H)
-#define	STOPWATCH_H
+#pragma once
 
 #include <sys/time.h>
 
@@ -35,4 +34,3 @@ public:
 private:
 	unsigned long long m_startMS;
 };
-#endif

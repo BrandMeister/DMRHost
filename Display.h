@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(DISPLAY_H)
-#define	DISPLAY_H
+#pragma once
 
 #include "Timer.h"
 
@@ -85,5 +84,3 @@ private:
 	unsigned char m_mode1;
 	unsigned char m_mode2;
 };
-
-#endif

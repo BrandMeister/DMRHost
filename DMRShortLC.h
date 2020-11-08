@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(DMRSHORTLC_H)
-#define	DMRSHORTLC_H
+#pragma once
 
 class CDMRShortLC
 {
@@ -43,5 +42,3 @@ private:
 	void encodeErrorCheck();
 	void encodeExtractBinary(unsigned char* data);
 };
-
-#endif

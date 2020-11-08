@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef Golay24128_H
-#define Golay24128_H
+#pragma once
 
 class CGolay24128 {
 public:
@@ -28,5 +27,3 @@ public:
 	static unsigned int decode24128(unsigned int code);
 	static unsigned int decode24128(unsigned char* bytes);
 };
-
-#endif

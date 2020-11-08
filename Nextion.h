@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(NEXTION_H)
-#define	NEXTION_H
+#pragma once
 
 #include "Display.h"
 #include "Defines.h"
@@ -85,5 +84,3 @@ private:
   void sendCommand(const char* command);
   void sendCommandAction(unsigned int status);
 };
-
-#endif

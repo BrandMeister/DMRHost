@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef	POCSAGNetwork_H
-#define	POCSAGNetwork_H
+#pragma once
 
 #include "POCSAGDefines.h"
 #include "RingBuffer.h"
@@ -52,5 +51,3 @@ private:
 	bool             m_enabled;
 	CRingBuffer<unsigned char> m_buffer;
 };
-
-#endif

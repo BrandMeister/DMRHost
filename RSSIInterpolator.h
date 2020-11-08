@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(RSSIINTERPOLATOR_H)
-#define	RSSIINTERPOLATOR_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -35,5 +34,3 @@ public:
 private:	
 	std::map<uint16_t, int> m_map;
 };
-
-#endif

@@ -16,8 +16,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(DMRSlot_H)
-#define	DMRSlot_H
+#pragma once
 
 #include "RSSIInterpolator.h"
 #include "DMREmbeddedData.h"
@@ -152,5 +151,3 @@ private:
 
 	static void setShortLC(unsigned int slotNo, unsigned int id, FLCO flco = FLCO_GROUP, ACTIVITY_TYPE type = ACTIVITY_NONE);
 };
-
-#endif
