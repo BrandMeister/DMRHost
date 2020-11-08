@@ -130,7 +130,7 @@ bool CDMRNetwork::open()
 	CUDPSocket::lookup(m_addressStr, m_port, m_addr, m_addrLen);
 
 	m_status = WAITING_CONNECT;
-	m_timeoutTimer.stop();
+	m_timeoutTimer.start();
 	m_retryTimer.start();
 
 	return true;
@@ -364,17 +364,20 @@ void CDMRNetwork::clock(unsigned int ms)
 	if (m_status == WAITING_CONNECT) {
 		m_retryTimer.clock(ms);
 		if (m_retryTimer.isRunning() && m_retryTimer.hasExpired()) {
+			m_retryTimer.start();
+
 			bool ret = m_socket.open(m_addr.ss_family);
 			if (ret) {
 				ret = writeLogin();
-				if (!ret)
+				if (!ret) {
+					LogMessage("DMR, connect: writeLogin() failed");
 					return;
+				}
 
 				m_status = WAITING_LOGIN;
 				m_timeoutTimer.start();
-			}
-
-			m_retryTimer.start();
+			} else
+				LogMessage("DMR, connect: socket failed");
 		}
 
 		return;
@@ -390,7 +393,13 @@ void CDMRNetwork::clock(unsigned int ms)
 		return;
 	}
 
-	if (length > 0 && CUDPSocket::match(m_addr, address)) {
+	if (length > 0) {
+		// should never happen
+		if (!CUDPSocket::match(m_addr, address)) {
+			LogMessage("DMR, packet received from an invalid source");
+			return;
+		}
+
 		if (m_debug)
 			CUtils::dump(1U, "Network Received", m_buffer, length);
 
