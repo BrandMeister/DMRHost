@@ -23,7 +23,6 @@
 #include "Defines.h"
 #include "SerialPort.h"
 #include "Timer.h"
-#include "Thread.h"
 #include <string>
 
 class CNextion : public CDisplay

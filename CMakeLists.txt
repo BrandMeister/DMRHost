@@ -16,13 +16,9 @@ file(GLOB SOURCES "*.cpp")
 file(GLOB HEADERS "*.h")
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os -Wall -std=c++0x $ENV{CXXFLAGS}")
-set(DEPLIBS "")
-
-find_package(Threads REQUIRED QUIET)
-list(APPEND DEPLIBS ${CMAKE_THREAD_LIBS_INIT})
 
 add_executable(${APP_NAME} ${SOURCES} ${HEADERS})
-target_link_libraries(${APP_NAME} ${DEPLIBS})
+target_link_libraries(${APP_NAME})
 
 include(GNUInstallDirs)
 install (TARGETS ${APP_NAME} RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")

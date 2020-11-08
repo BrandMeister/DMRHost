@@ -26,6 +26,8 @@
 #include <ctime>
 #include <clocale>
 
+#include <unistd.h>
+
 const unsigned int DMR_RSSI_COUNT   = 4U;		  // 4 * 360ms = 1440ms
 const unsigned int DMR_BER_COUNT    = 24U;		// 24 * 60ms = 1440ms
 
@@ -584,5 +586,5 @@ void CNextion::sendCommand(const char* command)
 	// Since we just firing commands at the display, and not listening for the response,
 	// we must add a bit of a delay to allow the display to process the commands, else some are getting mangled.
 	// 10 ms is just a guess, but seems to be sufficient.
-    CThread::sleep(10U);
+    usleep(10 * 1000);
 }

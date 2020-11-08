@@ -22,7 +22,6 @@
 #include "Version.h"
 #include "StopWatch.h"
 #include "Defines.h"
-#include "Thread.h"
 #include "Log.h"
 #include "GitVersion.h"
 
@@ -597,7 +596,7 @@ int CMMDVMHost::run()
 			m_ump->clock(ms);
 
 		if (ms < 5U)
-			CThread::sleep(5U);
+			usleep(5 * 1000);
 	}
 
 	setMode(MODE_QUIT);

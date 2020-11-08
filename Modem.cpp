@@ -19,7 +19,6 @@
 #include "I2CController.h"
 #include "DMRDefines.h"
 #include "POCSAGDefines.h"
-#include "Thread.h"
 #include "Modem.h"
 #include "NullModem.h"
 #include "Utils.h"
@@ -238,9 +237,9 @@ void CModem::clock(unsigned int ms)
 		m_error = true;
 		close();
 
-		CThread::sleep(2000U);		// 2s
+		usleep(2000 * 1000);		// 2s
 		while (!open())
-			CThread::sleep(5000U);	// 5s
+			usleep(5000 * 1000);	// 5s
 	}
 
 	RESP_TYPE_MMDVM type = getResponse();
@@ -767,7 +766,7 @@ bool CModem::readVersion()
 {
 	assert(m_serial != NULL);
 
-	CThread::sleep(2000U);	// 2s
+	usleep(2000 * 1000);	// 2s
 
 	for (unsigned int i = 0U; i < 6U; i++) {
 		unsigned char buffer[3U];
@@ -787,7 +786,7 @@ bool CModem::readVersion()
 #endif
 
 		for (unsigned int count = 0U; count < MAX_RESPONSES; count++) {
-			CThread::sleep(10U);
+			usleep(10 * 1000);
 			RESP_TYPE_MMDVM resp = getResponse();
 			if (resp == RTM_OK && m_buffer[2U] == MMDVM_GET_VERSION) {
 				if (::memcmp(m_buffer + 4U, "MMDVM ", 6U) == 0)
@@ -816,7 +815,7 @@ bool CModem::readVersion()
 			}
 		}
 
-		CThread::sleep(1500U);
+		usleep(1500 * 1000);
 	}
 
 	LogError("Unable to read the firmware version after six attempts");
@@ -906,7 +905,7 @@ bool CModem::setConfig()
 	unsigned int count = 0U;
 	RESP_TYPE_MMDVM resp;
 	do {
-		CThread::sleep(10U);
+		usleep(10 * 1000);
 
 		resp = getResponse();
 		if (resp == RTM_OK && m_buffer[2U] != MMDVM_ACK && m_buffer[2U] != MMDVM_NAK) {
@@ -981,7 +980,7 @@ bool CModem::setFrequency()
 	unsigned int count = 0U;
 	RESP_TYPE_MMDVM resp;
 	do {
-		CThread::sleep(10U);
+		usleep(10 * 1000);
 
 		resp = getResponse();
 		if (resp == RTM_OK && m_buffer[2U] != MMDVM_ACK && m_buffer[2U] != MMDVM_NAK) {
