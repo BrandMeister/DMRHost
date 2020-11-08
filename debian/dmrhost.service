@@ -3,9 +3,8 @@ Description=DMRHost
 After=multi-user.target
 
 [Service]
-Type=forking
+Type=simple
 ExecStart=/usr/bin/DMRHost
-User=seo
 TimeoutStopSec=1
 Restart=always
 RestartSec=5
