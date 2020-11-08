@@ -61,7 +61,7 @@ public:
 
 	void enable(bool enabled);
 
-	static void init(unsigned int colorCode, bool embeddedLCOnly, bool dumpTAData, unsigned int callHang, CModem* modem, CDMRNetwork* network, CDisplay* display, bool duplex, CRSSIInterpolator* rssiMapper, unsigned int jitter, DMR_OVCM_TYPES ovcm);
+	static void init(unsigned int colorCode, bool embeddedLCOnly, bool dumpTAData, unsigned int callHang, CModem* modem, CDMRNetwork* network, CDisplay* display, bool duplex, CRSSIInterpolator* rssiMapper, DMR_OVCM_TYPES ovcm);
 
 private:
 	unsigned int               m_slotNo;
@@ -88,7 +88,6 @@ private:
 	CTimer                     m_networkWatchdog;
 	CTimer                     m_rfTimeoutTimer;
 	CTimer                     m_netTimeoutTimer;
-	CTimer                     m_packetTimer;
 	CStopWatch                 m_interval;
 	CStopWatch                 m_elapsed;
 	unsigned int               m_rfFrames;

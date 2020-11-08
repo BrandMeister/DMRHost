@@ -92,7 +92,6 @@ m_netN(0U),
 m_networkWatchdog(1000U, 0U, 1500U),
 m_rfTimeoutTimer(1000U, timeout),
 m_netTimeoutTimer(1000U, timeout),
-m_packetTimer(1000U, 0U, 50U),
 m_interval(),
 m_elapsed(),
 m_rfFrames(0U),
@@ -1856,7 +1855,7 @@ void CDMRSlot::writeQueueNet(const unsigned char *data)
 	m_queue.addData(data, len);
 }
 
-void CDMRSlot::init(unsigned int colorCode, bool embeddedLCOnly, bool dumpTAData, unsigned int callHang, CModem* modem, CDMRNetwork* network, CDisplay* display, bool duplex, CRSSIInterpolator* rssiMapper, unsigned int jitter, DMR_OVCM_TYPES ovcm)
+void CDMRSlot::init(unsigned int colorCode, bool embeddedLCOnly, bool dumpTAData, unsigned int callHang, CModem* modem, CDMRNetwork* network, CDisplay* display, bool duplex, CRSSIInterpolator* rssiMapper, DMR_OVCM_TYPES ovcm)
 {
 	assert(modem != NULL);
 	assert(display != NULL);
