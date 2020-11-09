@@ -30,10 +30,6 @@
 #include <arpa/inet.h>
 #include <errno.h>
 
-#if !defined(UDP_SOCKET_MAX)
-#define UDP_SOCKET_MAX	1
-#endif
-
 enum IPMATCHTYPE {
 	IMT_ADDRESS_AND_PORT,
 	IMT_ADDRESS_ONLY
@@ -53,7 +49,6 @@ public:
 	bool write(const unsigned char* buffer, unsigned int length, const sockaddr_storage& address, unsigned int address_length);
 
 	void close();
-	void close(const unsigned int index);
 
 	static void startup();
 	static void shutdown();
@@ -64,11 +59,8 @@ public:
 	static bool match(const sockaddr_storage& addr1, const sockaddr_storage& addr2, IPMATCHTYPE type = IMT_ADDRESS_AND_PORT);
 
 private:
-	std::string    m_address_save;
-	unsigned short m_port_save;
-	std::string    m_address[UDP_SOCKET_MAX];
-	unsigned short m_port[UDP_SOCKET_MAX];
-	unsigned int   m_af[UDP_SOCKET_MAX];
-	int            m_fd[UDP_SOCKET_MAX];
-	unsigned int   m_counter;
+	std::string    m_address;
+	unsigned short m_port;
+	unsigned int   m_af;
+	int            m_fd;
 };

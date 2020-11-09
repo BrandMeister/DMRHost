@@ -32,7 +32,6 @@ const unsigned int BUFFER_LENGTH = 500U;
 
 const unsigned int HOMEBREW_DATA_PACKET_LENGTH = 55U;
 
-
 CDMRNetwork::CDMRNetwork(const std::string& address, unsigned int port, unsigned int id, const std::string& password, bool duplex, const char* version, bool debug, bool slot1, bool slot2, HW_TYPE hwType) :
 m_addressStr(address),
 m_addr(),
@@ -361,26 +360,35 @@ void CDMRNetwork::close()
 
 void CDMRNetwork::clock(unsigned int ms)
 {
-	if (m_status == WAITING_CONNECT) {
-		m_retryTimer.clock(ms);
-		if (m_retryTimer.isRunning() && m_retryTimer.hasExpired()) {
-			m_retryTimer.start();
-
-			bool ret = m_socket.open(m_addr.ss_family);
-			if (ret) {
-				ret = writeLogin();
-				if (!ret) {
-					LogMessage("DMR, connect: writeLogin() failed");
-					return;
+	m_retryTimer.clock(ms);
+	if (m_retryTimer.isRunning() && m_retryTimer.hasExpired()) {
+		switch (m_status) {
+			case WAITING_CONNECT:
+				if (m_socket.open(m_addr.ss_family)) {
+					if (writeLogin()) {
+						m_status = WAITING_LOGIN;
+					}
 				}
-
-				m_status = WAITING_LOGIN;
-				m_timeoutTimer.start();
-			} else
-				LogMessage("DMR, connect: socket failed");
+				break;
+			case WAITING_LOGIN:
+				writeLogin();
+				break;
+			case WAITING_AUTHORISATION:
+				writeAuthorisation();
+				break;
+			case WAITING_OPTIONS:
+				writeOptions();
+				break;
+			case WAITING_CONFIG:
+				writeConfig();
+				break;
+			case RUNNING:
+				writePing();
+				break;
+			default:
+				break;
 		}
-
-		return;
+		m_retryTimer.start();
 	}
 
 	sockaddr_storage address;
@@ -473,31 +481,6 @@ void CDMRNetwork::clock(unsigned int ms)
 		} else {
 			CUtils::dump("Unknown packet from the master", m_buffer, length);
 		}
-	}
-
-	m_retryTimer.clock(ms);
-	if (m_retryTimer.isRunning() && m_retryTimer.hasExpired()) {
-		switch (m_status) {
-			case WAITING_LOGIN:
-				writeLogin();
-				break;
-			case WAITING_AUTHORISATION:
-				writeAuthorisation();
-				break;
-			case WAITING_OPTIONS:
-				writeOptions();
-				break;
-			case WAITING_CONFIG:
-				writeConfig();
-				break;
-			case RUNNING:
-				writePing();
-				break;
-			default:
-				break;
-		}
-
-		m_retryTimer.start();
 	}
 
 	m_timeoutTimer.clock(ms);
@@ -669,9 +652,6 @@ bool CDMRNetwork::write(const unsigned char* data, unsigned int length)
 	assert(data != NULL);
 	assert(length > 0U);
 
-	if (m_debug)
-		CUtils::dump(1U, "Network Transmitted", data, length);
-
 	bool ret = m_socket.write(data, length, m_addr, m_addrLen);
 	if (!ret) {
 		LogError("DMR, Socket has failed when writing data to the master, retrying connection");
@@ -679,6 +659,9 @@ bool CDMRNetwork::write(const unsigned char* data, unsigned int length)
 		open();
 		return false;
 	}
+
+	if (m_debug)
+		CUtils::dump(1U, "Network Transmitted", data, length);
 
 	return true;
 }
