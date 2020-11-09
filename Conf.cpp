@@ -41,7 +41,9 @@ enum SECTION {
   SECTION_DMR_NETWORK,
   SECTION_POCSAG_NETWORK,
   SECTION_TFTSERIAL,
-  SECTION_NEXTION
+  SECTION_NEXTION,
+  SECTION_OLED,
+  SECTION_LCDPROC
 };
 
 CConf::CConf(const std::string& file) :
@@ -139,7 +141,19 @@ m_nextionDisplayClock(false),
 m_nextionUTC(false),
 m_nextionIdleBrightness(20U),
 m_nextionScreenLayout(0U),
-m_nextionTempInFahrenheit(false)
+m_nextionTempInFahrenheit(false),
+m_oledType(3U),
+m_oledBrightness(0U),
+m_oledInvert(false),
+m_oledScroll(false),
+m_oledRotate(false),
+m_oledLogoScreensaver(true),
+m_lcdprocAddress(),
+m_lcdprocPort(0U),
+m_lcdprocLocalPort(0U),
+m_lcdprocDisplayClock(false),
+m_lcdprocUTC(false),
+m_lcdprocDimOnIdle(false)
 {
 }
 
@@ -189,6 +203,10 @@ bool CConf::read()
 		  section = SECTION_TFTSERIAL;
 	  else if (::strncmp(buffer, "[Nextion]", 9U) == 0)
 		  section = SECTION_NEXTION;
+	  else if (::strncmp(buffer, "[OLED]", 6U) == 0)
+		  section = SECTION_OLED;
+	  else if (::strncmp(buffer, "[LCDproc]", 9U) == 0)
+		  section = SECTION_LCDPROC;
 	  else
 		  section = SECTION_NONE;
 
@@ -480,6 +498,32 @@ bool CConf::read()
 			m_nextionScreenLayout = (unsigned int)::strtoul(value, NULL, 0);
 		else if (::strcmp(key, "DisplayTempInFahrenheit") == 0)
 			m_nextionTempInFahrenheit = ::atoi(value) == 1;
+	} else if (section == SECTION_OLED) {
+		if (::strcmp(key, "Type") == 0)
+			m_oledType = (unsigned char)::atoi(value);
+		else if (::strcmp(key, "Brightness") == 0)
+			m_oledBrightness = (unsigned char)::atoi(value);
+		else if (::strcmp(key, "Invert") == 0)
+			m_oledInvert = ::atoi(value) == 1;
+		else if (::strcmp(key, "Scroll") == 0)
+			m_oledScroll = ::atoi(value) == 1;
+		else if (::strcmp(key, "Rotate") == 0)
+			m_oledRotate = ::atoi(value) == 1;
+		else if (::strcmp(key, "LogoScreensaver") == 0)
+			m_oledLogoScreensaver = ::atoi(value) == 1;
+	} else if (section == SECTION_LCDPROC) {
+		if (::strcmp(key, "Address") == 0)
+			m_lcdprocAddress = value;
+		else if (::strcmp(key, "Port") == 0)
+			m_lcdprocPort = (unsigned int)::atoi(value);
+		else if (::strcmp(key, "LocalPort") == 0)
+			m_lcdprocLocalPort = (unsigned int)::atoi(value);
+		else if (::strcmp(key, "DisplayClock") == 0)
+			m_lcdprocDisplayClock = ::atoi(value) == 1;
+		else if (::strcmp(key, "UTC") == 0)
+			m_lcdprocUTC = ::atoi(value) == 1;
+		else if (::strcmp(key, "DimOnIdle") == 0)
+                       m_lcdprocDimOnIdle = ::atoi(value) == 1;
 	}
   }
 
@@ -951,6 +995,66 @@ unsigned int CConf::getNextionIdleBrightness() const
 unsigned int CConf::getNextionScreenLayout() const
 {
 	return m_nextionScreenLayout;
+}
+
+unsigned char CConf::getOLEDType() const
+{
+	return m_oledType;
+}
+
+unsigned char CConf::getOLEDBrightness() const
+{
+	return m_oledBrightness;
+}
+
+bool CConf::getOLEDInvert() const
+{
+	return m_oledInvert;
+}
+
+bool CConf::getOLEDScroll() const
+{
+	return m_oledScroll;
+}
+
+bool CConf::getOLEDRotate() const
+{
+	return m_oledRotate;
+}
+
+bool CConf::getOLEDLogoScreensaver() const
+{
+	return m_oledLogoScreensaver;
+}
+
+std::string CConf::getLCDprocAddress() const
+{
+	return m_lcdprocAddress;
+}
+
+unsigned int CConf::getLCDprocPort() const
+{
+	return m_lcdprocPort;
+}
+
+unsigned int CConf::getLCDprocLocalPort() const
+{
+	return m_lcdprocLocalPort;
+}
+
+bool CConf::getLCDprocDisplayClock() const
+{
+	return m_lcdprocDisplayClock;
+}
+
+bool CConf::getLCDprocUTC() const
+{
+	return m_lcdprocUTC;
+}
+
+bool CConf::getLCDprocDimOnIdle() const
+{
+	return m_lcdprocDimOnIdle;
 }
 
 bool CConf::getNextionTempInFahrenheit() const

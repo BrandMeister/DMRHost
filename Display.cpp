@@ -22,12 +22,18 @@
 #include "ModemSerialPort.h"
 #include "NullDisplay.h"
 #include "TFTSerial.h"
+#include "TFTSurenoo.h"
+#include "LCDproc.h"
 #include "Nextion.h"
 #include "CASTInfo.h"
 #include "Conf.h"
 #include "Modem.h"
 #include "UMP.h"
 #include "Log.h"
+
+#if defined(OLED)
+#include "OLED.h"
+#endif
 
 #include <cstdio>
 #include <cassert>
@@ -102,7 +108,6 @@ void CDisplay::writeDMR(unsigned int slotNo, const std::string& src, bool group,
 		m_timer2.start();
 		m_mode2 = MODE_IDLE;
 	}
-
 	writeDMRInt(slotNo, src, group, dst, type);
 }
 
@@ -249,7 +254,10 @@ CDisplay* CDisplay::createDisplay(const CConf& conf, CUMP* ump, CModem* modem)
 		else
 			serial = new CSerialController(port, (type == "TFT Serial") ? SERIAL_9600 : SERIAL_115200);
 
-		display = new CTFTSerial(conf.getCallsign(), dmrid, serial, brightness);
+		if (type == "TFT Surenoo")
+			display = new CTFTSurenoo(conf.getCallsign(), dmrid, serial, brightness, conf.getDuplex());
+		else
+			display = new CTFTSerial(conf.getCallsign(), dmrid, serial, brightness);
 	} else if (type == "Nextion") {
 		std::string port            = conf.getNextionPort();
 		unsigned int brightness     = conf.getNextionBrightness();
@@ -306,6 +314,40 @@ CDisplay* CDisplay::createDisplay(const CConf& conf, CUMP* ump, CModem* modem)
 			ISerialPort* serial = new CSerialController(port, baudrate);
 			display = new CNextion(conf.getCallsign(), dmrid, serial, brightness, displayClock, utc, idleBrightness, screenLayout, txFrequency, rxFrequency, displayTempInF);
 		}
+	} else if (type == "LCDproc") {
+		std::string address       = conf.getLCDprocAddress();
+		unsigned int port         = conf.getLCDprocPort();
+		unsigned int localPort    = conf.getLCDprocLocalPort();
+		bool displayClock         = conf.getLCDprocDisplayClock();
+		bool utc                  = conf.getLCDprocUTC();
+		bool dimOnIdle            = conf.getLCDprocDimOnIdle();
+
+		LogInfo("    Address: %s", address.c_str());
+		LogInfo("    Port: %u", port);
+
+		if (localPort == 0 )
+			LogInfo("    Local Port: random");
+		else
+			LogInfo("    Local Port: %u", localPort);
+
+		LogInfo("    Dim Display on Idle: %s", dimOnIdle ? "yes" : "no");
+		LogInfo("    Clock Display: %s", displayClock ? "yes" : "no");
+
+		if (displayClock)
+			LogInfo("    Display UTC: %s", utc ? "yes" : "no");
+
+		display = new CLCDproc(address.c_str(), port, localPort, conf.getCallsign(), dmrid, displayClock, utc, conf.getDuplex(), dimOnIdle);
+#if defined(OLED)
+	} else if (type == "OLED") {
+	        unsigned char type       = conf.getOLEDType();
+	        unsigned char brightness = conf.getOLEDBrightness();
+	        bool          invert     = conf.getOLEDInvert();
+	        bool          scroll     = conf.getOLEDScroll();
+		bool          rotate     = conf.getOLEDRotate();
+		bool          logosaver  = conf.getOLEDLogoScreensaver();
+
+		display = new COLED(type, brightness, invert, scroll, rotate, logosaver, conf.getDMRNetworkSlot1(), conf.getDMRNetworkSlot2());
+#endif
 	} else if (type == "CAST") {
 		display = new CCASTInfo(modem);
 	} else {
