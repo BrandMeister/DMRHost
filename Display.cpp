@@ -28,7 +28,6 @@
 #include "CASTInfo.h"
 #include "Conf.h"
 #include "Modem.h"
-#include "UMP.h"
 #include "Log.h"
 
 #if defined(OLED)
@@ -231,7 +230,7 @@ void CDisplay::writeDMRBERInt(unsigned int slotNo, float ber)
 }
 
 /* Factory method extracted from MMDVMHost.cpp - BG5HHP */
-CDisplay* CDisplay::createDisplay(const CConf& conf, CUMP* ump, CModem* modem)
+CDisplay* CDisplay::createDisplay(const CConf& conf, CModem* modem)
 {
         CDisplay *display = NULL;
 
@@ -298,13 +297,6 @@ CDisplay* CDisplay::createDisplay(const CConf& conf, CUMP* ump, CModem* modem)
 		if (port == "modem") {
 			ISerialPort* serial = new CModemSerialPort(modem);
 			display = new CNextion(conf.getCallsign(), dmrid, serial, brightness, displayClock, utc, idleBrightness, screenLayout, txFrequency, rxFrequency, displayTempInF);
-		} else if (port == "ump") {
-			if (ump != NULL) {
-				display = new CNextion(conf.getCallsign(), dmrid, ump, brightness, displayClock, utc, idleBrightness, screenLayout, txFrequency, rxFrequency, displayTempInF);
-			} else {
-				LogInfo("    NullDisplay loaded");
-				display = new CNullDisplay;
-			}
 		} else {
 			SERIAL_SPEED baudrate = SERIAL_9600;
 			if (screenLayout&0x0cU)

@@ -89,10 +89,6 @@ public:
   unsigned int getTransparentLocalPort() const;
   unsigned int getTransparentSendFrameType() const;
 
-  // The UMP section
-  bool         getUMPEnabled() const;
-  std::string  getUMPPort() const;
-
   // The DMR section
   bool         getDMREnabled() const;
   DMR_BEACONS  getDMRBeacons() const;
@@ -220,9 +216,6 @@ private:
   unsigned int m_transparentRemotePort;
   unsigned int m_transparentLocalPort;
   unsigned int m_transparentSendFrameType;
-
-  bool         m_umpEnabled;
-  std::string  m_umpPort;
 
   bool         m_dmrEnabled;
   DMR_BEACONS  m_dmrBeacons;

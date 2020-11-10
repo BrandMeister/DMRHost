@@ -26,7 +26,6 @@
 #include "Timer.h"
 #include "Modem.h"
 #include "Conf.h"
-#include "UMP.h"
 
 #include <string>
 
@@ -47,7 +46,6 @@ private:
   CDMRNetwork*    m_dmrNetwork;
   CPOCSAGNetwork* m_pocsagNetwork;
   CDisplay*       m_display;
-  CUMP*           m_ump;
   unsigned char   m_mode;
   unsigned int    m_dmrRFModeHang;
   unsigned int    m_dmrNetModeHang;

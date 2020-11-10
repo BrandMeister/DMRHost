@@ -35,7 +35,6 @@ enum SECTION {
   SECTION_CWID,
   SECTION_MODEM,
   SECTION_TRANSPARENT,
-  SECTION_UMP,
   SECTION_DMR,
   SECTION_POCSAG,
   SECTION_DMR_NETWORK,
@@ -96,8 +95,6 @@ m_transparentRemoteAddress(),
 m_transparentRemotePort(0U),
 m_transparentLocalPort(0U),
 m_transparentSendFrameType(0U),
-m_umpEnabled(false),
-m_umpPort(),
 m_dmrEnabled(false),
 m_dmrBeacons(DMR_BEACONS_OFF),
 m_dmrBeaconDuration(3U),
@@ -189,8 +186,6 @@ bool CConf::read()
 		  section = SECTION_MODEM;
 	  else if (::strncmp(buffer, "[Transparent Data]", 18U) == 0)
 		  section = SECTION_TRANSPARENT;
-	  else if (::strncmp(buffer, "[UMP]", 5U) == 0)
-		  section = SECTION_UMP;
 	  else if (::strncmp(buffer, "[DMR]", 5U) == 0)
 		  section = SECTION_DMR;
 	  else if (::strncmp(buffer, "[POCSAG]", 8U) == 0)
@@ -356,11 +351,6 @@ bool CConf::read()
 			m_transparentLocalPort = (unsigned int)::atoi(value);
 		else if (::strcmp(key, "SendFrameType") == 0)
 			m_transparentSendFrameType = (unsigned int)::atoi(value);
-	} else if (section == SECTION_UMP) {
-		if (::strcmp(key, "Enable") == 0)
-			m_umpEnabled = ::atoi(value) == 1;
-		else if (::strcmp(key, "Port") == 0)
-			m_umpPort = value;
 	} else if (section == SECTION_DMR) {
 		if (::strcmp(key, "Enable") == 0)
 			m_dmrEnabled = ::atoi(value) == 1;
@@ -770,16 +760,6 @@ unsigned int CConf::getTransparentLocalPort() const
 unsigned int CConf::getTransparentSendFrameType() const
 {
 	return m_transparentSendFrameType;
-}
-
-bool CConf::getUMPEnabled() const
-{
-	return m_umpEnabled;
-}
-
-std::string CConf::getUMPPort() const
-{
-	return m_umpPort;
 }
 
 bool CConf::getDMREnabled() const

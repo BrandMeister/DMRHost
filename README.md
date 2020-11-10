@@ -15,8 +15,7 @@ various Displays. Currently these are:
 
 The Nextion displays can connect to the UART on the Raspberry Pi, or via a USB
 to TTL serial converter like the FT-232RL. It may also be connected to the UART
-output of the MMDVM modem (Arduino Due, STM32, Teensy), or to the UART output
-on the UMP.
+output of the MMDVM modem (Arduino Due, STM32, Teensy)
 
 The Hobbytronics TFT Display, which is a Pi-Hat, connects to the UART on the
 Raspbery Pi.
