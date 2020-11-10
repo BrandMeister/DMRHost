@@ -9,16 +9,12 @@ It builds on 32-bit and 64-bit Linux. It can optionally control
 various Displays. Currently these are:
 
 - Nextion TFTs (all sizes, both Basic and Enhanced versions)
-- TFT display sold by Hobbytronics in UK
 - OLED 128x64 (SSD1306)
 - LCDproc
 
 The Nextion displays can connect to the UART on the Raspberry Pi, or via a USB
 to TTL serial converter like the FT-232RL. It may also be connected to the UART
 output of the MMDVM modem (Arduino Due, STM32, Teensy)
-
-The Hobbytronics TFT Display, which is a Pi-Hat, connects to the UART on the
-Raspbery Pi.
 
 The OLED display needs an extra library: https://github.com/hallard/ArduiPi_OLED
 
