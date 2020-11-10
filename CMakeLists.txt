@@ -10,8 +10,17 @@ option(ENABLE_OLED "Enable OLED support" OFF)
 if(GIT_VERSION)
   set(GIT_HASH ${GIT_VERSION})
 else()
-  set(GIT_HASH "0000000000")
+  execute_process(
+    COMMAND
+      git log -1 --pretty=format:%h --abbrev=10 HEAD ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE GIT_HASH
+  )
+  if (NOT GIT_HASH)
+    set(GIT_HASH "0000000000")
+  endif()
 endif()
+message(STATUS "Git revision: " ${GIT_HASH})
+
 file(WRITE ${CMAKE_SOURCE_DIR}/GitVersion.h "const char *gitversion = \"${GIT_HASH}\";")
 
 file(GLOB SOURCES "*.cpp")
