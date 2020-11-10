@@ -1,1 +1,0 @@
-DMR: DMO mode doesn't wake up older radios like other radios do.
