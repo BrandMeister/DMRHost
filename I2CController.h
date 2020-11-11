@@ -23,7 +23,7 @@
 
 class CI2CController : public CSerialController {
 public:
-	CI2CController(const std::string& device, SERIAL_SPEED speed, unsigned int address = 0x22U, bool assertRTS = false);
+	CI2CController(const std::string& device, unsigned int speed, unsigned int address = 0x22U, bool assertRTS = false);
 	virtual ~CI2CController();
 
 	virtual bool open();

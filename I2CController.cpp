@@ -34,7 +34,7 @@
 #include <linux/i2c-dev.h>
 #endif
 
-CI2CController::CI2CController(const std::string& device, SERIAL_SPEED speed, unsigned int address, bool assertRTS) :
+CI2CController::CI2CController(const std::string& device, unsigned int speed, unsigned int address, bool assertRTS) :
 CSerialController(device, speed, assertRTS),
 m_address(address)
 {

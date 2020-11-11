@@ -250,7 +250,7 @@ CDisplay* CDisplay::createDisplay(const CConf& conf, CModem* modem)
 		if (port == "modem")
 			serial = new CModemSerialPort(modem);
 		else
-			serial = new CSerialController(port, SERIAL_115200);
+			serial = new CSerialController(port, 115200);
 
 		display = new CTFTSurenoo(conf.getCallsign(), dmrid, serial, brightness, conf.getDuplex());
 	} else if (type == "Nextion") {
@@ -294,9 +294,9 @@ CDisplay* CDisplay::createDisplay(const CConf& conf, CModem* modem)
 			ISerialPort* serial = new CModemSerialPort(modem);
 			display = new CNextion(conf.getCallsign(), dmrid, serial, brightness, displayClock, utc, idleBrightness, screenLayout, txFrequency, rxFrequency, displayTempInF);
 		} else {
-			SERIAL_SPEED baudrate = SERIAL_9600;
+			unsigned int baudrate = 9600;
 			if (screenLayout&0x0cU)
-				baudrate = SERIAL_115200;
+				baudrate = 115200;
 			
 			LogInfo("    Display baudrate: %u ",baudrate);
 			ISerialPort* serial = new CSerialController(port, baudrate);
