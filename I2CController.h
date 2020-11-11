@@ -19,6 +19,8 @@
 
 #pragma once
 
+#if defined(__linux__)
+
 #include "SerialController.h"
 
 class CI2CController : public CSerialController {
@@ -35,3 +37,4 @@ public:
 private:
 	unsigned int m_address;
 };
+#endif

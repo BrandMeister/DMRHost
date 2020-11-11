@@ -17,6 +17,8 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#if defined(__linux__)
+
 #include "I2CController.h"
 #include "Log.h"
 
@@ -30,9 +32,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <termios.h>
-#if defined(__linux__)
 #include <linux/i2c-dev.h>
-#endif
 
 CI2CController::CI2CController(const std::string& device, unsigned int speed, unsigned int address, bool assertRTS) :
 CSerialController(device, speed, assertRTS),
@@ -48,7 +48,6 @@ bool CI2CController::open()
 {
 	assert(m_fd == -1);
 
-#if defined(__linux__)
 	m_fd = ::open(m_device.c_str(), O_RDWR);
 	if (m_fd < 0) {
 		LogError("Cannot open device - %s", m_device.c_str());
@@ -66,9 +65,6 @@ bool CI2CController::open()
 		::close(m_fd);
 		return false;
 	}
-#else
-	#warning "I2C controller supports Linux only"
-#endif
 
 	return true;
 }
@@ -84,7 +80,6 @@ int CI2CController::read(unsigned char* buffer, unsigned int length)
 	unsigned int offset = 0U;
 
 	while (offset < length) {
-#if defined(__linux__)
 		ssize_t n = ::read(m_fd, buffer + offset, 1U);
 		if (n < 0) {
 			if (errno != EAGAIN) {
@@ -95,7 +90,6 @@ int CI2CController::read(unsigned char* buffer, unsigned int length)
 
 		if (n > 0)
 			offset += n;
-#endif
 	}
 
 	return length;
@@ -112,9 +106,7 @@ int CI2CController::write(const unsigned char* buffer, unsigned int length)
 	unsigned int ptr = 0U;
 	while (ptr < length) {
 		ssize_t n = 0U;
-#if defined(__linux__)
 		n = ::write(m_fd, buffer + ptr, 1U);
-#endif
 		if (n < 0) {
 			if (errno != EAGAIN) {
 				LogError("Error returned from write(), errno=%d", errno);
@@ -128,3 +120,5 @@ int CI2CController::write(const unsigned char* buffer, unsigned int length)
 
 	return length;
 }
+
+#endif

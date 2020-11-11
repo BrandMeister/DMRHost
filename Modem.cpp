@@ -132,9 +132,11 @@ CModem::~CModem()
 void CModem::setSerialParams(const std::string& protocol, unsigned int address)
 {
 	// Create the serial controller instance according the protocol specified in conf.
+#if defined(__linux__)
 	if (protocol == "i2c")
 		m_serial = new CI2CController(m_port, 115200, address, true);
 	else
+#endif
 		m_serial = new CSerialController(m_port, 115200, true);
 }
 
