@@ -116,8 +116,7 @@ m_pocsagEnabled(false),
 m_cwIdTime(0U),
 m_callsign(),
 m_id(0U),
-m_cwCallsign(),
-m_fixedMode(false)
+m_cwCallsign()
 {
 	CUDPSocket::startup();
 }
@@ -409,10 +408,8 @@ int CMMDVMHost::run()
 		if (transparentSocket != NULL && len > 0U)
 			transparentSocket->write(data, len, transparentAddress, transparentAddrLen);
 
-		if (!m_fixedMode) {
-			if (m_modeTimer.isRunning() && m_modeTimer.hasExpired())
-				setMode(MODE_IDLE);
-		}
+		if (m_modeTimer.isRunning() && m_modeTimer.hasExpired())
+			setMode(MODE_IDLE);
 
 		if (m_dmr != NULL) {
 			ret = m_modem->hasDMRSpace1();
@@ -488,8 +485,7 @@ int CMMDVMHost::run()
 
 		m_modem->clock(ms);
 
-		if (!m_fixedMode)
-			m_modeTimer.clock(ms);
+		m_modeTimer.clock(ms);
 
 		if (m_dmr != NULL)
 			m_dmr->clock();
@@ -519,7 +515,7 @@ int CMMDVMHost::run()
 					bool beacon = m_dmrNetwork->wantsBeacon();
 					if (beacon) {
 						if ((m_mode == MODE_IDLE || m_mode == MODE_DMR) && !m_modem->hasTX()) {
-							if (!m_fixedMode && m_mode == MODE_IDLE)
+							if (m_mode == MODE_IDLE)
 								setMode(MODE_DMR);
 							dmrBeaconDurationTimer.start();
 						}
@@ -532,8 +528,7 @@ int CMMDVMHost::run()
 
 		dmrBeaconDurationTimer.clock(ms);
 		if (dmrBeaconDurationTimer.isRunning() && dmrBeaconDurationTimer.hasExpired()) {
-			if (!m_fixedMode)
-				setMode(MODE_IDLE);
+			setMode(MODE_IDLE);
 			dmrBeaconDurationTimer.stop();
 		}
 

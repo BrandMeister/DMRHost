@@ -61,7 +61,6 @@ private:
   std::string     m_callsign;
   unsigned int    m_id;
   std::string     m_cwCallsign;
-  bool            m_fixedMode;
 
   void readParams();
   bool createModem();
