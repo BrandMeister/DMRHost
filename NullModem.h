@@ -26,7 +26,7 @@
 
 class CNullModem : public CModem {
 public:
-	CNullModem(const std::string& port, bool duplex, bool rxInvert, bool txInvert, bool pttInvert, unsigned int txDelay, unsigned int dmrDelay, bool useCOSAsLockout, bool trace, bool debug);
+	CNullModem(const std::string& port, bool duplex, bool rxInvert, bool txInvert, bool pttInvert, unsigned int txDelay, unsigned int dmrDelay, bool trace, bool debug);
 	virtual ~CNullModem();
 
 	virtual void setSerialParams(const std::string& protocol, unsigned int address){};
@@ -51,7 +51,6 @@ public:
 	virtual bool hasTX() const {return false;};
 	virtual bool hasCD() const {return false;};
 
-	virtual bool hasLockout() const {return false;};
 	virtual bool hasError() const   {return false;};
 
 	virtual bool writeDMRData1(const unsigned char* data, unsigned int length){return true;};

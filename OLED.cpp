@@ -196,21 +196,6 @@ void COLED::setErrorInt(const char* text)
     m_display.display();
 }
 
-void COLED::setLockoutInt()
-{
-    m_mode = MODE_LOCKOUT;
-
-    m_display.clearDisplay();
-    OLED_statusbar();
-
-    m_display.setCursor(0,30);
-    m_display.setTextSize(3);
-    m_display.print("Lockout");
-
-    m_display.setTextSize(1);
-    m_display.display();
-}
-
 void COLED::setQuitInt()
 {
     m_mode = MODE_QUIT;

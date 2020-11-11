@@ -87,7 +87,6 @@ m_modemCWIdTXLevel(50.0F),
 m_modemDMRTXLevel(50.0F),
 m_modemPOCSAGTXLevel(50.0F),
 m_modemRSSIMappingFile(),
-m_modemUseCOSAsLockout(false),
 m_modemTrace(false),
 m_modemDebug(false),
 m_transparentEnabled(false),
@@ -334,8 +333,6 @@ bool CConf::read()
 			m_modemPOCSAGTXLevel = float(::atof(value));
 		else if (::strcmp(key, "RSSIMappingFile") == 0)
 			m_modemRSSIMappingFile = value;
-		else if (::strcmp(key, "UseCOSAsLockout") == 0)
-			m_modemUseCOSAsLockout = ::atoi(value) == 1;
 		else if (::strcmp(key, "Trace") == 0)
 			m_modemTrace = ::atoi(value) == 1;
 		else if (::strcmp(key, "Debug") == 0)
@@ -720,11 +717,6 @@ float CConf::getModemPOCSAGTXLevel() const
 std::string CConf::getModemRSSIMappingFile () const
 {
 	return m_modemRSSIMappingFile;
-}
-
-bool CConf::getModemUseCOSAsLockout() const
-{
-	return m_modemUseCOSAsLockout;
 }
 
 bool CConf::getModemTrace() const

@@ -36,7 +36,6 @@ public:
 	virtual bool open() = 0;
 
 	void setIdle();
-	void setLockout();
 	void setError(const char* text);
 	void setQuit();
 
@@ -59,7 +58,6 @@ public:
 
 protected:
 	virtual void setIdleInt() = 0;
-	virtual void setLockoutInt() = 0;
 	virtual void setErrorInt(const char* text) = 0;
 	virtual void setQuitInt() = 0;
 

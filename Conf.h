@@ -78,7 +78,6 @@ public:
   float        getModemDMRTXLevel() const;
   float        getModemPOCSAGTXLevel() const;
   std::string  getModemRSSIMappingFile() const;
-  bool         getModemUseCOSAsLockout() const;
   bool         getModemTrace() const;
   bool         getModemDebug() const;
 
@@ -207,7 +206,6 @@ private:
   float        m_modemDMRTXLevel;
   float        m_modemPOCSAGTXLevel;
   std::string  m_modemRSSIMappingFile;
-  bool         m_modemUseCOSAsLockout;
   bool         m_modemTrace;
   bool         m_modemDebug;
 

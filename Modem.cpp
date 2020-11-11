@@ -71,7 +71,7 @@ const unsigned int MAX_RESPONSES = 30U;
 const unsigned int BUFFER_LENGTH = 2000U;
 
 
-CModem::CModem(const std::string& port, bool duplex, bool rxInvert, bool txInvert, bool pttInvert, unsigned int txDelay, unsigned int dmrDelay, bool useCOSAsLockout, bool trace, bool debug) :
+CModem::CModem(const std::string& port, bool duplex, bool rxInvert, bool txInvert, bool pttInvert, unsigned int txDelay, unsigned int dmrDelay, bool trace, bool debug) :
 m_port(port),
 m_dmrColorCode(0U),
 m_duplex(duplex),
@@ -85,7 +85,6 @@ m_cwIdTXLevel(0.0F),
 m_dmrTXLevel(0.0F),
 m_pocsagTXLevel(0.0F),
 m_rfLevel(0.0F),
-m_useCOSAsLockout(useCOSAsLockout),
 m_trace(trace),
 m_debug(debug),
 m_rxFrequency(0U),
@@ -115,7 +114,6 @@ m_dmrSpace2(0U),
 m_pocsagSpace(0U),
 m_tx(false),
 m_cd(false),
-m_lockout(false),
 m_error(false),
 m_mode(MODE_IDLE),
 m_hwType(HWT_UNKNOWN)
@@ -331,8 +329,6 @@ void CModem::clock(unsigned int ms)
 					if (txOverflow)
 						LogError("MMDVM TX buffer has overflowed");
 
-					m_lockout = (m_buffer[5U] & 0x10U) == 0x10U;
-
 					bool dacOverflow = (m_buffer[5U] & 0x20U) == 0x20U;
 					if (dacOverflow)
 						LogError("MMDVM DAC levels have overflowed");
@@ -346,7 +342,7 @@ void CModem::clock(unsigned int ms)
 						m_pocsagSpace = m_buffer[12U];
 
 					m_inactivityTimer.start();
-					// LogMessage("status=%02X, tx=%d, space=%u,%u,%u,%u,%u,%u,%u lockout=%d, cd=%d", m_buffer[5U], int(m_tx), m_dmrSpace1, m_dmrSpace2, m_pocsagSpace, int(m_lockout), int(m_cd));
+					// LogMessage("status=%02X, tx=%d, space=%u,%u,%u,%u,%u,%u,%u cd=%d", m_buffer[5U], int(m_tx), m_dmrSpace1, m_dmrSpace2, m_pocsagSpace, int(m_cd));
 				}
 				break;
 
@@ -752,11 +748,6 @@ bool CModem::hasCD() const
 	return m_cd;
 }
 
-bool CModem::hasLockout() const
-{
-	return m_lockout;
-}
-
 bool CModem::hasError() const
 {
 	return m_error;
@@ -866,8 +857,6 @@ bool CModem::setConfig()
 		buffer[3U] |= 0x04U;
 	if (m_debug)
 		buffer[3U] |= 0x10U;
-	if (m_useCOSAsLockout)
-		buffer[3U] |= 0x20U;
 	if (!m_duplex)
 		buffer[3U] |= 0x80U;
 
@@ -1242,9 +1231,9 @@ void CModem::printDebug()
 	}
 }
 
-CModem* CModem::createModem(const std::string& port, bool duplex, bool rxInvert, bool txInvert, bool pttInvert, unsigned int txDelay, unsigned int dmrDelay, bool useCOSAsLockout, bool trace, bool debug){
+CModem* CModem::createModem(const std::string& port, bool duplex, bool rxInvert, bool txInvert, bool pttInvert, unsigned int txDelay, unsigned int dmrDelay, bool trace, bool debug){
 	if (port == "NullModem")
-		return new CNullModem(port, duplex, rxInvert, txInvert, pttInvert, txDelay, dmrDelay, useCOSAsLockout, trace, debug);
+		return new CNullModem(port, duplex, rxInvert, txInvert, pttInvert, txDelay, dmrDelay, trace, debug);
 	else
-		return new CModem(port, duplex, rxInvert, txInvert, pttInvert, txDelay, dmrDelay, useCOSAsLockout, trace, debug);
+		return new CModem(port, duplex, rxInvert, txInvert, pttInvert, txDelay, dmrDelay, trace, debug);
 }

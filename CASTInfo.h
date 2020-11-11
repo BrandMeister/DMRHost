@@ -37,7 +37,6 @@ public:
 protected:
 	virtual void setIdleInt();
 	virtual void setErrorInt(const char* text);
-	virtual void setLockoutInt();
 	virtual void setQuitInt();
 
 	virtual void writeDMRInt(unsigned int slotNo, const std::string& src, bool group, const std::string& dst, const char* type);

@@ -23,7 +23,6 @@ const unsigned char MODE_DMR     = 2U;
 const unsigned char MODE_POCSAG  = 6U;
 
 const unsigned char MODE_CW      = 98U;
-const unsigned char MODE_LOCKOUT = 99U;
 const unsigned char MODE_ERROR   = 100U;
 const unsigned char MODE_QUIT    = 110U;
 

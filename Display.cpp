@@ -60,17 +60,6 @@ void CDisplay::setIdle()
 	setIdleInt();
 }
 
-void CDisplay::setLockout()
-{
-	m_timer1.stop();
-	m_timer2.stop();
-
-	m_mode1 = MODE_IDLE;
-	m_mode2 = MODE_IDLE;
-
-	setLockoutInt();
-}
-
 void CDisplay::setError(const char* text)
 {
 	assert(text != NULL);

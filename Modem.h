@@ -33,7 +33,7 @@ enum RESP_TYPE_MMDVM {
 
 class CModem {
 public:
-	CModem(const std::string& port, bool duplex, bool rxInvert, bool txInvert, bool pttInvert, unsigned int txDelay, unsigned int dmrDelay, bool useCOSAsLockout, bool trace, bool debug);
+	CModem(const std::string& port, bool duplex, bool rxInvert, bool txInvert, bool pttInvert, unsigned int txDelay, unsigned int dmrDelay, bool trace, bool debug);
 	virtual ~CModem();
 
 	virtual void setSerialParams(const std::string& protocol, unsigned int address);
@@ -58,7 +58,6 @@ public:
 	virtual bool hasTX() const;
 	virtual bool hasCD() const;
 
-	virtual bool hasLockout() const;
 	virtual bool hasError() const;
 
 	virtual bool writeConfig();
@@ -90,7 +89,7 @@ public:
 
 	virtual void close();
 
-	static CModem* createModem(const std::string& port, bool duplex, bool rxInvert, bool txInvert, bool pttInvert, unsigned int txDelay, unsigned int dmrDelay, bool useCOSAsLockout, bool trace, bool debug);
+	static CModem* createModem(const std::string& port, bool duplex, bool rxInvert, bool txInvert, bool pttInvert, unsigned int txDelay, unsigned int dmrDelay, bool trace, bool debug);
 
 private:
 	std::string                m_port;
@@ -106,7 +105,6 @@ private:
 	float                      m_dmrTXLevel;
 	float                      m_pocsagTXLevel;
 	float                      m_rfLevel;
-	bool                       m_useCOSAsLockout;
 	bool                       m_trace;
 	bool                       m_debug;
 	unsigned int               m_rxFrequency;
@@ -136,7 +134,6 @@ private:
 	unsigned int               m_pocsagSpace;
 	bool                       m_tx;
 	bool                       m_cd;
-	bool                       m_lockout;
 	bool                       m_error;
 	unsigned char              m_mode;
 	HW_TYPE                    m_hwType;

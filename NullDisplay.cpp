@@ -40,10 +40,6 @@ void CNullDisplay::setErrorInt(const char* text)
 {
 }
 
-void CNullDisplay::setLockoutInt()
-{
-}
-
 void CNullDisplay::setQuitInt()
 {
 }

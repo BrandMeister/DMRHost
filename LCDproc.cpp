@@ -181,19 +181,6 @@ void CLCDproc::setErrorInt(const char* text)
 	m_dmr = false;
 }
 
-void CLCDproc::setLockoutInt()
-{
-	m_clockDisplayTimer.stop();           // Stop the clock display
-
-	if (m_screensDefined) {
-		socketPrintf(m_socketfd, "screen_set DMR -priority hidden");
-		socketPrintf(m_socketfd, "widget_set Status Status %u %u Lockout", m_cols - 6, m_rows);
-		socketPrintf(m_socketfd, "output 0");   // Clear all LEDs
-	}
-
-	m_dmr = false;
-}
-
 // LED 4 Green 8 Red 128 Yellow 136
 
 void CLCDproc::setQuitInt()

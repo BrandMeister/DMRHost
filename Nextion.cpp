@@ -212,25 +212,6 @@ void CNextion::setErrorInt(const char* text)
 	m_mode = MODE_ERROR;
 }
 
-void CNextion::setLockoutInt()
-{
-	sendCommand("page MMDVM");
-	sendCommandAction(1U);
-
-	char command[20];
-	if (m_brightness>0) {
-		::sprintf(command, "dim=%u", m_brightness);
-		sendCommand(command);
-	}
-
-	sendCommand("t0.txt=\"LOCKOUT\"");
-	sendCommandAction(15U);
-
-	m_clockDisplayTimer.stop();
-
-	m_mode = MODE_LOCKOUT;
-}
-
 void CNextion::setQuitInt()
 {
 	sendCommand("page MMDVM");

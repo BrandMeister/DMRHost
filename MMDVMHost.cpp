@@ -325,13 +325,6 @@ int CMMDVMHost::run()
 	LogMessage("DMRHost-%s is running", VERSION);
 
 	while (!m_killed) {
-		bool lockout = m_modem->hasLockout();
-
-		if (lockout && m_mode != MODE_LOCKOUT)
-			setMode(MODE_LOCKOUT);
-		else if (!lockout && m_mode == MODE_LOCKOUT)
-			setMode(MODE_IDLE);
-
 		bool error = m_modem->hasError();
 		if (error && m_mode != MODE_ERROR)
 			setMode(MODE_ERROR);
@@ -374,8 +367,6 @@ int CMMDVMHost::run()
 							m_dmrTXTimer.start();
 					}
 				}
-			} else if (m_mode != MODE_LOCKOUT) {
-				LogWarning("DMR modem data received when in mode %u", m_mode);
 			}
 		}
 
@@ -411,8 +402,6 @@ int CMMDVMHost::run()
 							m_dmrTXTimer.start();
 					}
 				}
-			} else if (m_mode != MODE_LOCKOUT) {
-				LogWarning("DMR modem data received when in mode %u", m_mode);
 			}
 		}
 
@@ -442,8 +431,6 @@ int CMMDVMHost::run()
 						m_modem->writeDMRData1(data, len);
 						dmrBeaconDurationTimer.stop();
 						m_modeTimer.start();
-					} else if (m_mode != MODE_LOCKOUT) {
-						LogWarning("DMR data received when in mode %u", m_mode);
 					}
 				}
 			}
@@ -464,8 +451,6 @@ int CMMDVMHost::run()
 						m_modem->writeDMRData2(data, len);
 						dmrBeaconDurationTimer.stop();
 						m_modeTimer.start();
-					} else if (m_mode != MODE_LOCKOUT) {
-						LogWarning("DMR data received when in mode %u", m_mode);
 					}
 				}
 			}
@@ -483,8 +468,6 @@ int CMMDVMHost::run()
 					if (m_mode == MODE_POCSAG) {
 						m_modem->writePOCSAGData(data, len);
 						m_modeTimer.start();
-					} else if (m_mode != MODE_LOCKOUT) {
-						LogWarning("POCSAG data received when in mode %u", m_mode);
 					}
 				}
 			}
@@ -625,7 +608,6 @@ bool CMMDVMHost::createModem()
 	int rxDCOffset               = m_conf.getModemRXDCOffset();
 	int txDCOffset               = m_conf.getModemTXDCOffset();
 	float rfLevel                = m_conf.getModemRFLevel();
-	bool useCOSAsLockout         = m_conf.getModemUseCOSAsLockout();
 
 	LogInfo("Modem Parameters");
 	LogInfo("    Port: %s", port.c_str());
@@ -647,9 +629,8 @@ bool CMMDVMHost::createModem()
 	LogInfo("    DMR TX Level: %.1f%%", dmrTXLevel);
 	LogInfo("    POCSAG TX Level: %.1f%%", pocsagTXLevel);
 	LogInfo("    TX Frequency: %uHz (%uHz)", txFrequency, txFrequency + txOffset);
-	LogInfo("    Use COS as Lockout: %s", useCOSAsLockout ? "yes" : "no");
 
-	m_modem = CModem::createModem(port, m_duplex, rxInvert, txInvert, pttInvert, txDelay, dmrDelay, useCOSAsLockout, trace, debug);
+	m_modem = CModem::createModem(port, m_duplex, rxInvert, txInvert, pttInvert, txDelay, dmrDelay, trace, debug);
 	m_modem->setSerialParams(protocol, address);
 	m_modem->setModeParams(m_dmrEnabled, m_pocsagEnabled);
 	m_modem->setLevels(rxLevel, cwIdTXLevel, dmrTXLevel, pocsagTXLevel);
@@ -815,26 +796,6 @@ void CMMDVMHost::setMode(unsigned char mode)
 		m_modem->setMode(MODE_POCSAG);
 		m_mode = MODE_POCSAG;
 		m_modeTimer.start();
-		m_cwIdTimer.stop();
-		break;
-
-	case MODE_LOCKOUT:
-		if (m_dmrNetwork != NULL)
-			m_dmrNetwork->enable(false);
-		if (m_pocsagNetwork != NULL)
-			m_pocsagNetwork->enable(false);
-		if (m_dmr != NULL)
-			m_dmr->enable(false);
-		if (m_pocsag != NULL)
-			m_pocsag->enable(false);
-		if (m_mode == MODE_DMR && m_duplex && m_modem->hasTX()) {
-			m_modem->writeDMRStart(false);
-			m_dmrTXTimer.stop();
-		}
-		m_modem->setMode(MODE_IDLE);
-		m_display->setLockout();
-		m_mode = MODE_LOCKOUT;
-		m_modeTimer.stop();
 		m_cwIdTimer.stop();
 		break;
 

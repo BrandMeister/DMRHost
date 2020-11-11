@@ -68,10 +68,6 @@ void CCASTInfo::setErrorInt(const char* text)
 {
 }
 
-void CCASTInfo::setLockoutInt()
-{
-}
-
 void CCASTInfo::setQuitInt()
 {
 }

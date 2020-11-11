@@ -150,14 +150,6 @@ void CTFTSurenoo::setErrorInt(const char* text)
 	m_mode = MODE_ERROR;
 }
 
-void CTFTSurenoo::setLockoutInt()
-{
-	setModeLine(STR_MMDVM);
-	setStatusLine(statusLineNo(1), "LOCKOUT");
-
-	m_mode = MODE_LOCKOUT;
-}
-
 void CTFTSurenoo::setQuitInt()
 {
 	// m_refreshTimer has stopped, need delay here
