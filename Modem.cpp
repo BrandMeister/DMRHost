@@ -698,27 +698,6 @@ bool CModem::writePOCSAGInfo(unsigned int ric, const std::string& message)
 	return ret != int(length + 11U);
 }
 
-bool CModem::writeIPInfo(const std::string& address)
-{
-	assert(m_serial != NULL);
-
-	size_t length = address.size();
-
-	unsigned char buffer[25U];
-
-	buffer[0U] = MMDVM_FRAME_START;
-	buffer[1U] = length + 4U;
-	buffer[2U] = MMDVM_QSO_INFO;
-
-	buffer[3U] = 250U;
-
-	::memcpy(buffer + 4U, address.c_str(), length);
-
-	int ret = m_serial->write(buffer, length + 4U);
-
-	return ret != int(length + 4U);
-}
-
 bool CModem::writeSerial(const unsigned char* data, unsigned int length)
 {
 	assert(m_serial != NULL);

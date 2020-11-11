@@ -18,13 +18,9 @@
 
 #include "CASTInfo.h"
 
-static bool networkInfoInitialized = false;
-static unsigned char passCounter = 0;
-
 CCASTInfo::CCASTInfo(CModem* modem) :
 CDisplay(),
-m_modem(modem),
-m_ipaddress()
+m_modem(modem)
 {
 }
 
@@ -39,29 +35,6 @@ bool CCASTInfo::open()
 
 void CCASTInfo::setIdleInt()
 {
-    unsigned char info[100U];
-    CNetworkInfo* m_network;
-
-    passCounter ++;
-    if (passCounter > 253U)
-        networkInfoInitialized = false;
-
-    if (! networkInfoInitialized) {
-        //LogMessage("Initialize CNetworkInfo");
-        info[0]=0;
-        m_network = new CNetworkInfo;
-        m_network->getNetworkInterface(info);
-        m_ipaddress = (char*)info;
-        delete m_network;
-
-        if (m_modem != NULL)
-            m_modem->writeIPInfo(m_ipaddress);
-
-        networkInfoInitialized = true;
-        passCounter = 0;
-    }
-
-
 }
 
 void CCASTInfo::setErrorInt(const char* text)

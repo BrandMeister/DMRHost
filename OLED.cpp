@@ -19,9 +19,6 @@
 #include "OLED.h"
 #include "Log.h"
 
-static bool networkInfoInitialized = false;
-static unsigned char passCounter = 0;
-
 //Logo MMDVM for Idle Screen
 static unsigned char logo_glcd_bmp[] =
 {
@@ -94,7 +91,6 @@ m_displayRotate(displayRotate),
 m_displayLogoScreensaver(displayLogoScreensaver),
 m_slot1Enabled(slot1Enabled),
 m_slot2Enabled(slot2Enabled),
-m_ipaddress(),
 m_display()
 {
 }
@@ -160,25 +156,6 @@ void COLED::setIdleInt()
     if (m_displayScroll && m_displayLogoScreensaver)
         m_display.startscrolldiagleft(0x00,0x0f);  //the MMDVM logo scrolls the whole screen
     m_display.display();
-
-    unsigned char info[100U];
-    CNetworkInfo* m_network;
-
-    passCounter ++;
-    if (passCounter > 253U)
-        networkInfoInitialized = false;
-
-    if (! networkInfoInitialized) {
-        //LogMessage("Initialize CNetworkInfo");
-        info[0]=0;
-        m_network = new CNetworkInfo;
-        m_network->getNetworkInterface(info);
-        m_ipaddress = (char*)info;
-        delete m_network;
-
-        networkInfoInitialized = true;
-        passCounter = 0;
-    }
 }
 
 void COLED::setErrorInt(const char* text)
@@ -239,8 +216,6 @@ void COLED::writeDMRInt(unsigned int slotNo,const std::string& src,bool group,co
         }
 
         m_display.fillRect(0,OLED_LINE6,m_display.width(),20,BLACK);
-        m_display.setCursor(0,OLED_LINE6);
-        m_display.printf("%s",m_ipaddress.c_str());
     }
     else
     {
@@ -278,8 +253,6 @@ void COLED::clearDMRInt(unsigned int slotNo)
     }
 
     m_display.fillRect(0, OLED_LINE6, m_display.width(), 20, BLACK);
-    m_display.setCursor(0,OLED_LINE6);
-    m_display.printf("%s",m_ipaddress.c_str());
     m_display.display();
 }
 
@@ -309,9 +282,6 @@ void COLED::clearPOCSAGInt()
 
     m_display.setCursor(40,OLED_LINE4);
     m_display.print("Listening");
-
-    m_display.setCursor(0,OLED_LINE6);
-    m_display.printf("%s",m_ipaddress.c_str());
 
     m_display.display();
 }

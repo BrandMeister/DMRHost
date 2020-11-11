@@ -70,7 +70,6 @@ public:
 	virtual bool writeDMRInfo(unsigned int slotNo, const std::string& src, bool group, const std::string& dst, const char* type);
 
 	virtual bool writePOCSAGInfo(unsigned int ric, const std::string& message);
-	virtual bool writeIPInfo(const std::string& address);
 
 	virtual bool writeDMRStart(bool tx);
 	virtual bool writeDMRShortLC(const unsigned char* lc);

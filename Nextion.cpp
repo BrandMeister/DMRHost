@@ -16,7 +16,6 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "NetworkInfo.h"
 #include "Nextion.h"
 #include "Log.h"
 
@@ -44,7 +43,6 @@ const unsigned int DMR_BER_COUNT    = 24U;		// 24 * 60ms = 1440ms
 CNextion::CNextion(const std::string& callsign, unsigned int dmrid, ISerialPort* serial, unsigned int brightness, bool displayClock, bool utc, unsigned int idleBrightness, unsigned int screenLayout, unsigned int txFrequency, unsigned int rxFrequency, bool displayTempInF) :
 CDisplay(),
 m_callsign(callsign),
-m_ipaddress("(ip unknown)"),
 m_dmrid(dmrid),
 m_serial(serial),
 m_brightness(brightness),
@@ -95,20 +93,12 @@ CNextion::~CNextion()
 
 bool CNextion::open()
 {
-	unsigned char info[100U];
-	CNetworkInfo* m_network;
-
 	bool ret = m_serial->open();
 	if (!ret) {
 		LogError("Cannot open the port for the Nextion display");
 		delete m_serial;
 		return false;
 	}
-
-	info[0] = 0;
-	m_network = new CNetworkInfo;
-	m_network->getNetworkInterface(info);
-	m_ipaddress = (char*)info;
 
 	sendCommand("bkcmd=0");
 	sendCommandAction(0U);
@@ -178,10 +168,6 @@ void CNextion::setIdleInt()
 	sendCommand("t1.txt=\"MMDVM IDLE\"");
 	sendCommandAction(11U);
 
-	::sprintf(command, "t3.txt=\"%s\"", m_ipaddress.c_str());
-	sendCommand(command);
-	sendCommandAction(16U);
-
 	m_clockDisplayTimer.start();
 
 	m_mode = MODE_IDLE;
@@ -222,10 +208,6 @@ void CNextion::setQuitInt()
 		::sprintf(command, "dim=%u", m_idleBrightness);
 		sendCommand(command);
 	}
-
-	::sprintf(command, "t3.txt=\"%s\"", m_ipaddress.c_str());
-	sendCommand(command);
-	sendCommandAction(16U);
 
 	sendCommand("t0.txt=\"MMDVM STOPPED\"");
 	sendCommandAction(19U);

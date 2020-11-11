@@ -61,7 +61,6 @@ public:
 
 	virtual bool writeDMRInfo(unsigned int slotNo, const std::string& src, bool group, const std::string& dst, const char* type){return true;};
 	virtual bool writePOCSAGInfo(unsigned int ric, const std::string& message){return true;};
-	virtual bool writeIPInfo(const std::string& address){return true;};
 
 	virtual bool writeDMRStart(bool tx){return true;};
 	virtual bool writeDMRShortLC(const unsigned char* lc){return true;};

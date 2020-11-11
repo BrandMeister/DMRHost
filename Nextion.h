@@ -56,7 +56,6 @@ protected:
 
 private:
   std::string   m_callsign;
-  std::string   m_ipaddress;
   unsigned int  m_dmrid;
   ISerialPort*  m_serial;
   unsigned int  m_brightness;

@@ -22,7 +22,6 @@
 
 #include <string>
 
-#include "NetworkInfo.h"
 #include "Modem.h"
 class CCASTInfo : public CDisplay
 {
@@ -50,5 +49,4 @@ protected:
 
 private:
   	CModem*		m_modem;
-	std::string	m_ipaddress;
 };
