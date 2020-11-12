@@ -37,3 +37,5 @@ wget http://repo.test.net.in/dmrhost/public.key -O - | apt-key add -
 apt-get update
 apt-get install dmrhost
 ```
+
+If you have questions, feel free to join our [telegram](https://t.me/dmrhost) group.
