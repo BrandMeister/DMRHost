@@ -26,11 +26,11 @@ package:amd64:
     CROSS: x86_64-linux-musl
     CXXFLAGS: -static
 
-package:arm:
+package:armhf:
   stage: binary
   extends: .build
   variables:
-    ARCH: arm
+    ARCH: armhf
     CROSS: arm-linux-musleabihf
     CXXFLAGS: -march=armv6zk -mcpu=arm1176jzf-s -static
 
