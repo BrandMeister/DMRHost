@@ -54,7 +54,7 @@ int main(int argc, char** argv)
  		for (int currentArg = 1; currentArg < argc; ++currentArg) {
 			std::string arg = argv[currentArg];
 			if ((arg == "-v") || (arg == "--version")) {
-				::fprintf(stdout, "DMRHost version %s git #%.7s\n", VERSION, gitversion);
+				::fprintf(stdout, "DMRHost version %s git #%.10s\n", VERSION, gitversion);
 				return 0;
 			} else if (arg.substr(0,1) == "-") {
 				::fprintf(stderr, "Usage: DMRHost [-v|--version] [filename]\n");
@@ -142,7 +142,7 @@ int CMMDVMHost::run()
 	}
 
 	LogMessage("DMRHost-%s is starting", VERSION);
-	LogMessage("Built %s %s (GitID #%.7s)", __TIME__, __DATE__, gitversion);
+	LogMessage("Built %s %s (GitID #%.10s)", __TIME__, __DATE__, gitversion);
 
 	readParams();
 
