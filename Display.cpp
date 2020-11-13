@@ -20,6 +20,7 @@
 #include "Defines.h"
 #include "SerialController.h"
 #include "ModemSerialPort.h"
+#include "NetDisplay.h"
 #include "NullDisplay.h"
 #include "TFTSurenoo.h"
 #include "LCDproc.h"
@@ -314,6 +315,11 @@ CDisplay* CDisplay::createDisplay(const CConf& conf, CModem* modem)
 			LogInfo("    Display UTC: %s", utc ? "yes" : "no");
 
 		display = new CLCDproc(address.c_str(), port, localPort, conf.getCallsign(), dmrid, displayClock, utc, conf.getDuplex(), dimOnIdle);
+	} else if (type == "NetDisplay") {
+	        std::string address = conf.getNetDisplayAddress();
+	        unsigned int port   = conf.getNetDisplayPort();
+
+		display = new CNetDisplay(address, port);
 #if defined(OLED)
 	} else if (type == "OLED") {
 	        unsigned char type       = conf.getOLEDType();

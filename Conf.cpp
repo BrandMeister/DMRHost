@@ -42,7 +42,8 @@ enum SECTION {
   SECTION_TFTSERIAL,
   SECTION_NEXTION,
   SECTION_OLED,
-  SECTION_LCDPROC
+  SECTION_LCDPROC,
+  SECTION_NET_DISPLAY
 };
 
 CConf::CConf(const std::string& file) :
@@ -149,7 +150,9 @@ m_lcdprocPort(0U),
 m_lcdprocLocalPort(0U),
 m_lcdprocDisplayClock(false),
 m_lcdprocUTC(false),
-m_lcdprocDimOnIdle(false)
+m_lcdprocDimOnIdle(false),
+m_netdisplayAddress("127.0.0.1"),
+m_netdisplayPort(62001)
 {
 }
 
@@ -201,6 +204,8 @@ bool CConf::read()
 		  section = SECTION_OLED;
 	  else if (::strncmp(buffer, "[LCDproc]", 9U) == 0)
 		  section = SECTION_LCDPROC;
+	  else if (::strncmp(buffer, "[NetDisplay]", 9U) == 0)
+		  section = SECTION_NET_DISPLAY;
 	  else
 		  section = SECTION_NONE;
 
@@ -511,6 +516,11 @@ bool CConf::read()
 			m_lcdprocUTC = ::atoi(value) == 1;
 		else if (::strcmp(key, "DimOnIdle") == 0)
                        m_lcdprocDimOnIdle = ::atoi(value) == 1;
+	} else if (section == SECTION_NET_DISPLAY) {
+		if (::strcmp(key, "Address") == 0)
+			m_netdisplayAddress = value;
+		else if (::strcmp(key, "Port") == 0)
+			m_netdisplayPort = (unsigned int)::atoi(value);
 	}
   }
 
@@ -1032,4 +1042,14 @@ bool CConf::getLCDprocDimOnIdle() const
 bool CConf::getNextionTempInFahrenheit() const
 {
 	return m_nextionTempInFahrenheit;
+}
+
+std::string CConf::getNetDisplayAddress() const
+{
+	return m_netdisplayAddress;
+}
+
+unsigned int CConf::getNetDisplayPort() const
+{
+	return m_netdisplayPort;
 }

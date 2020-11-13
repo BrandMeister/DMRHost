@@ -160,6 +160,10 @@ public:
   bool         getLCDprocUTC() const;
   bool         getLCDprocDimOnIdle() const;
 
+  // The NetDisplay section
+  std::string  getNetDisplayAddress() const;
+  unsigned int getNetDisplayPort() const;
+
 private:
   std::string  m_file;
   std::string  m_callsign;
@@ -278,4 +282,7 @@ private:
   bool         m_lcdprocDisplayClock;
   bool         m_lcdprocUTC;
   bool         m_lcdprocDimOnIdle;
+
+  std::string  m_netdisplayAddress;
+  unsigned int m_netdisplayPort;
 };
