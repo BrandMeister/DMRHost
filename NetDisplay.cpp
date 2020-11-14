@@ -141,7 +141,7 @@ void CNetDisplay::writeDMRBERInt(unsigned int slotNo, float ber)
 	data[0]  = 0x07;
 	data[1]  = slotNo;
 
-	char _ber[5];
+	char _ber[10];
         _ber[0] = 0;
 	snprintf(_ber, sizeof(_ber), "%f", ber);
 

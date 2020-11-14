@@ -34,7 +34,6 @@ public:
   unsigned int getId() const;
   unsigned int getTimeout() const;
   bool         getDuplex() const;
-  std::string  getDisplay() const;
 
   // The Info section
   unsigned int getRXFrequency() const;
@@ -131,38 +130,10 @@ public:
   unsigned int getPOCSAGNetworkModeHang() const;
   bool         getPOCSAGNetworkDebug() const;
 
-  // The TFTSERIAL section
-  std::string  getTFTSerialPort() const;
-  unsigned int getTFTSerialBrightness() const;
-
-  // The Nextion section
-  std::string  getNextionPort() const;
-  unsigned int getNextionBrightness() const;
-  bool         getNextionDisplayClock() const;
-  bool         getNextionUTC() const;
-  unsigned int getNextionIdleBrightness() const;
-  unsigned int getNextionScreenLayout() const;
-  bool         getNextionTempInFahrenheit() const;
-
-  // The OLED section
-  unsigned char  getOLEDType() const;
-  unsigned char  getOLEDBrightness() const;
-  bool           getOLEDInvert() const;
-  bool           getOLEDScroll() const;
-  bool           getOLEDRotate() const;
-  bool           getOLEDLogoScreensaver() const;
-
-  // The LCDproc section
-  std::string  getLCDprocAddress() const;
-  unsigned int getLCDprocPort() const;
-  unsigned int getLCDprocLocalPort() const;
-  bool         getLCDprocDisplayClock() const;
-  bool         getLCDprocUTC() const;
-  bool         getLCDprocDimOnIdle() const;
-
-  // The NetDisplay section
-  std::string  getNetDisplayAddress() const;
-  unsigned int getNetDisplayPort() const;
+  // The Display section
+  bool         getDisplayEnabled() const;
+  std::string  getDisplayAddress() const;
+  unsigned int getDisplayPort() const;
 
 private:
   std::string  m_file;
@@ -258,31 +229,7 @@ private:
   unsigned int m_pocsagNetworkModeHang;
   bool         m_pocsagNetworkDebug;
 
-  std::string  m_tftSerialPort;
-  unsigned int m_tftSerialBrightness;
-
-  std::string  m_nextionPort;
-  unsigned int m_nextionBrightness;
-  bool         m_nextionDisplayClock;
-  bool         m_nextionUTC;
-  unsigned int m_nextionIdleBrightness;
-  unsigned int m_nextionScreenLayout;
-  bool         m_nextionTempInFahrenheit;
-  
-  unsigned char m_oledType;
-  unsigned char m_oledBrightness;
-  bool          m_oledInvert;
-  bool          m_oledScroll;
-  bool          m_oledRotate;
-  bool          m_oledLogoScreensaver;
-
-  std::string  m_lcdprocAddress;
-  unsigned int m_lcdprocPort;
-  unsigned int m_lcdprocLocalPort;
-  bool         m_lcdprocDisplayClock;
-  bool         m_lcdprocUTC;
-  bool         m_lcdprocDimOnIdle;
-
-  std::string  m_netdisplayAddress;
-  unsigned int m_netdisplayPort;
+  bool         m_displayEnabled;
+  std::string  m_displayAddress;
+  unsigned int m_displayPort;
 };
