@@ -319,6 +319,9 @@ CDisplay* CDisplay::createDisplay(const CConf& conf, CModem* modem)
 	        std::string address = conf.getNetDisplayAddress();
 	        unsigned int port   = conf.getNetDisplayPort();
 
+		LogInfo("    Address: %s", address.c_str());
+		LogInfo("    Port: %u", port);
+
 		display = new CNetDisplay(address, port);
 #if defined(OLED)
 	} else if (type == "OLED") {
