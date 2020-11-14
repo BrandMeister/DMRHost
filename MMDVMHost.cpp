@@ -408,7 +408,7 @@ int CMMDVMHost::run()
 		if (transparentSocket != NULL && len > 0U)
 			transparentSocket->write(data, len, transparentAddress, transparentAddrLen);
 
-		if (m_modeTimer.isRunning() && m_modeTimer.hasExpired())
+		if (m_modeTimer.isRunning() && m_modeTimer.hasExpired() && !m_modem->hasTX())
 			setMode(MODE_IDLE);
 
 		if (m_dmr != NULL) {
@@ -458,11 +458,10 @@ int CMMDVMHost::run()
 			if (ret) {
 				len = m_pocsag->readModem(data);
 				if (len > 0U) {
-					if (m_mode == MODE_IDLE) {
+					if ((m_mode == MODE_IDLE || m_mode == MODE_POCSAG) && !m_modem->hasTX()) {
 						m_modeTimer.setTimeout(m_pocsagNetModeHang);
-						setMode(MODE_POCSAG);
-					}
-					if (m_mode == MODE_POCSAG) {
+						if (m_mode == MODE_IDLE)
+							setMode(MODE_POCSAG);
 						m_modem->writePOCSAGData(data, len);
 						m_modeTimer.start();
 					}
