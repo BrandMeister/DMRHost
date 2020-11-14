@@ -32,8 +32,7 @@ m_fd(-1)
 }
 
 CUDPSocket::CUDPSocket(unsigned int port) :
-m_address(),
-m_port(0U),
+m_port(port),
 m_af(0U),
 m_fd(-1)
 {
