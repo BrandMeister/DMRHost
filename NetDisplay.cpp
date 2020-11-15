@@ -56,17 +56,6 @@ bool CNetDisplay::open()
 	return true;
 }
 
-template<typename... Args>
-std::string string_format(const char* fmt, Args... args)
-{
-	size_t size = snprintf(nullptr, 0, fmt, args...);
-	std::string buf;
-	buf.reserve(size + 1);
-	buf.resize(size);
-	snprintf(&buf[0], size + 1, fmt, args...);
-	return buf;
-}
-
 void CNetDisplay::write(unsigned char* data, unsigned int length)
 {
 	if (m_socket)
@@ -152,7 +141,9 @@ void CNetDisplay::writeDMRBERInt(unsigned int slotNo, float ber)
 	data[0]  = 0x07;
 	data[1]  = slotNo;
 
-	std::string _ber = std::to_string(ber);
+	char _ber[5];
+        _ber[0] = 0;
+	snprintf(_ber, sizeof(_ber), "%f", ber);
 
         uint8_t count = 0;
         for (uint8_t i = 0U; _ber[i] != '\0'; i++, count++)
