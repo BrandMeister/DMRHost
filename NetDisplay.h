@@ -56,5 +56,5 @@ private:
 	unsigned int     m_addrLen;
 	unsigned int     m_port;
 
-	void write(const std::string& data);
+	void write(unsigned char* data, unsigned int length);
 };

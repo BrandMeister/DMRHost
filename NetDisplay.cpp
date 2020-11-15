@@ -67,87 +67,154 @@ std::string string_format(const char* fmt, Args... args)
 	return buf;
 }
 
-void CNetDisplay::write(const std::string& data)
+void CNetDisplay::write(unsigned char* data, unsigned int length)
 {
 	if (m_socket)
-		m_socket->write((unsigned char*)data.c_str(), data.size(), m_addr, m_addrLen);
+		m_socket->write(data, length, m_addr, m_addrLen);
 }
 
 void CNetDisplay::setIdleInt()
 {
-	std::string data = "setIdle";
-	write(data);
+	unsigned char data[1U];
+	data[0] = 0x01;
+	write(data, 1U);
 }
 
 void CNetDisplay::setErrorInt(const char* text)
 {
-	std::string data = string_format("setError %s", text);
-	write(data);
+	unsigned char data[100U];
+	data[0]  = 0x02;
+
+	uint8_t count = 0;
+	for (uint8_t i = 0U; text[i] != '\0'; i++, count++)
+		data[2 + i] = text[i];
+
+	data[1]  = count;
+
+	write(data, 2 + count);
 }
 
 void CNetDisplay::setQuitInt()
 {
-	std::string data = "setQuit";
-	write(data);
+	unsigned char data[1U];
+	data[0] = 0x03;
+	write(data, 1U);
 }
 
 void CNetDisplay::writeDMRInt(unsigned int slotNo, const std::string& src, bool group, const std::string& dst, const char* type)
 {
-	std::string data = string_format("writeDMR %u %s %u %s %s", slotNo, src.c_str(), group, dst.c_str(), type);
-	write(data);
+	unsigned char data[12U];
+	data[0]  = 0x04;
+	data[1]  = slotNo;
+        data[2]  = atoi(src.c_str()) >> 24;
+        data[3]  = atoi(src.c_str()) >> 16;
+        data[4]  = atoi(src.c_str()) >> 8;
+        data[5]  = atoi(src.c_str()) >> 0;
+	data[6]  = group;
+        data[7]  = atoi(dst.c_str()) >> 24;
+        data[8]  = atoi(dst.c_str()) >> 16;
+        data[9]  = atoi(dst.c_str()) >> 8;
+        data[10] = atoi(dst.c_str()) >> 0;
+        data[11] = type[0];
+
+	write(data, 12);
 }
 
 void CNetDisplay::writeDMRRSSIInt(unsigned int slotNo, unsigned char rssi)
 {
-// TODO. meh
-//	std::string data = string_format("writeDMRRSSI %u %s", slotNo, rssi);
-//	write(data);
+	unsigned char data[100U];
+	data[0]  = 0x05;
+	data[1]  = slotNo;
+	data[2]  = rssi;
+
+	write(data, 3);
 }
 
 void CNetDisplay::writeDMRTAInt(unsigned int slotNo, unsigned char* talkerAlias, const char* type)
 {
-	std::string data = string_format("writeDMRTA %u %s %s", slotNo, type, talkerAlias);
-	write(data);
+	unsigned char data[100U];
+	data[0]  = 0x06;
+	data[1]  = slotNo;
+	data[2]  = type[0];
+
+	uint8_t count = 0;
+	for (uint8_t i = 0U; talkerAlias[i] != '\0'; i++, count++)
+		data[4 + i] = talkerAlias[i];
+
+	data[3]  = count;
+
+	write(data, 4 + count);
 }
 
 void CNetDisplay::writeDMRBERInt(unsigned int slotNo, float ber)
 {
-	std::string data = string_format("writeDMRBER %u %f", slotNo, ber);
-	write(data);
+	unsigned char data[100U];
+	data[0]  = 0x07;
+	data[1]  = slotNo;
+
+	std::string _ber = std::to_string(ber);
+
+        uint8_t count = 0;
+        for (uint8_t i = 0U; _ber[i] != '\0'; i++, count++)
+                data[3 + i] = _ber[i];
+
+        data[2]  = count;
+
+        write(data, 3 + count);
 }
 
 void CNetDisplay::clearDMRInt(unsigned int slotNo)
 {
-	std::string data = string_format("clearDMR %u", slotNo);
-	write(data);
+	unsigned char data[2U];
+	data[0]  = 0x08;
+	data[1]  = slotNo;
+
+	write(data, 2);
 }
 
 void CNetDisplay::writePOCSAGInt(uint32_t ric, const std::string& message)
 {
-	std::string data = string_format("writePOCSAG %u %s", ric, message.c_str());
-	write(data);
+	unsigned char data[100U];
+	data[0]  = 0x09;
+
+        data[1]  = ric >> 24;
+        data[2]  = ric >> 16;
+        data[3]  = ric >> 8;
+        data[4]  = ric >> 0;
+
+	uint8_t count = 0;
+	for (uint8_t i = 0U; message[i] != '\0'; i++, count++)
+		data[6 + i] = message[i];
+
+        data[5]  = count;
+
+	write(data, 6 + count);
 }
 
 void CNetDisplay::clearPOCSAGInt()
 {
-	std::string data = "clearPOCSAG";
-	write(data);
+	unsigned char data[1U];
+	data[0] = 0x0A;
+	write(data, 1U);
 }
 
 void CNetDisplay::writeCWInt()
 {
-	std::string data = "writeCW";
-	write(data);
+	unsigned char data[1U];
+	data[0] = 0x0B;
+	write(data, 1U);
 }
 
 void CNetDisplay::clearCWInt()
 {
-	std::string data = "clearCW";
-	write(data);
+	unsigned char data[1U];
+	data[0] = 0x0C;
+	write(data, 1U);
 }
 
 void CNetDisplay::close()
 {
-	std::string data = "close";
-	write(data);
+	unsigned char data[1U];
+	data[0] = 0x0D;
+	write(data, 1U);
 }
