@@ -49,14 +49,11 @@ public:
 	virtual unsigned int readDMRData2(unsigned char* data);
 	virtual unsigned int readTransparentData(unsigned char* data);
 
-	virtual unsigned int readSerial(unsigned char* data, unsigned int length);
-
 	virtual bool hasDMRSpace1() const;
 	virtual bool hasDMRSpace2() const;
 	virtual bool hasPOCSAGSpace() const;
 
 	virtual bool hasTX() const;
-	virtual bool hasCD() const;
 
 	virtual bool hasError() const;
 
@@ -67,17 +64,10 @@ public:
 
 	virtual bool writeTransparentData(const unsigned char* data, unsigned int length);
 
-	virtual bool writeDMRInfo(unsigned int slotNo, const std::string& src, bool group, const std::string& dst, const char* type);
-
-	virtual bool writePOCSAGInfo(unsigned int ric, const std::string& message);
-
 	virtual bool writeDMRStart(bool tx);
 	virtual bool writeDMRShortLC(const unsigned char* lc);
 	virtual bool writeDMRAbort(unsigned int slotNo);
 
-	virtual bool writeSerial(const unsigned char* data, unsigned int length);
-
-	virtual unsigned char getMode() const;
 	virtual bool setMode(unsigned char mode);
 
 	virtual bool sendCWId(const std::string& callsign);
@@ -132,7 +122,6 @@ private:
 	unsigned int               m_dmrSpace2;
 	unsigned int               m_pocsagSpace;
 	bool                       m_tx;
-	bool                       m_cd;
 	bool                       m_error;
 	unsigned char              m_mode;
 	HW_TYPE                    m_hwType;

@@ -70,25 +70,6 @@ void CUtils::dump(int level, const std::string& title, const unsigned char* data
 	}
 }
 
-void CUtils::dump(const std::string& title, const bool* bits, unsigned int length)
-{
-	assert(bits != NULL);
-
-	dump(2U, title, bits, length);
-}
-
-void CUtils::dump(int level, const std::string& title, const bool* bits, unsigned int length)
-{
-	assert(bits != NULL);
-
-	unsigned char bytes[100U];
-	unsigned int nBytes = 0U;
-	for (unsigned int n = 0U; n < length; n += 8U, nBytes++)
-		bitsToByteBE(bits + n, bytes[nBytes]);
-
-	dump(level, title, bytes, nBytes);
-}
-
 void CUtils::byteToBitsBE(unsigned char byte, bool* bits)
 {
 	assert(bits != NULL);
@@ -101,20 +82,6 @@ void CUtils::byteToBitsBE(unsigned char byte, bool* bits)
 	bits[5U] = (byte & 0x04U) == 0x04U;
 	bits[6U] = (byte & 0x02U) == 0x02U;
 	bits[7U] = (byte & 0x01U) == 0x01U;
-}
-
-void CUtils::byteToBitsLE(unsigned char byte, bool* bits)
-{
-	assert(bits != NULL);
-
-	bits[0U] = (byte & 0x01U) == 0x01U;
-	bits[1U] = (byte & 0x02U) == 0x02U;
-	bits[2U] = (byte & 0x04U) == 0x04U;
-	bits[3U] = (byte & 0x08U) == 0x08U;
-	bits[4U] = (byte & 0x10U) == 0x10U;
-	bits[5U] = (byte & 0x20U) == 0x20U;
-	bits[6U] = (byte & 0x40U) == 0x40U;
-	bits[7U] = (byte & 0x80U) == 0x80U;
 }
 
 void CUtils::bitsToByteBE(const bool* bits, unsigned char& byte)
@@ -130,36 +97,3 @@ void CUtils::bitsToByteBE(const bool* bits, unsigned char& byte)
 	byte |= bits[6U] ? 0x02U : 0x00U;
 	byte |= bits[7U] ? 0x01U : 0x00U;
 }
-
-void CUtils::bitsToByteLE(const bool* bits, unsigned char& byte)
-{
-	assert(bits != NULL);
-
-	byte  = bits[0U] ? 0x01U : 0x00U;
-	byte |= bits[1U] ? 0x02U : 0x00U;
-	byte |= bits[2U] ? 0x04U : 0x00U;
-	byte |= bits[3U] ? 0x08U : 0x00U;
-	byte |= bits[4U] ? 0x10U : 0x00U;
-	byte |= bits[5U] ? 0x20U : 0x00U;
-	byte |= bits[6U] ? 0x40U : 0x00U;
-	byte |= bits[7U] ? 0x80U : 0x00U;
-}
-
-unsigned int CUtils::compare(const unsigned char* bytes1, const unsigned char* bytes2, unsigned int length)
-{
-	assert(bytes1 != NULL);
-	assert(bytes2 != NULL);
-
-	unsigned int diffs = 0U;
-
-	for (unsigned int i = 0U; i < length; i++) {
-		unsigned char v = bytes1[i] ^ bytes2[i];
-		while (v != 0U) {
-			v &= v - 1U;
-			diffs++;
-		}
-	}
-
-	return diffs;
-}
-

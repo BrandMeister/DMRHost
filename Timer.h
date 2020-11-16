@@ -25,9 +25,6 @@ public:
 
 	void setTimeout(unsigned int secs, unsigned int msecs = 0U);
 
-	unsigned int getTimeout() const;
-	unsigned int getTimer() const;
-
 	unsigned int getRemaining()
 	{
 		if (m_timeout == 0U || m_timer == 0U)

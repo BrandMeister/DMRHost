@@ -50,8 +50,6 @@ public:
 
 	bool writeTalkerAlias(unsigned int id, unsigned char type, const unsigned char* data);
 
-	bool writeHomePosition(float latitude, float longitude);
-
 	bool wantsBeacon();
 
 	void clock(unsigned int ms);

@@ -42,14 +42,11 @@ public:
 	virtual unsigned int readDMRData2(unsigned char* data){return 0;};
 	virtual unsigned int readTransparentData(unsigned char* data){return 0;};
 
-	virtual unsigned int readSerial(unsigned char* data, unsigned int length){return 0;};
-
 	virtual bool hasDMRSpace1() const {return true;};
 	virtual bool hasDMRSpace2() const {return true;};
 	virtual bool hasPOCSAGSpace() const{return true;}; 
 
 	virtual bool hasTX() const {return false;};
-	virtual bool hasCD() const {return false;};
 
 	virtual bool hasError() const   {return false;};
 
@@ -59,14 +56,9 @@ public:
 
 	virtual bool writeTransparentData(const unsigned char* data, unsigned int length){return true;};
 
-	virtual bool writeDMRInfo(unsigned int slotNo, const std::string& src, bool group, const std::string& dst, const char* type){return true;};
-	virtual bool writePOCSAGInfo(unsigned int ric, const std::string& message){return true;};
-
 	virtual bool writeDMRStart(bool tx){return true;};
 	virtual bool writeDMRShortLC(const unsigned char* lc){return true;};
 	virtual bool writeDMRAbort(unsigned int slotNo){return true;};
-
-	virtual bool writeSerial(const unsigned char* data, unsigned int length){return true;};
 
 	virtual bool setMode(unsigned char mode){return true;};
 

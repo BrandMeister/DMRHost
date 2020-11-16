@@ -50,19 +50,3 @@ void CTimer::setTimeout(unsigned int secs, unsigned int msecs)
 		m_timer = 0U;
 	}
 }
-
-unsigned int CTimer::getTimeout() const
-{
-	if (m_timeout == 0U)
-		return 0U;
-
-	return (m_timeout - 1U) / m_ticksPerSec;
-}
-
-unsigned int CTimer::getTimer() const
-{
-	if (m_timer == 0U)
-		return 0U;
-
-	return (m_timer - 1U) / m_ticksPerSec;
-}

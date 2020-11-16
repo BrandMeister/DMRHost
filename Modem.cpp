@@ -113,7 +113,6 @@ m_dmrSpace1(0U),
 m_dmrSpace2(0U),
 m_pocsagSpace(0U),
 m_tx(false),
-m_cd(false),
 m_error(false),
 m_mode(MODE_IDLE),
 m_hwType(HWT_UNKNOWN)
@@ -335,8 +334,6 @@ void CModem::clock(unsigned int ms)
 					if (dacOverflow)
 						LogError("MMDVM DAC levels have overflowed");
 
-					m_cd = (m_buffer[5U] & 0x40U) == 0x40U;
-
 					m_dmrSpace1   = m_buffer[7U];
 					m_dmrSpace2   = m_buffer[8U];
 
@@ -344,7 +341,7 @@ void CModem::clock(unsigned int ms)
 						m_pocsagSpace = m_buffer[12U];
 
 					m_inactivityTimer.start();
-					// LogMessage("status=%02X, tx=%d, space=%u,%u,%u,%u,%u,%u,%u cd=%d", m_buffer[5U], int(m_tx), m_dmrSpace1, m_dmrSpace2, m_pocsagSpace, int(m_cd));
+					// LogMessage("status=%02X, tx=%d, space=%u,%u,%u,%u,%u,%u,%u cd=%d", m_buffer[5U], int(m_tx), m_dmrSpace1, m_dmrSpace2, m_pocsagSpace);
 				}
 				break;
 
@@ -521,15 +518,6 @@ unsigned int CModem::readTransparentData(unsigned char* data)
 	return len;
 }
 
-// To be implemented later if needed
-unsigned int CModem::readSerial(unsigned char* data, unsigned int length)
-{
-	assert(data != NULL);
-	assert(length > 0U);
-
-	return 0U;
-}
-
 bool CModem::hasDMRSpace1() const
 {
 	unsigned int space = m_txDMRData1.freeSpace() / (DMR_FRAME_LENGTH_BYTES + 4U);
@@ -651,82 +639,9 @@ bool CModem::writeTransparentData(const unsigned char* data, unsigned int length
 	return true;
 }
 
-bool CModem::writeDMRInfo(unsigned int slotNo, const std::string& src, bool group, const std::string& dest, const char* type)
-{
-	assert(m_serial != NULL);
-	assert(type != NULL);
-
-	unsigned char buffer[50U];
-
-	buffer[0U] = MMDVM_FRAME_START;
-	buffer[1U] = 47U;
-	buffer[2U] = MMDVM_QSO_INFO;
-
-	buffer[3U] = MODE_DMR;
-
-	buffer[4U] = slotNo;
-
-	::sprintf((char*)(buffer + 5U), "%20.20s", src.c_str());
-
-	buffer[25U] = group ? 'G' : 'I';
-
-	::sprintf((char*)(buffer + 26U), "%20.20s", dest.c_str());
-
-	::memcpy(buffer + 46U, type, 1U);
-
-	return m_serial->write(buffer, 47U) != 47;
-}
-
-bool CModem::writePOCSAGInfo(unsigned int ric, const std::string& message)
-{
-	assert(m_serial != NULL);
-
-	size_t length = message.size();
-
-	unsigned char buffer[250U];
-
-	buffer[0U] = MMDVM_FRAME_START;
-	buffer[1U] = length + 11U;
-	buffer[2U] = MMDVM_QSO_INFO;
-
-	buffer[3U] = MODE_POCSAG;
-
-	::sprintf((char*)(buffer + 4U), "%07u", ric);	// 21-bits
-
-	::memcpy(buffer + 11U, message.c_str(), length);
-
-	int ret = m_serial->write(buffer, length + 11U);
-
-	return ret != int(length + 11U);
-}
-
-bool CModem::writeSerial(const unsigned char* data, unsigned int length)
-{
-	assert(m_serial != NULL);
-	assert(data != NULL);
-	assert(length > 0U);
-
-	unsigned char buffer[250U];
-
-	buffer[0U] = MMDVM_FRAME_START;
-	buffer[1U] = length + 3U;
-	buffer[2U] = MMDVM_SERIAL;
-
-	::memcpy(buffer + 3U, data, length);
-
-	int ret = m_serial->write(buffer, length + 3U);
-
-	return ret != int(length + 3U);
-}
-
 bool CModem::hasTX() const
 {
 	return m_tx;
-}
-
-bool CModem::hasCD() const
-{
-	return m_cd;
 }
 
 bool CModem::hasError() const
@@ -1075,11 +990,6 @@ RESP_TYPE_MMDVM CModem::getResponse()
 HW_TYPE CModem::getHWType() const
 {
 	return m_hwType;
-}
-
-unsigned char CModem::getMode() const
-{
-	return m_mode;
 }
 
 bool CModem::setMode(unsigned char mode)

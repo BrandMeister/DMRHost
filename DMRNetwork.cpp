@@ -323,24 +323,6 @@ bool CDMRNetwork::writeTalkerAlias(unsigned int id, unsigned char type, const un
 	return write(buffer, 19U);
 }
 
-bool CDMRNetwork::writeHomePosition(float latitude, float longitude)
-{
-	m_latitude  = latitude;
-	m_longitude = longitude;
-
-	if (m_status != RUNNING)
-		return false;
-
-	char buffer[50U];
-
-	::memcpy(buffer + 0U, "RPTG", 4U);
-	::memcpy(buffer + 4U, m_id, 4U);
-
-	::sprintf(buffer + 8U, "%08f%09f", latitude, longitude);
-
-	return write((unsigned char*)buffer, 25U);
-}
-
 void CDMRNetwork::close()
 {
 	LogMessage("DMR, Closing DMR Network");
