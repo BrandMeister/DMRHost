@@ -29,46 +29,46 @@ public:
 	CNullModem(const std::string& port, bool duplex, bool rxInvert, bool txInvert, bool pttInvert, unsigned int txDelay, unsigned int dmrDelay, bool trace, bool debug);
 	virtual ~CNullModem();
 
-	virtual void setSerialParams(const std::string& protocol, unsigned int address){};
-	virtual void setRFParams(unsigned int rxFrequency, int rxOffset, unsigned int txFrequency, int txOffset, int txDCOffset, int rxDCOffset, float rfLevel, unsigned int pocsagFrequency){};
-	virtual void setModeParams(bool dmrEnabled, bool pocsagEnabled, bool fmEnabled){};
-	virtual void setLevels(float rxLevel, float cwIdTXLevel, float dmrTXLevel, float pocsagLevel, float fmTXLevel){};
-	virtual void setDMRParams(unsigned int colorCode){};
-	virtual void setTransparentDataParams(unsigned int sendFrameType){};
+	virtual void setSerialParams(const std::string& protocol, unsigned int address) override {};
+	virtual void setRFParams(unsigned int rxFrequency, int rxOffset, unsigned int txFrequency, int txOffset, int txDCOffset, int rxDCOffset, float rfLevel, unsigned int pocsagFrequency) override {};
+	virtual void setModeParams(bool dmrEnabled, bool pocsagEnabled, bool fmEnabled) {};
+	virtual void setLevels(float rxLevel, float cwIdTXLevel, float dmrTXLevel, float pocsagLevel, float fmTXLevel) {};
+	virtual void setDMRParams(unsigned int colorCode) override {};
+	virtual void setTransparentDataParams(unsigned int sendFrameType) override {};
 
-	virtual bool open();
+	virtual bool open() override;
 
-	virtual unsigned int readDMRData1(unsigned char* data){return 0;};
-	virtual unsigned int readDMRData2(unsigned char* data){return 0;};
-	virtual unsigned int readTransparentData(unsigned char* data){return 0;};
+	virtual unsigned int readDMRData1(unsigned char* data) override {return 0;};
+	virtual unsigned int readDMRData2(unsigned char* data) override {return 0;};
+	virtual unsigned int readTransparentData(unsigned char* data) override {return 0;};
 
-	virtual bool hasDMRSpace1() const {return true;};
-	virtual bool hasDMRSpace2() const {return true;};
-	virtual bool hasPOCSAGSpace() const{return true;}; 
+	virtual bool hasDMRSpace1() const override {return true;};
+	virtual bool hasDMRSpace2() const override {return true;};
+	virtual bool hasPOCSAGSpace() const override {return true;};
 
-	virtual bool hasTX() const {return false;};
+	virtual bool hasTX() const override {return false;};
 
-	virtual bool hasError() const   {return false;};
+	virtual bool hasError() const override {return false;};
 
-	virtual bool writeDMRData1(const unsigned char* data, unsigned int length){return true;};
-	virtual bool writeDMRData2(const unsigned char* data, unsigned int length){return true;};
-	virtual bool writePOCSAGData(const unsigned char* data, unsigned int length){return true;};
+	virtual bool writeDMRData1(const unsigned char* data, unsigned int length) override {return true;};
+	virtual bool writeDMRData2(const unsigned char* data, unsigned int length) override {return true;};
+	virtual bool writePOCSAGData(const unsigned char* data, unsigned int length) override {return true;};
 
-	virtual bool writeTransparentData(const unsigned char* data, unsigned int length){return true;};
+	virtual bool writeTransparentData(const unsigned char* data, unsigned int length) override {return true;};
 
-	virtual bool writeDMRStart(bool tx){return true;};
-	virtual bool writeDMRShortLC(const unsigned char* lc){return true;};
-	virtual bool writeDMRAbort(unsigned int slotNo){return true;};
+	virtual bool writeDMRStart(bool tx) override {return true;};
+	virtual bool writeDMRShortLC(const unsigned char* lc) override {return true;};
+	virtual bool writeDMRAbort(unsigned int slotNo) override {return true;};
 
-	virtual bool setMode(unsigned char mode){return true;};
+	virtual bool setMode(unsigned char mode) override {return true;};
 
-	virtual bool sendCWId(const std::string& callsign){return true;};
+	virtual bool sendCWId(const std::string& callsign) override {return true;};
 
-	virtual HW_TYPE getHWType() const {return m_hwType;};
+	virtual HW_TYPE getHWType() const override {return m_hwType;};
 
-	virtual void clock(unsigned int ms){};
+	virtual void clock(unsigned int ms) override {};
 
-	virtual void close(){};
+	virtual void close() override {};
 
 private:
 	HW_TYPE                    m_hwType;

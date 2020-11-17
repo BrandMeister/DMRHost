@@ -75,9 +75,8 @@ unsigned int CQR1676::getSyndrome1576(unsigned int pattern)
  * obtain its syndrome in decoding.
  */
 {
-	unsigned int aux = X14;
- 
 	if (pattern >= X8) {
+		unsigned int aux = X14;
 		while (pattern & MASK7) {
 			while (!(aux & pattern))
 				aux = aux >> 1;

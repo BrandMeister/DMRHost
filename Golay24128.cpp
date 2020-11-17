@@ -1055,9 +1055,8 @@ static unsigned int get_syndrome_23127(unsigned int pattern)
  * obtain its syndrome in decoding.
  */
 {
-	unsigned int aux = X22;
- 
 	if (pattern >= X11) {
+		unsigned int aux = X22;
 		while (pattern & MASK12) {
 			while (!(aux & pattern))
 				aux = aux >> 1;

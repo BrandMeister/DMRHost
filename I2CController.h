@@ -28,11 +28,11 @@ public:
 	CI2CController(const std::string& device, unsigned int speed, unsigned int address = 0x22U, bool assertRTS = false);
 	virtual ~CI2CController();
 
-	virtual bool open();
+	virtual bool open() override;
 
-	virtual int read(unsigned char* buffer, unsigned int length);
+	virtual int read(unsigned char* buffer, unsigned int length) override;
 
-	virtual int write(const unsigned char* buffer, unsigned int length);
+	virtual int write(const unsigned char* buffer, unsigned int length) override;
 
 private:
 	unsigned int m_address;

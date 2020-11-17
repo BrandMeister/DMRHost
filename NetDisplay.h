@@ -29,26 +29,26 @@ public:
   CNetDisplay(const std::string& address, unsigned int port);
   virtual ~CNetDisplay();
 
-  virtual bool open();
+  virtual bool open() override;
 
-  virtual void close();
+  virtual void close() override;
 
 protected:
-	virtual void setIdleInt();
-	virtual void setErrorInt(const char* text);
-	virtual void setQuitInt();
+	virtual void setIdleInt() override;
+	virtual void setErrorInt(const char* text) override;
+	virtual void setQuitInt() override;
 
-	virtual void writeDMRInt(unsigned int slotNo, const std::string& src, bool group, const std::string& dst, const char* type);
-	virtual void writeDMRRSSIInt(unsigned int slotNo, unsigned char rssi);
-	virtual void writeDMRTAInt(unsigned int slotNo, unsigned char* talkerAlias, const char* type);
-	virtual void writeDMRBERInt(unsigned int slotNo, float ber);
-	virtual void clearDMRInt(unsigned int slotNo);
+	virtual void writeDMRInt(unsigned int slotNo, const std::string& src, bool group, const std::string& dst, const char* type) override;
+	virtual void writeDMRRSSIInt(unsigned int slotNo, unsigned char rssi) override;
+	virtual void writeDMRTAInt(unsigned int slotNo, unsigned char* talkerAlias, const char* type) override;
+	virtual void writeDMRBERInt(unsigned int slotNo, float ber) override;
+	virtual void clearDMRInt(unsigned int slotNo) override;
 
-	virtual void writePOCSAGInt(uint32_t ric, const std::string& message);
-	virtual void clearPOCSAGInt();
+	virtual void writePOCSAGInt(uint32_t ric, const std::string& message) override;
+	virtual void clearPOCSAGInt() override;
 
-	virtual void writeCWInt();
-	virtual void clearCWInt();
+	virtual void writeCWInt() override;
+	virtual void clearCWInt() override;
 private:
 	CUDPSocket*  m_socket;
 	std::string      m_addressStr;

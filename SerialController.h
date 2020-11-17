@@ -28,13 +28,13 @@ public:
 	CSerialController(const std::string& device, unsigned int speed, bool assertRTS = false);
 	virtual ~CSerialController();
 
-	virtual bool open();
+	virtual bool open() override;
 
-	virtual int read(unsigned char* buffer, unsigned int length);
+	virtual int read(unsigned char* buffer, unsigned int length) override;
 
-	virtual int write(const unsigned char* buffer, unsigned int length);
+	virtual int write(const unsigned char* buffer, unsigned int length) override;
 
-	virtual void close();
+	virtual void close() override;
 
 #if defined(__APPLE__)
 	virtual int setNonblock(bool nonblock);

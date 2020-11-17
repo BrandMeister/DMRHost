@@ -136,20 +136,21 @@ void CBPTC19696::decodeErrorCheck()
 {
 	bool fixing;
 	unsigned int count = 0U;
+	unsigned int pos;
 	do {
 		fixing = false;
 
 		// Run through each of the 15 columns
 		bool col[13U];
 		for (unsigned int c = 0U; c < 15U; c++) {
-			unsigned int pos = c + 1U;
+			pos = c + 1U;
 			for (unsigned int a = 0U; a < 13U; a++) {
 				col[a] = m_deInterData[pos];
 				pos = pos + 15U;
 			}
 
 			if (CHamming::decode1393(col)) {
-				unsigned int pos = c + 1U;
+				pos = c + 1U;
 				for (unsigned int a = 0U; a < 13U; a++) {
 					m_deInterData[pos] = col[a];
 					pos = pos + 15U;
@@ -161,7 +162,7 @@ void CBPTC19696::decodeErrorCheck()
 		
 		// Run through each of the 9 rows containing data
 		for (unsigned int r = 0U; r < 9U; r++) {
-			unsigned int pos = (r * 15U) + 1U;
+			pos = (r * 15U) + 1U;
 			if (CHamming::decode15113_2(m_deInterData + pos))
 				fixing = true;
 		}

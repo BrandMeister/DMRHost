@@ -221,9 +221,8 @@ unsigned int CGolay2087::getSyndrome1987(unsigned int pattern)
  * obtain its syndrome in decoding.
  */
 {
-	unsigned int aux = X18;
- 
 	if (pattern >= X11) {
+		unsigned int aux = X18;
 		while (pattern & MASK8) {
 			while (!(aux & pattern))
 				aux = aux >> 1;

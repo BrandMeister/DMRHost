@@ -623,40 +623,40 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 			if (ret) {
 				FLCO flco = m_rfEmbeddedData[m_rfEmbeddedWriteN].getFLCO();
 
-				unsigned char data[9U];
-				m_rfEmbeddedData[m_rfEmbeddedWriteN].getRawData(data);
+				unsigned char _data[9U];
+				m_rfEmbeddedData[m_rfEmbeddedWriteN].getRawData(_data);
 
 				char text[80U];
 				switch (flco) {
 				case FLCO_GROUP:
 				case FLCO_USER_USER:
 					// ::sprintf(text, "DMR Slot %u, Embedded LC", m_slotNo);
-					// CUtils::dump(1U, text, data, 9U);
+					// CUtils::dump(1U, text, _data, 9U);
 					break;
 
 				case FLCO_GPS_INFO:
 					if (m_dumpTAData) {
 						::sprintf(text, "DMR Slot %u, Embedded GPS Info", m_slotNo);
-						CUtils::dump(2U, text, data, 9U);
-						logGPSPosition(data);
+						CUtils::dump(2U, text, _data, 9U);
+						logGPSPosition(_data);
 					}
 					if (m_network != NULL)
-						m_network->writeRadioPosition(m_rfLC->getSrcId(), data);
+						m_network->writeRadioPosition(m_rfLC->getSrcId(), _data);
 					break;
 
 				case FLCO_TALKER_ALIAS_HEADER:
 					if (m_network != NULL)
-						m_network->writeTalkerAlias(m_rfLC->getSrcId(), 0U, data);
+						m_network->writeTalkerAlias(m_rfLC->getSrcId(), 0U, _data);
 
 					if (!(m_rfTalkerId & TALKER_ID_HEADER)) {
 						if (m_rfTalkerId == TALKER_ID_NONE)
 							m_rfTalkerAlias.reset();
-						m_rfTalkerAlias.add(0, data, 7U);
+						m_rfTalkerAlias.add(0, _data, 7U);
 						m_display->writeDMRTA(m_slotNo, (unsigned char*)m_rfTalkerAlias.get(), "R");
 
 						if (m_dumpTAData) {
 							::sprintf(text, "DMR Slot %u, Embedded Talker Alias Header", m_slotNo);
-							CUtils::dump(2U, text, data, 9U);
+							CUtils::dump(2U, text, _data, 9U);
 						}
 
 						m_rfTalkerId |= TALKER_ID_HEADER;
@@ -665,17 +665,17 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 
 				case FLCO_TALKER_ALIAS_BLOCK1:
 					if (m_network != NULL)
-						m_network->writeTalkerAlias(m_rfLC->getSrcId(), 1U, data);
+						m_network->writeTalkerAlias(m_rfLC->getSrcId(), 1U, _data);
 
 					if (!(m_rfTalkerId & TALKER_ID_BLOCK1)) {
 						if (m_rfTalkerId == TALKER_ID_NONE)
 							m_rfTalkerAlias.reset();
-						m_rfTalkerAlias.add(1, data, 7U);
+						m_rfTalkerAlias.add(1, _data, 7U);
 						m_display->writeDMRTA(m_slotNo, (unsigned char*)m_rfTalkerAlias.get(), "R");
 
 						if (m_dumpTAData) {
 							::sprintf(text, "DMR Slot %u, Embedded Talker Alias Block 1", m_slotNo);
-							CUtils::dump(2U, text, data, 9U);
+							CUtils::dump(2U, text, _data, 9U);
 						}
 
 						m_rfTalkerId |= TALKER_ID_BLOCK1;
@@ -684,17 +684,17 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 
 				case FLCO_TALKER_ALIAS_BLOCK2:
 					if (m_network != NULL)
-						m_network->writeTalkerAlias(m_rfLC->getSrcId(), 2U, data);
+						m_network->writeTalkerAlias(m_rfLC->getSrcId(), 2U, _data);
 
 					if (!(m_rfTalkerId & TALKER_ID_BLOCK2)) {
 						if (m_rfTalkerId == TALKER_ID_NONE)
 							m_rfTalkerAlias.reset();
-						m_rfTalkerAlias.add(2, data, 7U);
+						m_rfTalkerAlias.add(2, _data, 7U);
 						m_display->writeDMRTA(m_slotNo, (unsigned char*)m_rfTalkerAlias.get(), "R");
 
 						if (m_dumpTAData) {
 							::sprintf(text, "DMR Slot %u, Embedded Talker Alias Block 2", m_slotNo);
-							CUtils::dump(2U, text, data, 9U);
+							CUtils::dump(2U, text, _data, 9U);
 						}
 
 						m_rfTalkerId |= TALKER_ID_BLOCK2;
@@ -703,17 +703,17 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 
 				case FLCO_TALKER_ALIAS_BLOCK3:
 					if (m_network != NULL)
-						m_network->writeTalkerAlias(m_rfLC->getSrcId(), 3U, data);
+						m_network->writeTalkerAlias(m_rfLC->getSrcId(), 3U, _data);
 
 					if (!(m_rfTalkerId & TALKER_ID_BLOCK3)) {
 						if (m_rfTalkerId == TALKER_ID_NONE)
 							m_rfTalkerAlias.reset();
-						m_rfTalkerAlias.add(3, data, 7U);
+						m_rfTalkerAlias.add(3, _data, 7U);
 						m_display->writeDMRTA(m_slotNo, (unsigned char*)m_rfTalkerAlias.get(), "R");
 
 						if (m_dumpTAData) {
 							::sprintf(text, "DMR Slot %u, Embedded Talker Alias Block 3", m_slotNo);
-							CUtils::dump(2U, text, data, 9U);
+							CUtils::dump(2U, text, _data, 9U);
 						}
 
 						m_rfTalkerId |= TALKER_ID_BLOCK3;
@@ -722,7 +722,7 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 
 				default:
 					::sprintf(text, "DMR Slot %u, Unknown Embedded Data", m_slotNo);
-					CUtils::dump(1U, text, data, 9U);
+					CUtils::dump(1U, text, _data, 9U);
 					break;
 				}
 			}
@@ -1421,33 +1421,33 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 		if (ret) {
 			FLCO flco = m_netEmbeddedData[m_netEmbeddedWriteN].getFLCO();
 
-			unsigned char data[9U];
-			m_netEmbeddedData[m_netEmbeddedWriteN].getRawData(data);
+			unsigned char _data[9U];
+			m_netEmbeddedData[m_netEmbeddedWriteN].getRawData(_data);
 
 			char text[80U];
 			switch (flco) {
 			case FLCO_GROUP:
 			case FLCO_USER_USER:
 				// ::sprintf(text, "DMR Slot %u, Embedded LC", m_slotNo);
-				// CUtils::dump(1U, text, data, 9U);
+				// CUtils::dump(1U, text, _data, 9U);
 				break;
 			case FLCO_GPS_INFO:
 				if (m_dumpTAData) {
 					::sprintf(text, "DMR Slot %u, Embedded GPS Info", m_slotNo);
-					CUtils::dump(2U, text, data, 9U);
-					logGPSPosition(data);
+					CUtils::dump(2U, text, _data, 9U);
+					logGPSPosition(_data);
 				}
 				break;
 			case FLCO_TALKER_ALIAS_HEADER:
 				if (!(m_netTalkerId & TALKER_ID_HEADER)) {
 					if (!m_netTalkerId)
 						m_rfTalkerAlias.reset();
-					m_rfTalkerAlias.add(0, data + 2U, 7U);
+					m_rfTalkerAlias.add(0, _data + 2U, 7U);
 					m_display->writeDMRTA(m_slotNo, (unsigned char*)m_rfTalkerAlias.get(), "N");
 
 					if (m_dumpTAData) {
 						::sprintf(text, "DMR Slot %u, Embedded Talker Alias Header", m_slotNo);
-						CUtils::dump(2U, text, data, 9U);
+						CUtils::dump(2U, text, _data, 9U);
 					}
 
 					m_netTalkerId |= TALKER_ID_HEADER;
@@ -1457,12 +1457,12 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 				if (!(m_netTalkerId & TALKER_ID_BLOCK1)) {
 					if (!m_netTalkerId)
 						m_rfTalkerAlias.reset();
-					m_rfTalkerAlias.add(1, data + 2U, 7U);
+					m_rfTalkerAlias.add(1, _data + 2U, 7U);
 					m_display->writeDMRTA(m_slotNo, (unsigned char*)m_rfTalkerAlias.get(), "N");
 
 					if (m_dumpTAData) {
 						::sprintf(text, "DMR Slot %u, Embedded Talker Alias Block 1", m_slotNo);
-						CUtils::dump(2U, text, data, 9U);
+						CUtils::dump(2U, text, _data, 9U);
 					}
 
 					m_netTalkerId |= TALKER_ID_BLOCK1;
@@ -1472,12 +1472,12 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 				if (!(m_netTalkerId & TALKER_ID_BLOCK2)) {
 					if (!m_netTalkerId)
 						m_rfTalkerAlias.reset();
-					m_rfTalkerAlias.add(2, data + 2U, 7U);
+					m_rfTalkerAlias.add(2, _data + 2U, 7U);
 					m_display->writeDMRTA(m_slotNo, (unsigned char*)m_rfTalkerAlias.get(), "N");
 
 					if (m_dumpTAData) {
 						::sprintf(text, "DMR Slot %u, Embedded Talker Alias Block 2", m_slotNo);
-						CUtils::dump(2U, text, data, 9U);
+						CUtils::dump(2U, text, _data, 9U);
 					}
 
 					m_netTalkerId |= TALKER_ID_BLOCK2;
@@ -1487,12 +1487,12 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 				if (!(m_netTalkerId & TALKER_ID_BLOCK3)) {
 					if (!m_netTalkerId)
 						m_rfTalkerAlias.reset();
-					m_rfTalkerAlias.add(3, data+2U, 7U);
+					m_rfTalkerAlias.add(3, _data+2U, 7U);
 					m_display->writeDMRTA(m_slotNo, (unsigned char*)m_rfTalkerAlias.get(), "N");
 
 					if (m_dumpTAData) {
 						::sprintf(text, "DMR Slot %u, Embedded Talker Alias Block 3", m_slotNo);
-						CUtils::dump(2U, text, data, 9U);
+						CUtils::dump(2U, text, _data, 9U);
 					}
 
 					m_netTalkerId |= TALKER_ID_BLOCK3;
@@ -1500,7 +1500,7 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 				break;
 			default:
 				::sprintf(text, "DMR Slot %u, Unknown Embedded Data", m_slotNo);
-				CUtils::dump(1U, text, data, 9U);
+				CUtils::dump(1U, text, _data, 9U);
 				break;
 			}
 		}
@@ -1589,10 +1589,10 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 				csbk.get(data + 2U);
 
 				// Regenerate the Slot Type
-				CDMRSlotType slotType;
-				slotType.putData(data + 2U);
-				slotType.setColorCode(m_colorCode);
-				slotType.getData(data + 2U);
+				CDMRSlotType _slotType;
+				_slotType.putData(data + 2U);
+				_slotType.setColorCode(m_colorCode);
+				_slotType.getData(data + 2U);
 
 				// Convert the Data Sync to be from the BS or MS as needed
 				CSync::addDMRDataSync(data + 2U, m_duplex);

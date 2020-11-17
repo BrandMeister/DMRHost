@@ -168,12 +168,11 @@ int CMMDVMHost::run()
 	unsigned int transparentAddrLen;
 	CUDPSocket* transparentSocket = NULL;
 
-	unsigned int sendFrameType = 0U;
 	if (m_conf.getTransparentEnabled()) {
 		std::string remoteAddress = m_conf.getTransparentRemoteAddress();
 		unsigned int remotePort   = m_conf.getTransparentRemotePort();
 		unsigned int localPort    = m_conf.getTransparentLocalPort();
-		sendFrameType             = m_conf.getTransparentSendFrameType();
+		unsigned int sendFrameType = m_conf.getTransparentSendFrameType();
 
 		LogInfo("Transparent Data");
 		LogInfo("    Remote Address: %s", remoteAddress.c_str());
@@ -332,13 +331,12 @@ int CMMDVMHost::run()
 
 		unsigned char data[220U];
 		unsigned int len;
-		bool ret;
 
 		len = m_modem->readDMRData1(data);
 		if (m_dmr != NULL && len > 0U) {
 			if (m_mode == MODE_IDLE) {
 				if (m_duplex) {
-					bool ret = m_dmr->processWakeup(data);
+					ret = m_dmr->processWakeup(data);
 					if (ret) {
 						m_modeTimer.setTimeout(m_dmrRFModeHang);
 						setMode(MODE_DMR);
@@ -352,13 +350,13 @@ int CMMDVMHost::run()
 				}
 			} else if (m_mode == MODE_DMR) {
 				if (m_duplex && !m_modem->hasTX()) {
-					bool ret = m_dmr->processWakeup(data);
+					ret = m_dmr->processWakeup(data);
 					if (ret) {
 						m_modem->writeDMRStart(true);
 						m_dmrTXTimer.start();
 					}
 				} else {
-					bool ret = m_dmr->writeModemSlot1(data, len);
+					ret = m_dmr->writeModemSlot1(data, len);
 					if (ret) {
 						dmrBeaconDurationTimer.stop();
 						m_modeTimer.start();
@@ -373,7 +371,7 @@ int CMMDVMHost::run()
 		if (m_dmr != NULL && len > 0U) {
 			if (m_mode == MODE_IDLE) {
 				if (m_duplex) {
-					bool ret = m_dmr->processWakeup(data);
+					ret = m_dmr->processWakeup(data);
 					if (ret) {
 						m_modeTimer.setTimeout(m_dmrRFModeHang);
 						setMode(MODE_DMR);
@@ -387,13 +385,13 @@ int CMMDVMHost::run()
 				}
 			} else if (m_mode == MODE_DMR) {
 				if (m_duplex && !m_modem->hasTX()) {
-					bool ret = m_dmr->processWakeup(data);
+					ret = m_dmr->processWakeup(data);
 					if (ret) {
 						m_modem->writeDMRStart(true);
 						m_dmrTXTimer.start();
 					}
 				} else {
-					bool ret = m_dmr->writeModemSlot2(data, len);
+					ret = m_dmr->writeModemSlot2(data, len);
 					if (ret) {
 						dmrBeaconDurationTimer.stop();
 						m_modeTimer.start();
