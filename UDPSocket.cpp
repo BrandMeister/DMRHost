@@ -159,7 +159,7 @@ bool CUDPSocket::open(const unsigned int index, const unsigned int af, const std
 
 	m_af = addr.ss_family;
 
-	if (m_port > 0U) {
+	if (port > 0U) {
 		int reuse = 1;
 		if (::setsockopt(m_fd, SOL_SOCKET, SO_REUSEADDR, (char *)&reuse, sizeof(reuse)) == -1) {
 			LogError("Cannot set the UDP socket option, err: %d", errno);
@@ -171,7 +171,7 @@ bool CUDPSocket::open(const unsigned int index, const unsigned int af, const std
 			return false;
 		}
 
-		LogInfo("Opening UDP port on %u", port);
+		LogInfo("Opening UDP port on %s:%u", address.c_str(), port);
 	}
 
 	return true;

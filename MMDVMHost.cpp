@@ -23,6 +23,7 @@
 #include "StopWatch.h"
 #include "Defines.h"
 #include "Log.h"
+#include "Utils.h"
 #include "GitVersion.h"
 
 #include <cstdio>
@@ -171,12 +172,14 @@ int CMMDVMHost::run()
 	if (m_conf.getTransparentEnabled()) {
 		std::string remoteAddress = m_conf.getTransparentRemoteAddress();
 		unsigned int remotePort   = m_conf.getTransparentRemotePort();
+		std::string localAddress  = m_conf.getTransparentLocalAddress();
 		unsigned int localPort    = m_conf.getTransparentLocalPort();
 		unsigned int sendFrameType = m_conf.getTransparentSendFrameType();
 
 		LogInfo("Transparent Data");
 		LogInfo("    Remote Address: %s", remoteAddress.c_str());
 		LogInfo("    Remote Port: %u", remotePort);
+		LogInfo("    Local Address: %s", localAddress.c_str());
 		LogInfo("    Local Port: %u", localPort);
 		LogInfo("    Send Frame Type: %u", sendFrameType);
 
@@ -186,7 +189,7 @@ int CMMDVMHost::run()
 		}
 
 		transparentSocket = new CUDPSocket(localPort);
-		ret = transparentSocket->open(transparentAddress);
+		ret = transparentSocket->open(0, transparentAddress.ss_family, localAddress, localPort);
 		if (!ret) {
 			LogWarning("Could not open the Transparent data socket, disabling");
 			delete transparentSocket;
