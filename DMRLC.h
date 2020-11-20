@@ -40,6 +40,7 @@ public:
 
 	bool getOVCM() const;
 	void setOVCM(bool ovcm);
+	void clearOVCM();
 
 	unsigned char getFID() const;
 	void setFID(unsigned char fid);

@@ -189,6 +189,12 @@ void CDMRCSBK::setOVCM(bool ovcm)
 	}
 }
 
+void CDMRCSBK::clearOVCM()
+{
+	if (getOVCM())
+		m_data[2U] ^= 0x04U;
+}
+
 bool CDMRCSBK::getGI() const
 {
 	return m_GI;

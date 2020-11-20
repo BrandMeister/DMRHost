@@ -49,6 +49,7 @@ public:
 	// Set/Get the OVCM bit in the supported CSBKs
 	bool getOVCM() const;
 	void setOVCM(bool ovcm);
+	void clearOVCM();
 
 	// For BS Dwn Act
 	unsigned int  getBSId() const;

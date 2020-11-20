@@ -195,6 +195,12 @@ void CDMRLC::setOVCM(bool ovcm)
 		m_options |= 0x04U;
 }
 
+void CDMRLC::clearOVCM()
+{
+	if (getOVCM())
+		m_options ^= 0x04U;
+}
+
 unsigned int CDMRLC::getSrcId() const
 {
 	return m_srcId;
