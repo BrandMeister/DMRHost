@@ -45,6 +45,9 @@ public:
 
 	virtual bool open();
 
+	bool hasDMR() const;
+	bool hasPOCSAG() const;
+
 	virtual unsigned int readDMRData1(unsigned char* data);
 	virtual unsigned int readDMRData2(unsigned char* data);
 	virtual unsigned int readTransparentData(unsigned char* data);
@@ -82,6 +85,7 @@ public:
 
 private:
 	std::string                m_port;
+	unsigned int               m_protocolVersion;
 	unsigned int               m_dmrColorCode;
 	bool                       m_duplex;
 	bool                       m_rxInvert;
@@ -125,10 +129,13 @@ private:
 	bool                       m_error;
 	unsigned char              m_mode;
 	const char*                m_hwType;
+	unsigned char              m_capabilities1;
+	unsigned char              m_capabilities2;
 
 	bool readVersion();
 	bool readStatus();
-	bool setConfig();
+	bool setConfig1();
+	bool setConfig2();
 	bool setFrequency();
 
 	void printDebug();

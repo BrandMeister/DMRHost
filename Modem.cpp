@@ -70,9 +70,13 @@ const unsigned int MAX_RESPONSES = 30U;
 
 const unsigned int BUFFER_LENGTH = 2000U;
 
+const unsigned char CAP1_DMR    = 0x02U;
+const unsigned char CAP2_POCSAG = 0x01U;
+
 
 CModem::CModem(const std::string& port, bool duplex, bool rxInvert, bool txInvert, bool pttInvert, unsigned int txDelay, unsigned int dmrDelay, bool trace, bool debug) :
 m_port(port),
+m_protocolVersion(0U),
 m_dmrColorCode(0U),
 m_duplex(duplex),
 m_rxInvert(rxInvert),
@@ -115,7 +119,9 @@ m_pocsagSpace(0U),
 m_tx(false),
 m_error(false),
 m_mode(MODE_IDLE),
-m_hwType("MMDVM_Unknown")
+m_hwType("MMDVM_Unknown"),
+m_capabilities1(0x00U),
+m_capabilities2(0x00U)
 {
 	m_buffer = new unsigned char[BUFFER_LENGTH];
 
@@ -203,7 +209,7 @@ bool CModem::open()
 		return false;
 	}
 
-	ret = setConfig();
+	ret = writeConfig();
 	if (!ret) {
 		m_serial->close();
 		delete m_serial;
@@ -312,33 +318,68 @@ void CModem::clock(unsigned int ms)
 					// if (m_trace)
 					//	CUtils::dump(1U, "GET_STATUS", m_buffer, m_length);
 
-					m_pocsagSpace = 0U;
+					switch (m_protocolVersion) {
+					case 1U: {
+						m_mode = m_buffer[4U];
 
-					m_mode = m_buffer[4U];
+						m_tx = (m_buffer[5U] & 0x01U) == 0x01U;
 
-					m_tx = (m_buffer[5U] & 0x01U) == 0x01U;
+						bool adcOverflow = (m_buffer[5U] & 0x02U) == 0x02U;
+						if (adcOverflow)
+							LogError("MMDVM ADC levels have overflowed");
 
-					bool adcOverflow = (m_buffer[5U] & 0x02U) == 0x02U;
-					if (adcOverflow)
-						LogError("MMDVM ADC levels have overflowed");
+						bool rxOverflow = (m_buffer[5U] & 0x04U) == 0x04U;
+						if (rxOverflow)
+							LogError("MMDVM RX buffer has overflowed");
 
-					bool rxOverflow = (m_buffer[5U] & 0x04U) == 0x04U;
-					if (rxOverflow)
-						LogError("MMDVM RX buffer has overflowed");
+						bool txOverflow = (m_buffer[5U] & 0x08U) == 0x08U;
+						if (txOverflow)
+							LogError("MMDVM TX buffer has overflowed");
 
-					bool txOverflow = (m_buffer[5U] & 0x08U) == 0x08U;
-					if (txOverflow)
-						LogError("MMDVM TX buffer has overflowed");
+						bool dacOverflow = (m_buffer[5U] & 0x20U) == 0x20U;
+						if (dacOverflow)
+							LogError("MMDVM DAC levels have overflowed");
 
-					bool dacOverflow = (m_buffer[5U] & 0x20U) == 0x20U;
-					if (dacOverflow)
-						LogError("MMDVM DAC levels have overflowed");
+						m_dmrSpace1  = m_buffer[7U];
+						m_dmrSpace2  = m_buffer[8U];
 
-					m_dmrSpace1   = m_buffer[7U];
-					m_dmrSpace2   = m_buffer[8U];
+						if (m_length > 12U)
+							m_pocsagSpace = m_buffer[12U];
+						}
+						break;
+					case 2U: {
+						m_mode = m_buffer[3U];
 
-					if (m_length > 12U)
-						m_pocsagSpace = m_buffer[12U];
+						m_tx = (m_buffer[4U] & 0x01U) == 0x01U;
+
+						bool adcOverflow = (m_buffer[4U] & 0x02U) == 0x02U;
+						if (adcOverflow)
+							LogError("MMDVM ADC levels have overflowed");
+
+						bool rxOverflow = (m_buffer[4U] & 0x04U) == 0x04U;
+						if (rxOverflow)
+							LogError("MMDVM RX buffer has overflowed");
+
+						bool txOverflow = (m_buffer[4U] & 0x08U) == 0x08U;
+						if (txOverflow)
+							LogError("MMDVM TX buffer has overflowed");
+
+						bool dacOverflow = (m_buffer[4U] & 0x20U) == 0x20U;
+						if (dacOverflow)
+							LogError("MMDVM DAC levels have overflowed");
+
+						m_dmrSpace1   = m_buffer[7U];
+						m_dmrSpace2   = m_buffer[8U];
+						m_pocsagSpace = m_buffer[16U];
+
+						}
+						break;
+					default:
+						m_dmrSpace1   = 0U;
+						m_dmrSpace2   = 0U;
+						m_pocsagSpace = 0U;
+						break;
+					}
 
 					m_inactivityTimer.start();
 					// LogMessage("status=%02X, tx=%d, space=%u,%u,%u,%u,%u,%u,%u cd=%d", m_buffer[5U], int(m_tx), m_dmrSpace1, m_dmrSpace2, m_pocsagSpace);
@@ -649,6 +690,16 @@ bool CModem::hasError() const
 	return m_error;
 }
 
+bool CModem::hasDMR() const
+{
+	return (m_capabilities1 & CAP1_DMR) == CAP1_DMR;
+}
+
+bool CModem::hasPOCSAG() const
+{
+	return (m_capabilities2 & CAP2_POCSAG) == CAP2_POCSAG;
+}
+
 bool CModem::readVersion()
 {
 	assert(m_serial != NULL);
@@ -676,7 +727,43 @@ bool CModem::readVersion()
 			usleep(10 * 1000);
 			RESP_TYPE_MMDVM resp = getResponse();
 			if (resp == RTM_OK && m_buffer[2U] == MMDVM_GET_VERSION) {
-				LogInfo("MMDVM protocol version: %u, description: %.*s", m_buffer[3U], m_length - 4U, m_buffer + 4U);
+				m_protocolVersion = m_buffer[3U];
+				switch (m_protocolVersion) {
+				case 1U:
+					LogInfo("MMDVM protocol version: %u, description: %.*s", m_protocolVersion, m_length - 4U, m_buffer + 4U);
+					m_capabilities1 = CAP1_DMR;
+					m_capabilities2 = CAP2_POCSAG;
+					break;
+				case 2U:
+					LogInfo("MMDVM protocol version: %u, description: %.*s", m_protocolVersion, m_length - 23U, m_buffer + 23U);
+					switch (m_buffer[6U]) {
+					case 0U:
+						LogInfo("CPU: Atmel ARM, UDID: %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X", m_buffer[7U], m_buffer[8U], m_buffer[9U], m_buffer[10U], m_buffer[11U], m_buffer[12U], m_buffer[13U], m_buffer[14U], m_buffer[15U], m_buffer[16U], m_buffer[17U], m_buffer[18U], m_buffer[19U], m_buffer[20U], m_buffer[21U], m_buffer[22U]);
+						break;
+					case 1U:
+						LogInfo("CPU: NXP ARM, UDID: %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X", m_buffer[7U], m_buffer[8U], m_buffer[9U], m_buffer[10U], m_buffer[11U], m_buffer[12U], m_buffer[13U], m_buffer[14U], m_buffer[15U], m_buffer[16U], m_buffer[17U], m_buffer[18U], m_buffer[19U], m_buffer[20U], m_buffer[21U], m_buffer[22U]);
+						break;
+					case 2U:
+						LogInfo("CPU: ST-Micro ARM, UDID: %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X", m_buffer[7U], m_buffer[8U], m_buffer[9U], m_buffer[10U], m_buffer[11U], m_buffer[12U], m_buffer[13U], m_buffer[14U], m_buffer[15U], m_buffer[16U], m_buffer[17U], m_buffer[18U]);
+						break;
+					default:
+						LogInfo("CPU: Unknown type: %u", m_buffer[6U]);
+						break;
+					}
+					m_capabilities1 = m_buffer[4U];
+					m_capabilities2 = m_buffer[5U];
+					char modeText[100U];
+					::strcpy(modeText, "Modes:");
+					if (hasDMR())
+						::strcat(modeText, " DMR");
+					if (hasPOCSAG())
+						::strcat(modeText, " POCSAG");
+					LogInfo(modeText);
+					break;
+				default:
+					LogError("MMDVM protocol version: %u, unsupported by this version of the MMDVM Host", m_protocolVersion);
+					return false;
+				}
 
 				char _hwType[40U];
 				::strcpy(_hwType, "MMDVM_Unknown");
@@ -686,7 +773,11 @@ bool CModem::readVersion()
 				else if (::memcmp(m_buffer + 4U, "DVMEGA ", 7U) == 0)
 					::strcpy(_hwType, "MMDVM_DVMega");
 				else {
-					char* hw = ::strtok((char*)m_buffer + 4U, "-");
+					char* hw = NULL;
+					if (m_protocolVersion == 1)
+						hw = ::strtok((char*)m_buffer + 4U, "-");
+					if (m_protocolVersion == 2)
+						hw = ::strtok((char*)m_buffer + 23U, "-");
 					// we do not trust the modem fw too much
 					if (hw != NULL) {
 						::strcpy(_hwType, "MMDVM_");
@@ -724,10 +815,17 @@ bool CModem::readStatus()
 
 bool CModem::writeConfig()
 {
-	return setConfig();
+	switch (m_protocolVersion) {
+	case 1U:
+		return setConfig1();
+	case 2U:
+		return setConfig2();
+	default:
+		return false;
+	}
 }
 
-bool CModem::setConfig()
+bool CModem::setConfig1()
 {
 	assert(m_serial != NULL);
 
@@ -782,6 +880,114 @@ bool CModem::setConfig()
 
 	int ret = m_serial->write(buffer, 24U);
 	if (ret != 24)
+		return false;
+
+	unsigned int count = 0U;
+	RESP_TYPE_MMDVM resp;
+	do {
+		usleep(10 * 1000);
+
+		resp = getResponse();
+		if (resp == RTM_OK && m_buffer[2U] != MMDVM_ACK && m_buffer[2U] != MMDVM_NAK) {
+			count++;
+			if (count >= MAX_RESPONSES) {
+				LogError("The MMDVM is not responding to the SET_CONFIG command");
+				return false;
+			}
+		}
+	} while (resp == RTM_OK && m_buffer[2U] != MMDVM_ACK && m_buffer[2U] != MMDVM_NAK);
+
+	// CUtils::dump(1U, "Response", m_buffer, m_length);
+
+	if (resp == RTM_OK && m_buffer[2U] == MMDVM_NAK) {
+		LogError("Received a NAK to the SET_CONFIG command from the modem");
+		return false;
+	}
+
+	m_playoutTimer.start();
+
+	return true;
+}
+
+bool CModem::setConfig2()
+{
+	assert(m_serial != NULL);
+
+	unsigned char buffer[50U];
+
+	buffer[0U] = MMDVM_FRAME_START;
+
+	buffer[1U] = 40U;
+
+	buffer[2U] = MMDVM_SET_CONFIG;
+
+	buffer[3U] = 0x00U;
+	if (m_rxInvert)
+		buffer[3U] |= 0x01U;
+	if (m_txInvert)
+		buffer[3U] |= 0x02U;
+	if (m_pttInvert)
+		buffer[3U] |= 0x04U;
+	if (m_debug)
+		buffer[3U] |= 0x10U;
+	if (!m_duplex)
+		buffer[3U] |= 0x80U;
+
+	buffer[4U] = 0x00U;
+	if (m_dmrEnabled)
+		buffer[4U] |= 0x02U;
+
+	buffer[5U] = 0x00U;
+	if (m_pocsagEnabled)
+		buffer[5U] |= 0x01U;
+
+	buffer[6U] = m_txDelay / 10U;		// In 10ms units
+
+	buffer[7U] = MODE_IDLE;
+
+	buffer[8U] = (unsigned char)(m_txDCOffset + 128);
+	buffer[9U] = (unsigned char)(m_rxDCOffset + 128);
+
+	buffer[10U] = (unsigned char)(m_rxLevel * 2.55F + 0.5F);
+
+	buffer[11U] = (unsigned char)(m_cwIdTXLevel * 2.55F + 0.5F);
+	buffer[12U] = 0x00U;
+	buffer[13U] = (unsigned char)(m_dmrTXLevel * 2.55F + 0.5F);
+	buffer[14U] = 0x00U;
+	buffer[15U] = 0x00U;
+	buffer[16U] = 0x00U;
+	buffer[17U] = 0x00U;
+	buffer[18U] = (unsigned char)(m_pocsagTXLevel * 2.55F + 0.5F);
+	buffer[19U] = 0x00U;
+	buffer[20U] = 0x00U;
+	buffer[21U] = 0x00U;
+	buffer[22U] = 0x00U;
+
+	buffer[23U] = 0x00U;
+	buffer[24U] = 0x00U;
+	buffer[25U] = 0x00U;
+	buffer[26U] = 0x00U;
+	buffer[27U] = 0x00U;
+	buffer[28U] = 0x00U;
+
+	buffer[29U] = m_dmrColorCode;
+	buffer[30U] = m_dmrDelay;
+
+	buffer[31U] = 0x86U; // wtf is this. m_ax25RXTwist 128 + default value 6. required by firmware even if ax25 is disabled
+	buffer[32U] = 0x00U;
+	buffer[33U] = 0x00U;
+	buffer[34U] = 0x00U;
+
+	buffer[35U] = 0x00U;
+	buffer[36U] = 0x00U;
+	buffer[37U] = 0x00U;
+	buffer[38U] = 0x00U;
+	buffer[39U] = 0x00U;
+
+	// CUtils::dump(1U, "Written", buffer, 40U);
+
+	int ret = m_serial->write(buffer, 40U);
+	if (ret != 40)
 		return false;
 
 	unsigned int count = 0U;

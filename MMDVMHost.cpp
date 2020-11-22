@@ -157,6 +157,15 @@ int CMMDVMHost::run()
 	ret = createModem();
 	if (!ret)
 		return 1;
+	if (m_dmrEnabled && !m_modem->hasDMR()) {
+		LogWarning("DMR enabled in the host but not in the modem firmware, disabling");
+		m_dmrEnabled = false;
+	}
+
+	if (m_pocsagEnabled && !m_modem->hasPOCSAG()) {
+		LogWarning("POCSAG enabled in the host but not in the modem firmware, disabling");
+		m_pocsagEnabled = false;
+	}
 
 	m_display = CDisplay::createDisplay(m_conf,m_modem);
 
