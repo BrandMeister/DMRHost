@@ -72,7 +72,7 @@ public:
 
 	virtual bool sendCWId(const std::string& callsign);
 
-	virtual HW_TYPE getHWType() const;
+	virtual const char* getHWType() const;
 
 	virtual void clock(unsigned int ms);
 
@@ -124,7 +124,7 @@ private:
 	bool                       m_tx;
 	bool                       m_error;
 	unsigned char              m_mode;
-	HW_TYPE                    m_hwType;
+	const char*                m_hwType;
 
 	bool readVersion();
 	bool readStatus();

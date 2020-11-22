@@ -64,12 +64,12 @@ public:
 
 	virtual bool sendCWId(const std::string& callsign) override {return true;};
 
-	virtual HW_TYPE getHWType() const override {return m_hwType;};
+	virtual const char* getHWType() const override {return m_hwType;};
 
 	virtual void clock(unsigned int ms) override {};
 
 	virtual void close() override {};
 
 private:
-	HW_TYPE                    m_hwType;
+	const char*   m_hwType;
 };

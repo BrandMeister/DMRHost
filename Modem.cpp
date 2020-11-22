@@ -115,7 +115,7 @@ m_pocsagSpace(0U),
 m_tx(false),
 m_error(false),
 m_mode(MODE_IDLE),
-m_hwType(HWT_UNKNOWN)
+m_hwType("MMDVM_Unknown")
 {
 	m_buffer = new unsigned char[BUFFER_LENGTH];
 
@@ -676,30 +676,23 @@ bool CModem::readVersion()
 			usleep(10 * 1000);
 			RESP_TYPE_MMDVM resp = getResponse();
 			if (resp == RTM_OK && m_buffer[2U] == MMDVM_GET_VERSION) {
-				if (::memcmp(m_buffer + 4U, "MMDVM ", 6U) == 0)
-					m_hwType = HWT_MMDVM;
-				else if (::memcmp(m_buffer + 4U, "DVMEGA", 6U) == 0)
-					m_hwType = HWT_DVMEGA;
-				else if (::memcmp(m_buffer + 4U, "ZUMspot", 7U) == 0)
-					m_hwType = HWT_MMDVM_ZUMSPOT;
-				else if (::memcmp(m_buffer + 4U, "MMDVM_HS_Hat", 12U) == 0)
-					m_hwType = HWT_MMDVM_HS_HAT;
-				else if (::memcmp(m_buffer + 4U, "MMDVM_HS_Dual_Hat", 17U) == 0)
-					m_hwType = HWT_MMDVM_HS_DUAL_HAT;
-				else if (::memcmp(m_buffer + 4U, "Nano_hotSPOT", 12U) == 0)
-					m_hwType = HWT_NANO_HOTSPOT;
-				else if (::memcmp(m_buffer + 4U, "Nano_DV", 7U) == 0)
-					m_hwType = HWT_NANO_DV;
-				else if (::memcmp(m_buffer + 4U, "D2RG_MMDVM_HS", 13U) == 0)
-					m_hwType = HWT_D2RG_MMDVM_HS;
-				else if (::memcmp(m_buffer + 4U, "MMDVM_HS-", 9U) == 0)
-					m_hwType = HWT_MMDVM_HS;
-				else if (::memcmp(m_buffer + 4U, "OpenGD77_HS", 11U) == 0)
-					m_hwType = HWT_OPENGD77_HS;
-				else if (::memcmp(m_buffer + 4U, "SkyBridge", 9U) == 0)
-					m_hwType = HWT_SKYBRIDGE;
-
 				LogInfo("MMDVM protocol version: %u, description: %.*s", m_buffer[3U], m_length - 4U, m_buffer + 4U);
+
+				char _hwType[40U];
+				::strcpy(_hwType, "MMDVM_Unknown");
+
+				if (::memcmp(m_buffer + 4U, "MMDVM ", 6U) == 0)
+					::strcpy(_hwType, "MMDVM");
+				else {
+					char* hw = ::strtok((char*)m_buffer + 4U, "-");
+					// we do not trust the modem fw too much
+					if (hw != NULL) {
+						::strcpy(_hwType, "MMDVM_");
+						::strncat(_hwType, hw, 40U - 6U);
+					}
+				}
+				m_hwType = strdup(_hwType);
+
 				return true;
 			}
 		}
@@ -827,7 +820,7 @@ bool CModem::setFrequency()
 	if (m_pocsagEnabled)
 		pocsagFrequency = m_pocsagFrequency;
 
-	if (m_hwType == HWT_DVMEGA)
+	if (::strcmp(m_hwType, "MMDVM_DVMega") == 0)
 		len = 12U;
 	else {
 		buffer[12U]  = (unsigned char)(m_rfLevel * 2.55F + 0.5F);
@@ -987,7 +980,7 @@ RESP_TYPE_MMDVM CModem::getResponse()
 	return RTM_OK;
 }
 
-HW_TYPE CModem::getHWType() const
+const char* CModem::getHWType() const
 {
 	return m_hwType;
 }

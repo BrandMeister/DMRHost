@@ -32,7 +32,7 @@ const unsigned int BUFFER_LENGTH = 500U;
 
 const unsigned int HOMEBREW_DATA_PACKET_LENGTH = 55U;
 
-CDMRNetwork::CDMRNetwork(const std::string& address, unsigned int port, unsigned int id, const std::string& password, bool duplex, const char* version, bool debug, bool slot1, bool slot2, HW_TYPE hwType) :
+CDMRNetwork::CDMRNetwork(const std::string& address, unsigned int port, unsigned int id, const std::string& password, bool duplex, const char* version, bool debug, bool slot1, bool slot2, const char* hwType) :
 m_addressStr(address),
 m_addr(),
 m_addrLen(0U),
@@ -517,7 +517,6 @@ bool CDMRNetwork::writeOptions()
 
 bool CDMRNetwork::writeConfig()
 {
-	const char* software;
 	char slots = '0';
 	if (m_duplex) {
 		if (m_slot1 && m_slot2)
@@ -527,64 +526,8 @@ bool CDMRNetwork::writeConfig()
 		else if (!m_slot1 && m_slot2)
 			slots = '2';
 
-		switch (m_hwType) {
-		case HWT_MMDVM:
-			software = "MMDVM";
-			break;
-		case HWT_MMDVM_HS:
-			software = "MMDVM_MMDVM_HS";
-			break;
-		case HWT_MMDVM_HS_DUAL_HAT:
-			software = "MMDVM_MMDVM_HS_Dual_Hat";
-			break;
-		case HWT_NANO_HOTSPOT:
-			software = "MMDVM_Nano_hotSPOT";
-			break;
-		default:
-			software = "MMDVM_Unknown";
-			break;
-		}
 	} else {
 		slots = '4';
-
-		switch (m_hwType) {
-		case HWT_MMDVM:
-			software = "MMDVM_DMO";
-			break;
-		case HWT_DVMEGA:
-			software = "MMDVM_DVMega";
-			break;
-		case HWT_MMDVM_ZUMSPOT:
-			software = "MMDVM_ZUMspot";
-			break;
-		case HWT_MMDVM_HS_HAT:
-			software = "MMDVM_MMDVM_HS_Hat";
-			break;
-		case HWT_MMDVM_HS_DUAL_HAT:
-			software = "MMDVM_MMDVM_HS_Dual_Hat";
-			break;
-		case HWT_NANO_HOTSPOT:
-			software = "MMDVM_Nano_hotSPOT";
-			break;
-		case HWT_NANO_DV:
-			software = "MMDVM_Nano_DV";
-			break;
-		case HWT_D2RG_MMDVM_HS:
-			software = "MMDVM_D2RG_MMDVM_HS";
-			break;
-		case HWT_MMDVM_HS:
-			software = "MMDVM_MMDVM_HS";
-			break;
-		case HWT_OPENGD77_HS:
-			software = "MMDVM_OpenGD77_HS";
-			break;
-		case HWT_SKYBRIDGE:
-			software = "MMDVM_SkyBridge";
-			break;
-		default:
-			software = "MMDVM_Unknown";
-			break;
-		}
 	}
 
 	char buffer[400U];
@@ -608,7 +551,7 @@ bool CDMRNetwork::writeConfig()
 
 	::sprintf(buffer + 8U, "%-8.8s%09u%09u%02u%02u%8.8s%9.9s%03d%-20.20s%-19.19s%c%-124.124s%-40.40s%-40.40s", m_callsign.c_str(),
 		m_rxFrequency, m_txFrequency, power, m_colorCode, latitude, longitude, height, m_location.c_str(),
-		m_description.c_str(), slots, m_url.c_str(), m_version, software);
+		m_description.c_str(), slots, m_url.c_str(), m_version, m_hwType);
 
 	return write((unsigned char*)buffer, 302U);
 }

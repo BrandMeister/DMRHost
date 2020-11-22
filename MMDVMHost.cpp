@@ -662,7 +662,7 @@ bool CMMDVMHost::createDMRNetwork()
 	bool debug           = m_conf.getDMRNetworkDebug();
 	bool slot1           = m_conf.getDMRNetworkSlot1();
 	bool slot2           = m_conf.getDMRNetworkSlot2();
-	HW_TYPE hwType       = m_modem->getHWType();
+	const char* hwType   = m_modem->getHWType();
 	m_dmrNetModeHang     = m_conf.getDMRNetworkModeHang();
 
 	LogInfo("DMR Network Parameters");

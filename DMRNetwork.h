@@ -31,7 +31,7 @@
 class CDMRNetwork
 {
 public:
-	CDMRNetwork(const std::string& address, unsigned int port, unsigned int id, const std::string& password, bool duplex, const char* version, bool debug, bool slot1, bool slot2, HW_TYPE hwType);
+	CDMRNetwork(const std::string& address, unsigned int port, unsigned int id, const std::string& password, bool duplex, const char* version, bool debug, bool slot1, bool slot2, const char* hwType);
 	~CDMRNetwork();
 
 	void setOptions(const std::string& options);
@@ -70,7 +70,7 @@ private:
 	bool             m_enabled;
 	bool             m_slot1;
 	bool             m_slot2;
-	HW_TYPE          m_hwType;
+	const char*      m_hwType;
 	enum STATUS {
 		WAITING_CONNECT,
 		WAITING_LOGIN,
