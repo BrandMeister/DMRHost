@@ -142,6 +142,15 @@ int CMMDVMHost::run()
 		return 1;
 	}
 
+	LogInfo("DMRHost is free software; you can redistribute it and/or modify");
+	LogInfo("it under the terms of the GNU General Public License as published by");
+	LogInfo("the Free Software Foundation; either version 2 of the License, or (at");
+	LogInfo("your option) any later version");
+	LogInfo("");
+	LogInfo("Copyright(C) 2015-2020 by Jonathan Naylor, G4KLX and others");
+	LogInfo("Copyright(C) 2020-present by BrandMeister");
+	LogInfo("");
+
 	LogMessage("DMRHost-%s is starting", VERSION);
 	LogMessage("Built %s %s (GitID #%.10s)", __TIME__, __DATE__, gitversion);
 
