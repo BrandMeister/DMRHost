@@ -21,7 +21,7 @@
 
 CNullModem::CNullModem(const std::string& port, bool duplex, bool rxInvert, bool txInvert, bool pttInvert, unsigned int txDelay, unsigned int dmrDelay, bool trace, bool debug) :
 CModem(port, duplex,rxInvert, txInvert,pttInvert,txDelay, dmrDelay, trace, debug),
-m_hwType()
+m_hwType("MMDVM_Unknown")
 {
 }
 
