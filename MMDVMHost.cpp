@@ -636,6 +636,11 @@ bool CMMDVMHost::createModem()
 	LogInfo("    POCSAG TX Level: %.1f%%", pocsagTXLevel);
 	LogInfo("    TX Frequency: %uHz (%uHz)", txFrequency, txFrequency + txOffset);
 
+	if (m_duplex && rxFrequency == txFrequency) {
+		LogError("Duplex == 1 and TX == RX-QRG!");
+		return false;
+	}
+
 	m_modem = CModem::createModem(port, m_duplex, rxInvert, txInvert, pttInvert, txDelay, dmrDelay, trace, debug);
 	m_modem->setSerialParams(protocol, address);
 	m_modem->setModeParams(m_dmrEnabled, m_pocsagEnabled);
