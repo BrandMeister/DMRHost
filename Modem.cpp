@@ -820,7 +820,7 @@ bool CModem::setFrequency()
 	if (m_pocsagEnabled)
 		pocsagFrequency = m_pocsagFrequency;
 
-	if (::strcmp(m_hwType, "MMDVM_DVMega") == 0)
+	if (::strcmp(m_hwType, "MMDVM_DVMEGA") == 0)
 		len = 12U;
 	else {
 		buffer[12U]  = (unsigned char)(m_rfLevel * 2.55F + 0.5F);
