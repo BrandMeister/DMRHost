@@ -18,4 +18,4 @@
 
 #pragma once
 
-const char* VERSION = "20201201-DMRHost";
+const char* VERSION = "20201202-DMRHost";

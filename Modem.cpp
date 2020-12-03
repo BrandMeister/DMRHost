@@ -683,6 +683,8 @@ bool CModem::readVersion()
 
 				if (::memcmp(m_buffer + 4U, "MMDVM ", 6U) == 0)
 					::strcpy(_hwType, "MMDVM");
+				else if (::memcmp(m_buffer + 4U, "DVMEGA ", 7U) == 0)
+					::strcpy(_hwType, "MMDVM_DVMEGA");
 				else {
 					char* hw = ::strtok((char*)m_buffer + 4U, "-");
 					// we do not trust the modem fw too much
