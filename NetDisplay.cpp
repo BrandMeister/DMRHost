@@ -46,7 +46,7 @@ bool CNetDisplay::open()
 	}
 
 	m_socket = new CUDPSocket();
-	int ret = m_socket->open(m_addr);
+	int ret = m_socket->open(m_addr.ss_family);
 	if (!ret) {
 		LogWarning("Display, Could not open socket, disabling");
 		delete m_socket;

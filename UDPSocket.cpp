@@ -124,11 +124,6 @@ bool CUDPSocket::match(const sockaddr_storage& addr1, const sockaddr_storage& ad
 	}
 }
 
-bool CUDPSocket::open(const sockaddr_storage& address)
-{
-	return open(address.ss_family);
-}
-
 bool CUDPSocket::open(unsigned int af)
 {
 	return open(0, af, m_address, m_port);
