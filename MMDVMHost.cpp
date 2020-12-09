@@ -119,12 +119,10 @@ m_callsign(),
 m_id(0U),
 m_cwCallsign()
 {
-	CUDPSocket::startup();
 }
 
 CMMDVMHost::~CMMDVMHost()
 {
-	CUDPSocket::shutdown();
 }
 
 int CMMDVMHost::run()

@@ -42,14 +42,6 @@ CUDPSocket::~CUDPSocket()
 {
 }
 
-void CUDPSocket::startup()
-{
-}
-
-void CUDPSocket::shutdown()
-{
-}
-
 int CUDPSocket::lookup(const std::string& hostname, unsigned int port, sockaddr_storage& addr, unsigned int& address_length)
 {
 	struct addrinfo hints;
