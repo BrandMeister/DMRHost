@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 2018,2019 by Jonathan Naylor G4KLX
+*   Copyright (C) 2018,2019,2020 by Jonathan Naylor G4KLX
 *
 *   This program is free software; you can redistribute it and/or modify
 *   it under the terms of the GNU General Public License as published by
@@ -78,4 +78,6 @@ private:
 	bool openFile();
 	bool writeFile(const unsigned char* data);
 	void closeFile();
+
+	void decodeROT1(const std::string& in, unsigned int start, std::string& out) const;
 };
