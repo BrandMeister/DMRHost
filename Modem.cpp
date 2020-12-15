@@ -684,7 +684,7 @@ bool CModem::readVersion()
 				if (::memcmp(m_buffer + 4U, "MMDVM ", 6U) == 0)
 					::strcpy(_hwType, "MMDVM");
 				else if (::memcmp(m_buffer + 4U, "DVMEGA ", 7U) == 0)
-					::strcpy(_hwType, "MMDVM_DVMEGA");
+					::strcpy(_hwType, "MMDVM_DVMega");
 				else {
 					char* hw = ::strtok((char*)m_buffer + 4U, "-");
 					// we do not trust the modem fw too much
@@ -822,7 +822,7 @@ bool CModem::setFrequency()
 	if (m_pocsagEnabled)
 		pocsagFrequency = m_pocsagFrequency;
 
-	if (::strcmp(m_hwType, "MMDVM_DVMEGA") == 0)
+	if (::strcmp(m_hwType, "MMDVM_DVMega") == 0)
 		len = 12U;
 	else {
 		buffer[12U]  = (unsigned char)(m_rfLevel * 2.55F + 0.5F);
