@@ -639,6 +639,11 @@ bool CMMDVMHost::createModem()
 		return false;
 	}
 
+	if (!m_duplex && rxFrequency != txFrequency) {
+		LogError("Duplex == 0 and TX != RX-QRG!");
+		return false;
+	}
+
 	m_modem = CModem::createModem(port, m_duplex, rxInvert, txInvert, pttInvert, txDelay, dmrDelay, trace, debug);
 	m_modem->setSerialParams(protocol, address);
 	m_modem->setModeParams(m_dmrEnabled, m_pocsagEnabled);
