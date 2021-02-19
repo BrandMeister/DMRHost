@@ -26,6 +26,7 @@
 #include <ctime>
 #include <cassert>
 #include <cstring>
+#include <syslog.h>
 
 static unsigned int m_fileLevel = 2U;
 static std::string m_filePath;
@@ -34,6 +35,7 @@ static bool m_fileRotate = true;
 
 static FILE* m_fpLog = NULL;
 
+static unsigned int m_syslogLevel = 2U;
 static unsigned int m_displayLevel = 2U;
 
 static struct tm m_tm;
@@ -100,12 +102,13 @@ bool LogOpen()
 		return logOpenNoRotate();
 }
 
-bool LogInitialise(const std::string& filePath, const std::string& fileRoot, unsigned int fileLevel, unsigned int displayLevel, bool rotate)
+bool LogInitialise(const std::string& filePath, const std::string& fileRoot, unsigned int fileLevel, unsigned int displayLevel, unsigned int syslogLevel, bool rotate)
 {
 	m_filePath     = filePath;
 	m_fileRoot     = fileRoot;
 	m_fileLevel    = fileLevel;
 	m_displayLevel = displayLevel;
+	m_syslogLevel  = syslogLevel;
 	m_fileRotate   = rotate;
 
 	return ::LogOpen();
@@ -148,6 +151,10 @@ void Log(unsigned int level, const char* fmt, ...)
 	if (level >= m_displayLevel && m_displayLevel != 0U) {
 		::fprintf(stdout, "%s\n", buffer);
 		::fflush(stdout);
+	}
+
+	if (level >= m_syslogLevel && m_syslogLevel != 0U) {
+		syslog(LOG_INFO, "DMRHost: %s\n", buffer);
 	}
 
 	if (level == 6U) {		// Fatal

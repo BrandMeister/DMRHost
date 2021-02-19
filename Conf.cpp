@@ -57,6 +57,7 @@ m_height(0),
 m_location(),
 m_description(),
 m_url(),
+m_logSyslogLevel(0U),
 m_logDisplayLevel(0U),
 m_logFileLevel(0U),
 m_logFilePath(),
@@ -252,6 +253,8 @@ bool CConf::read()
 			m_logFileLevel = (unsigned int)::atoi(value);
 		else if (::strcmp(key, "DisplayLevel") == 0)
 			m_logDisplayLevel = (unsigned int)::atoi(value);
+		else if (::strcmp(key, "SyslogLevel") == 0)
+			m_logSyslogLevel = (unsigned int)::atoi(value);
 		else if (::strcmp(key, "FileRotate") == 0)
 			m_logFileRotate = ::atoi(value) == 1;
 	} else if (section == SECTION_CWID) {
@@ -519,6 +522,11 @@ std::string CConf::getDescription() const
 std::string CConf::getURL() const
 {
 	return m_url;
+}
+
+unsigned int CConf::getLogSyslogLevel() const
+{
+	return m_logSyslogLevel;
 }
 
 unsigned int CConf::getLogDisplayLevel() const

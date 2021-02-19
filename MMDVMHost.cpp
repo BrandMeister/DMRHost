@@ -133,7 +133,7 @@ int CMMDVMHost::run()
 		return 1;
 	}
 
-	ret = ::LogInitialise(m_conf.getLogFilePath(), m_conf.getLogFileRoot(), m_conf.getLogFileLevel(), m_conf.getLogDisplayLevel(), m_conf.getLogFileRotate());
+	ret = ::LogInitialise(m_conf.getLogFilePath(), m_conf.getLogFileRoot(), m_conf.getLogFileLevel(), m_conf.getLogDisplayLevel(), m_conf.getLogSyslogLevel(), m_conf.getLogFileRotate());
 
 	if (!ret) {
 		::fprintf(stderr, "DMRHost: unable to open the log file\n");
