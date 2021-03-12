@@ -18,7 +18,6 @@
 
 #include "DMRNetwork.h"
 
-#include "StopWatch.h"
 #include "SHA256.h"
 #include "Utils.h"
 #include "Log.h"
@@ -72,8 +71,6 @@ m_url()
 	assert(port > 0U);
 	assert(id > 1000U);
 	assert(!password.empty());
-
-	CUDPSocket::lookup(m_addressStr, m_port, m_addr, m_addrLen);
 
 	m_buffer   = new unsigned char[BUFFER_LENGTH];
 	m_salt     = new unsigned char[sizeof(uint32_t)];
