@@ -130,7 +130,7 @@ void Log(unsigned int level, const char* fmt, ...)
 
 	struct tm* tm = ::gmtime(&now.tv_sec);
 
-	::sprintf(buffer, "%c: %04d-%02d-%02d %02d:%02d:%02d ", LEVELS[level], tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec);
+	::sprintf(buffer, "%c: %04d-%02d-%02d %02d:%02d:%02d.000 ", LEVELS[level], tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec);
 
 	va_list vl;
 	va_start(vl, fmt);
