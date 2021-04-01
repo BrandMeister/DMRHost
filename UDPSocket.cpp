@@ -26,14 +26,12 @@
 CUDPSocket::CUDPSocket(const std::string& address, unsigned int port) :
 m_address(address),
 m_port(port),
-m_af(0U),
 m_fd(-1)
 {
 }
 
 CUDPSocket::CUDPSocket(unsigned int port) :
 m_port(port),
-m_af(0U),
 m_fd(-1)
 {
 }
@@ -118,10 +116,10 @@ bool CUDPSocket::match(const sockaddr_storage& addr1, const sockaddr_storage& ad
 
 bool CUDPSocket::open(unsigned int af)
 {
-	return open(0, af, m_address, m_port);
+	return open(af, m_address, m_port);
 }
 
-bool CUDPSocket::open(const unsigned int index, const unsigned int af, const std::string& address, const unsigned int port)
+bool CUDPSocket::open(const unsigned int af, const std::string& address, const unsigned int port)
 {
 	sockaddr_storage addr;
 	unsigned int addrlen;
@@ -143,8 +141,6 @@ bool CUDPSocket::open(const unsigned int index, const unsigned int af, const std
 		LogError("Cannot create the UDP socket, err: %d", errno);
 		return false;
 	}
-
-	m_af = addr.ss_family;
 
 	if (port > 0U) {
 		int reuse = 1;
