@@ -31,7 +31,7 @@
 class CDMRNetwork
 {
 public:
-	CDMRNetwork(const std::string& address, unsigned int port, unsigned int id, const std::string& password, bool duplex, const char* version, bool debug, bool slot1, bool slot2, const char* hwType);
+	CDMRNetwork(const std::string& address, unsigned short port, unsigned int id, const std::string& password, bool duplex, const char* version, bool debug, bool slot1, bool slot2, const char* hwType);
 	~CDMRNetwork();
 
 	void setOptions(const std::string& options);
@@ -60,7 +60,7 @@ private:
 	std::string      m_addressStr;
 	sockaddr_storage m_addr;
 	unsigned int     m_addrLen;
-	unsigned int     m_port;
+	unsigned short   m_port;
 	uint8_t*         m_id;
 	std::string      m_password;
 	bool             m_duplex;

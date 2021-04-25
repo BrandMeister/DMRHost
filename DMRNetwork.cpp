@@ -31,7 +31,7 @@ const unsigned int BUFFER_LENGTH = 500U;
 
 const unsigned int HOMEBREW_DATA_PACKET_LENGTH = 55U;
 
-CDMRNetwork::CDMRNetwork(const std::string& address, unsigned int port, unsigned int id, const std::string& password, bool duplex, const char* version, bool debug, bool slot1, bool slot2, const char* hwType) :
+CDMRNetwork::CDMRNetwork(const std::string& address, unsigned short port, unsigned int id, const std::string& password, bool duplex, const char* version, bool debug, bool slot1, bool slot2, const char* hwType) :
 m_addressStr(address),
 m_addr(),
 m_addrLen(0U),

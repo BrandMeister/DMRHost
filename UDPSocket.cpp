@@ -23,14 +23,14 @@
 #include <cstring>
 #include "Log.h"
 
-CUDPSocket::CUDPSocket(const std::string& address, unsigned int port) :
+CUDPSocket::CUDPSocket(const std::string& address, unsigned short port) :
 m_address(address),
 m_port(port),
 m_fd(-1)
 {
 }
 
-CUDPSocket::CUDPSocket(unsigned int port) :
+CUDPSocket::CUDPSocket(unsigned short port) :
 m_port(port),
 m_fd(-1)
 {
@@ -40,7 +40,7 @@ CUDPSocket::~CUDPSocket()
 {
 }
 
-int CUDPSocket::lookup(const std::string& hostname, unsigned int port, sockaddr_storage& addr, unsigned int& address_length)
+int CUDPSocket::lookup(const std::string& hostname, unsigned short port, sockaddr_storage& addr, unsigned int& address_length)
 {
 	struct addrinfo hints;
 	::memset(&hints, 0, sizeof(hints));
@@ -48,7 +48,7 @@ int CUDPSocket::lookup(const std::string& hostname, unsigned int port, sockaddr_
 	return lookup(hostname, port, addr, address_length, hints);
 }
 
-int CUDPSocket::lookup(const std::string& hostname, unsigned int port, sockaddr_storage& addr, unsigned int& address_length, struct addrinfo& hints)
+int CUDPSocket::lookup(const std::string& hostname, unsigned short port, sockaddr_storage& addr, unsigned int& address_length, struct addrinfo& hints)
 {
 	std::string portstr = std::to_string(port);
 	struct addrinfo *res;
@@ -100,7 +100,7 @@ bool CUDPSocket::open(unsigned int af)
 	return open(af, m_address, m_port);
 }
 
-bool CUDPSocket::open(const unsigned int af, const std::string& address, const unsigned int port)
+bool CUDPSocket::open(const unsigned int af, const std::string& address, const unsigned short port)
 {
 	sockaddr_storage addr;
 	unsigned int addrlen;
@@ -135,7 +135,7 @@ bool CUDPSocket::open(const unsigned int af, const std::string& address, const u
 			return false;
 		}
 
-		LogInfo("Opening UDP port on %s:%u", address.c_str(), port);
+		LogInfo("Opening UDP port on %s:%hu", address.c_str(), port);
 	}
 
 	return true;
@@ -171,7 +171,7 @@ int CUDPSocket::read(unsigned char* buffer, unsigned int length, sockaddr_storag
 		LogError("Error returned from recvfrom, err: %d", errno);
 
 		if (len == -1 && errno == ENOTSOCK) {
-			LogMessage("Re-opening UDP port on %hn", m_port);
+			LogMessage("Re-opening UDP port on %hu", m_port);
 			close();
 			open();
 		}

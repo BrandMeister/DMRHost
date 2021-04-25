@@ -218,11 +218,11 @@ CDisplay* CDisplay::createDisplay(const CConf& conf, CModem* modem)
 
 	if (enabled) {
 	        std::string address = conf.getDisplayAddress();
-	        unsigned int port   = conf.getDisplayPort();
+	        unsigned short port = conf.getDisplayPort();
 
 		LogInfo("Display Parameters");
 		LogInfo("    Address: %s", address.c_str());
-		LogInfo("    Port: %u", port);
+		LogInfo("    Port: %hu", port);
 
 		display = new CNetDisplay(address, port);
 	} else {

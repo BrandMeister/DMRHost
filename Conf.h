@@ -84,9 +84,9 @@ public:
   // The Transparent Data section
   bool         getTransparentEnabled() const;
   std::string  getTransparentRemoteAddress() const;
-  unsigned int getTransparentRemotePort() const;
+  unsigned short getTransparentRemotePort() const;
   std::string  getTransparentLocalAddress() const;
-  unsigned int getTransparentLocalPort() const;
+  unsigned short getTransparentLocalPort() const;
   unsigned int getTransparentSendFrameType() const;
 
   // The DMR section
@@ -115,7 +115,7 @@ public:
   // The DMR Network section
   bool         getDMRNetworkEnabled() const;
   std::string  getDMRNetworkAddress() const;
-  unsigned int getDMRNetworkPort() const;
+  unsigned short getDMRNetworkPort() const;
   std::string  getDMRNetworkPassword() const;
   std::string  getDMRNetworkOptions() const;
   bool         getDMRNetworkDebug() const;
@@ -126,16 +126,16 @@ public:
   // The POCSAG Network section
   bool         getPOCSAGNetworkEnabled() const;
   std::string  getPOCSAGGatewayAddress() const;
-  unsigned int getPOCSAGGatewayPort() const;
+  unsigned short getPOCSAGGatewayPort() const;
   std::string  getPOCSAGLocalAddress() const;
-  unsigned int getPOCSAGLocalPort() const;
+  unsigned short getPOCSAGLocalPort() const;
   unsigned int getPOCSAGNetworkModeHang() const;
   bool         getPOCSAGNetworkDebug() const;
 
   // The Display section
   bool         getDisplayEnabled() const;
   std::string  getDisplayAddress() const;
-  unsigned int getDisplayPort() const;
+  unsigned short getDisplayPort() const;
 
 private:
   std::string  m_file;

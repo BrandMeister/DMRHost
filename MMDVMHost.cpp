@@ -178,16 +178,16 @@ int CMMDVMHost::run()
 
 	if (m_conf.getTransparentEnabled()) {
 		std::string remoteAddress = m_conf.getTransparentRemoteAddress();
-		unsigned int remotePort   = m_conf.getTransparentRemotePort();
+		unsigned short remotePort   = m_conf.getTransparentRemotePort();
 		std::string localAddress  = m_conf.getTransparentLocalAddress();
-		unsigned int localPort    = m_conf.getTransparentLocalPort();
+		unsigned short localPort    = m_conf.getTransparentLocalPort();
 		unsigned int sendFrameType = m_conf.getTransparentSendFrameType();
 
 		LogInfo("Transparent Data");
 		LogInfo("    Remote Address: %s", remoteAddress.c_str());
-		LogInfo("    Remote Port: %u", remotePort);
+		LogInfo("    Remote Port: %hu", remotePort);
 		LogInfo("    Local Address: %s", localAddress.c_str());
-		LogInfo("    Local Port: %u", localPort);
+		LogInfo("    Local Port: %hu", localPort);
 		LogInfo("    Send Frame Type: %u", sendFrameType);
 
 		if (CUDPSocket::lookup(remoteAddress, remotePort, transparentAddress, transparentAddrLen) != 0) {
@@ -664,7 +664,7 @@ bool CMMDVMHost::createModem()
 bool CMMDVMHost::createDMRNetwork()
 {
 	std::string address  = m_conf.getDMRNetworkAddress();
-	unsigned int port    = m_conf.getDMRNetworkPort();
+	unsigned short port  = m_conf.getDMRNetworkPort();
 	unsigned int id      = m_conf.getDMRId();
 	std::string password = m_conf.getDMRNetworkPassword();
 	bool debug           = m_conf.getDMRNetworkDebug();
@@ -675,7 +675,7 @@ bool CMMDVMHost::createDMRNetwork()
 
 	LogInfo("DMR Network Parameters");
 	LogInfo("    Address: %s", address.c_str());
-	LogInfo("    Port: %u", port);
+	LogInfo("    Port: %hu", port);
 	LogInfo("    Slot 1: %s", slot1 ? "enabled" : "disabled");
 	LogInfo("    Slot 2: %s", slot2 ? "enabled" : "disabled");
 	LogInfo("    Mode Hang: %us", m_dmrNetModeHang);
@@ -728,17 +728,17 @@ bool CMMDVMHost::createDMRNetwork()
 bool CMMDVMHost::createPOCSAGNetwork()
 {
 	std::string gatewayAddress = m_conf.getPOCSAGGatewayAddress();
-	unsigned int gatewayPort   = m_conf.getPOCSAGGatewayPort();
+	unsigned short gatewayPort = m_conf.getPOCSAGGatewayPort();
 	std::string localAddress   = m_conf.getPOCSAGLocalAddress();
-	unsigned int localPort     = m_conf.getPOCSAGLocalPort();
+	unsigned short localPort   = m_conf.getPOCSAGLocalPort();
 	m_pocsagNetModeHang        = m_conf.getPOCSAGNetworkModeHang();
 	bool debug                 = m_conf.getPOCSAGNetworkDebug();
 
 	LogInfo("POCSAG Network Parameters");
 	LogInfo("    Gateway Address: %s", gatewayAddress.c_str());
-	LogInfo("    Gateway Port: %u", gatewayPort);
+	LogInfo("    Gateway Port: %hu", gatewayPort);
 	LogInfo("    Local Address: %s", localAddress.c_str());
-	LogInfo("    Local Port: %u", localPort);
+	LogInfo("    Local Port: %hu", localPort);
 	LogInfo("    Mode Hang: %us", m_pocsagNetModeHang);
 
 	m_pocsagNetwork = new CPOCSAGNetwork(localAddress, localPort, gatewayAddress, gatewayPort, debug);

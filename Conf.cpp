@@ -317,11 +317,11 @@ bool CConf::read()
 		else if (::strcmp(key, "RemoteAddress") == 0)
 			m_transparentRemoteAddress = value;
 		else if (::strcmp(key, "RemotePort") == 0)
-			m_transparentRemotePort = (unsigned int)::atoi(value);
+			m_transparentRemotePort = (unsigned short)::atoi(value);
 		else if (::strcmp(key, "LocalAddress") == 0)
 			m_transparentLocalAddress = value;
 		else if (::strcmp(key, "LocalPort") == 0)
-			m_transparentLocalPort = (unsigned int)::atoi(value);
+			m_transparentLocalPort = (unsigned short)::atoi(value);
 		else if (::strcmp(key, "SendFrameType") == 0)
 			m_transparentSendFrameType = (unsigned int)::atoi(value);
 	} else if (section == SECTION_DMR) {
@@ -416,7 +416,7 @@ bool CConf::read()
 		else if (::strcmp(key, "Address") == 0)
 			m_dmrNetworkAddress = value;
 		else if (::strcmp(key, "Port") == 0)
-			m_dmrNetworkPort = (unsigned int)::atoi(value);
+			m_dmrNetworkPort = (unsigned short)::atoi(value);
 		else if (::strcmp(key, "Password") == 0)
 			m_dmrNetworkPassword = value;
 		else if (::strcmp(key, "Options") == 0)
@@ -435,11 +435,11 @@ bool CConf::read()
 		else if (::strcmp(key, "LocalAddress") == 0)
 			m_pocsagLocalAddress = value;
 		else if (::strcmp(key, "LocalPort") == 0)
-			m_pocsagLocalPort = (unsigned int)::atoi(value);
+			m_pocsagLocalPort = (unsigned short)::atoi(value);
 		else if (::strcmp(key, "GatewayAddress") == 0)
 			m_pocsagGatewayAddress = value;
 		else if (::strcmp(key, "GatewayPort") == 0)
-			m_pocsagGatewayPort = (unsigned int)::atoi(value);
+			m_pocsagGatewayPort = (unsigned short)::atoi(value);
 		else if (::strcmp(key, "ModeHang") == 0)
 			m_pocsagNetworkModeHang = (unsigned int)::atoi(value);
 		else if (::strcmp(key, "Debug") == 0)
@@ -450,7 +450,7 @@ bool CConf::read()
 		else if (::strcmp(key, "Address") == 0)
 			m_displayAddress = value;
 		else if (::strcmp(key, "Port") == 0)
-			m_displayPort = (unsigned int)::atoi(value);
+			m_displayPort = (unsigned short)::atoi(value);
 	}
   }
 
@@ -679,7 +679,7 @@ std::string CConf::getTransparentRemoteAddress() const
 	return m_transparentRemoteAddress;
 }
 
-unsigned int CConf::getTransparentRemotePort() const
+unsigned short CConf::getTransparentRemotePort() const
 {
 	return m_transparentRemotePort;
 }
@@ -689,7 +689,7 @@ std::string CConf::getTransparentLocalAddress() const
 	return m_transparentLocalAddress;
 }
 
-unsigned int CConf::getTransparentLocalPort() const
+unsigned short CConf::getTransparentLocalPort() const
 {
 	return m_transparentLocalPort;
 }
@@ -804,7 +804,7 @@ std::string CConf::getDMRNetworkAddress() const
 	return m_dmrNetworkAddress;
 }
 
-unsigned int CConf::getDMRNetworkPort() const
+unsigned short CConf::getDMRNetworkPort() const
 {
 	return m_dmrNetworkPort;
 }
@@ -849,7 +849,7 @@ std::string CConf::getPOCSAGGatewayAddress() const
 	return m_pocsagGatewayAddress;
 }
 
-unsigned int CConf::getPOCSAGGatewayPort() const
+unsigned short CConf::getPOCSAGGatewayPort() const
 {
 	return m_pocsagGatewayPort;
 }
@@ -859,7 +859,7 @@ std::string CConf::getPOCSAGLocalAddress() const
 	return m_pocsagLocalAddress;
 }
 
-unsigned int CConf::getPOCSAGLocalPort() const
+unsigned short CConf::getPOCSAGLocalPort() const
 {
 	return m_pocsagLocalPort;
 }
@@ -884,7 +884,7 @@ std::string CConf::getDisplayAddress() const
        return m_displayAddress;
 }
 
-unsigned int CConf::getDisplayPort() const
+unsigned short CConf::getDisplayPort() const
 {
        return m_displayPort;
 }
