@@ -24,6 +24,7 @@
 #include <sys/socket.h>
 #include <poll.h>
 #include <unistd.h>
+#include <netinet/in.h> // freebsd
 #include <arpa/inet.h>
 #include <errno.h>
 
