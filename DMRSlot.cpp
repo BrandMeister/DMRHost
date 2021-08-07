@@ -219,12 +219,14 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 			if (!CDMRAccessControl::validateSrcId(srcId)) {
 				LogMessage("DMR Slot %u, RF user %u rejected", m_slotNo, srcId);
 				delete lc;
+				m_rfState = RS_RF_LISTENING;
 				return false;
 			}
 
 			if (!CDMRAccessControl::validateTGId(m_slotNo, flco == FLCO_GROUP, dstId)) {
 				LogMessage("DMR Slot %u, RF user %u rejected for using TG %u", m_slotNo, srcId, dstId);
 				delete lc;
+				m_rfState = RS_RF_LISTENING;
 				return false;
 			}
 
@@ -378,11 +380,13 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 
 			if (!CDMRAccessControl::validateSrcId(srcId)) {
 				LogMessage("DMR Slot %u, RF user %u rejected", m_slotNo, srcId);
+				m_rfState = RS_RF_LISTENING;
 				return false;
 			}
 
 			if (!CDMRAccessControl::validateTGId(m_slotNo, gi, dstId)) {
 				LogMessage("DMR Slot %u, RF user %u rejected for using TG %u", m_slotNo, srcId, dstId);
+				m_rfState = RS_RF_LISTENING;
 				return false;
 			}
 
@@ -449,11 +453,13 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 			if (srcId != 0U || dstId != 0U) {
 				if (!CDMRAccessControl::validateSrcId(srcId)) {
 					LogMessage("DMR Slot %u, RF user %u rejected", m_slotNo, srcId);
+					m_rfState = RS_RF_LISTENING;
 					return false;
 				}
 
 				if (!CDMRAccessControl::validateTGId(m_slotNo, gi, dstId)) {
 					LogMessage("DMR Slot %u, RF user %u rejected for using TG %u", m_slotNo, srcId, dstId);
+					m_rfState = RS_RF_LISTENING;
 					return false;
 				}
 			}
@@ -788,12 +794,14 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 				if (!CDMRAccessControl::validateSrcId(srcId)) {
 					LogMessage("DMR Slot %u, RF user %u rejected", m_slotNo, srcId);
 					delete lc;
+					m_rfState = RS_RF_LISTENING;
 					return false;
 				}
 
 				if (!CDMRAccessControl::validateTGId(m_slotNo, flco == FLCO_GROUP, dstId)) {
 					LogMessage("DMR Slot %u, RF user %u rejected for using TG %u", m_slotNo, srcId, dstId);
 					delete lc;
+					m_rfState = RS_RF_LISTENING;
 					return false;
 				}
 
