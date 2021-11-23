@@ -833,7 +833,7 @@ bool CModem::setConfig1()
 
 	buffer[0U] = MMDVM_FRAME_START;
 
-	buffer[1U] = 24U;
+	buffer[1U] = 26U;
 
 	buffer[2U] = MMDVM_SET_CONFIG;
 
@@ -869,17 +869,31 @@ bool CModem::setConfig1()
 
 	buffer[11U] = 128U;           // Was OscOffset
 
+	buffer[12U] = 0x00U;
+
 	buffer[13U] = (unsigned char)(m_dmrTXLevel * 2.55F + 0.5F);
+
+	buffer[14U] = 0x00U;
+	buffer[15U] = 0x00U;
 
 	buffer[16U] = (unsigned char)(m_txDCOffset + 128);
 	buffer[17U] = (unsigned char)(m_rxDCOffset + 128);
 
+	buffer[18U] = 0x00U;
+	buffer[19U] = 0x00U;
+
 	buffer[20U] = (unsigned char)(m_pocsagTXLevel * 2.55F + 0.5F);
 
-	// CUtils::dump(1U, "Written", buffer, 24U);
+	buffer[21U] = 0x00U;
+	buffer[22U] = 0x00U;
+	buffer[23U] = 0x00U;
+	buffer[24U] = 0x00U;
+	buffer[25U] = 0x00U;
 
-	int ret = m_serial->write(buffer, 24U);
-	if (ret != 24)
+	// CUtils::dump(1U, "Written", buffer, 26U);
+
+	int ret = m_serial->write(buffer, 26U);
+	if (ret != 26)
 		return false;
 
 	unsigned int count = 0U;
