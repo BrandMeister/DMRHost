@@ -45,8 +45,8 @@ public:
 
 	virtual bool open();
 
-	bool hasDMR() const;
-	bool hasPOCSAG() const;
+	virtual bool hasDMR() const;
+	virtual bool hasPOCSAG() const;
 
 	virtual unsigned int readDMRData1(unsigned char* data);
 	virtual unsigned int readDMRData2(unsigned char* data);

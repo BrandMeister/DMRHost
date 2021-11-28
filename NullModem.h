@@ -38,6 +38,9 @@ public:
 
 	virtual bool open() override;
 
+	virtual bool hasDMR() const override {return true;};
+	virtual bool hasPOCSAG() const override {return true;};
+
 	virtual unsigned int readDMRData1(unsigned char* data) override {return 0;};
 	virtual unsigned int readDMRData2(unsigned char* data) override {return 0;};
 	virtual unsigned int readTransparentData(unsigned char* data) override {return 0;};
