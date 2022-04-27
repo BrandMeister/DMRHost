@@ -49,11 +49,7 @@ bool CSerialController::open()
 {
 	assert(m_fd == -1);
 
-#if defined(__APPLE__)
-	m_fd = ::open(m_device.c_str(), O_RDWR | O_NOCTTY | O_NONBLOCK); /*open in block mode under OSX*/
-#else
 	m_fd = ::open(m_device.c_str(), O_RDWR | O_NOCTTY | O_NDELAY, 0);
-#endif
 	if (m_fd < 0) {
 		LogError("Cannot open device - %s", m_device.c_str());
 		return false;
@@ -75,13 +71,8 @@ bool CSerialController::open()
 		termios.c_cflag |=  (CS8 | CLOCAL | CREAD);
 		termios.c_lflag &= ~(ISIG | ICANON | IEXTEN);
 		termios.c_lflag &= ~(ECHO | ECHOE | ECHOK | ECHONL);
-#if defined(__APPLE__)
-		termios.c_cc[VMIN] = 1;
-		termios.c_cc[VTIME] = 1;
-#else
 		termios.c_cc[VMIN]  = 0;
 		termios.c_cc[VTIME] = 10;
-#endif
 
 		switch (m_speed) {
 			case 1200U:
@@ -144,28 +135,10 @@ bool CSerialController::open()
 				return false;
 			}
 		}
-
-#if defined(__APPLE__)
-		setNonblock(false);
-#endif
 	}
 
 	return true;
 }
-
-#if defined(__APPLE__)
-int CSerialController::setNonblock(bool nonblock)
-{
-	int flag = ::fcntl(m_fd, F_GETFD, 0);
-
-	if (nonblock)
-		flag |= O_NONBLOCK;
-	else
-		flag &= ~O_NONBLOCK;
-
-	return ::fcntl(m_fd, F_SETFL, flag);
-}
-#endif
 
 int CSerialController::read(unsigned char* buffer, unsigned int length)
 {
@@ -215,26 +188,6 @@ int CSerialController::read(unsigned char* buffer, unsigned int length)
 	return length;
 }
 
-bool CSerialController::canWrite(){
-#if defined(__APPLE__)
-	fd_set wset;
-	FD_ZERO(&wset);
-	FD_SET(m_fd, &wset);
-
-	struct timeval timeo;
-	timeo.tv_sec  = 0;
-	timeo.tv_usec = 0;
-
-	int rc = ::select(m_fd + 1, NULL, &wset, NULL, &timeo);
-	if (rc > 0 && FD_ISSET(m_fd, &wset))
-		return true;
-
-	return false;
-#else
-	return true;
-#endif
-}
-
 int CSerialController::write(const unsigned char* buffer, unsigned int length)
 {
 	assert(buffer != NULL);
@@ -246,8 +199,7 @@ int CSerialController::write(const unsigned char* buffer, unsigned int length)
 	unsigned int ptr = 0U;
 	while (ptr < length) {
 		ssize_t n = 0U;
-		if (canWrite())
-			n = ::write(m_fd, buffer + ptr, length - ptr);
+		n = ::write(m_fd, buffer + ptr, length - ptr);
 		if (n < 0) {
 			if (errno != EAGAIN) {
 				LogError("Error returned from write(), errno=%d", errno);

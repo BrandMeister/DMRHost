@@ -36,14 +36,9 @@ public:
 
 	virtual void close() override;
 
-#if defined(__APPLE__)
-	virtual int setNonblock(bool nonblock);
-#endif
-
 protected:
 	std::string    m_device;
 	unsigned int   m_speed;
 	bool           m_assertRTS;
 	int            m_fd;
-	bool canWrite();
 };

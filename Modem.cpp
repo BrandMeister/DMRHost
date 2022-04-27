@@ -719,10 +719,6 @@ bool CModem::readVersion()
 		if (ret != 3)
 			return false;
 
-#if defined(__APPLE__)
-		m_serial->setNonblock(true);
-#endif
-
 		for (unsigned int count = 0U; count < MAX_RESPONSES; count++) {
 			usleep(10 * 1000);
 			RESP_TYPE_MMDVM resp = getResponse();
