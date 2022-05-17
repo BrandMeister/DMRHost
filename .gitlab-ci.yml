@@ -1,6 +1,3 @@
-default:
-  image: dmrhost-amd64-runner
-
 stages:
   - binary
   - deploy
