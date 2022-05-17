@@ -32,7 +32,7 @@ package:armhf:
   variables:
     ARCH: armhf
     CROSS: arm-linux-musleabihf
-    CXXFLAGS: -march=armv6zk -mcpu=arm1176jzf-s -static
+    CXXFLAGS: -mcpu=arm1176jzf-s -static
 
 package:arm64:
   stage: binary
