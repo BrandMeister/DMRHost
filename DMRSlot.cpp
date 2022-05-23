@@ -230,13 +230,12 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 				return false;
 			}
 
-			lc->setOVCM(m_ovcm == DMR_OVCM_TX_ON || m_ovcm == DMR_OVCM_ON);
-			m_rfLC = lc;
+			if (m_ovcm == DMR_OVCM_TX_ON || m_ovcm == DMR_OVCM_ON)
+				lc->setOVCM(true);
+			else if (m_ovcm == DMR_OVCM_FORCE_OFF)
+				lc->setOVCM(false);
 
-			if (m_ovcm == DMR_OVCM_FORCE_OFF) {
-				lc->clearOVCM();
-				m_rfLC = lc;
-			}
+			m_rfLC = lc;
 
 			// The standby LC data
 			m_rfEmbeddedLC.setLC(*m_rfLC);
@@ -441,10 +440,10 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 				return false;
 
 			// set the OVCM bit for the supported csbk
-			csbk.setOVCM(m_ovcm == DMR_OVCM_TX_ON || m_ovcm == DMR_OVCM_ON);
-
-			if (m_ovcm == DMR_OVCM_FORCE_OFF)
-				csbk.clearOVCM();
+			if (m_ovcm == DMR_OVCM_TX_ON || m_ovcm == DMR_OVCM_ON)
+				csbk.setOVCM(true);
+			else if (m_ovcm == DMR_OVCM_FORCE_OFF)
+				csbk.setOVCM(false);
 
 			bool gi = csbk.getGI();
 			unsigned int srcId = csbk.getSrcId();
@@ -808,13 +807,12 @@ bool CDMRSlot::writeModem(unsigned char *data, unsigned int len)
 					return false;
 				}
 
-				lc->setOVCM(m_ovcm == DMR_OVCM_TX_ON || m_ovcm == DMR_OVCM_ON);
-				m_rfLC = lc;
+				if (m_ovcm == DMR_OVCM_TX_ON || m_ovcm == DMR_OVCM_ON)
+					lc->setOVCM(true);
+				else if (m_ovcm == DMR_OVCM_FORCE_OFF)
+					lc->setOVCM(false);
 
-				if (m_ovcm == DMR_OVCM_FORCE_OFF) {
-					lc->clearOVCM();
-					m_rfLC = lc;
-				}
+				m_rfLC = lc;
 
 				// The standby LC data
 				m_rfEmbeddedLC.setLC(*m_rfLC);
@@ -1068,13 +1066,13 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 				dmrData.getSrcId(), dmrData.getFLCO() == FLCO_GROUP ? "TG" : "", dmrData.getDstId(),
 				srcId, flco == FLCO_GROUP ? "TG" : "", dstId);
 
-		lc->setOVCM(m_ovcm == DMR_OVCM_RX_ON || m_ovcm == DMR_OVCM_ON);
+		if (m_ovcm == DMR_OVCM_RX_ON || m_ovcm == DMR_OVCM_ON)
+			lc->setOVCM(true);
+		else if (m_ovcm == DMR_OVCM_FORCE_OFF)
+			lc->setOVCM(false);
+
 		m_netLC = lc;
 
-		if (m_ovcm == DMR_OVCM_FORCE_OFF) {
-			lc->clearOVCM();
-			m_netLC = lc;
-		}
 		// The standby LC data
 		m_netEmbeddedLC.setLC(*m_netLC);
 		m_netEmbeddedData[0U].setLC(*m_netLC);
@@ -1143,13 +1141,12 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 			unsigned int dstId = lc->getDstId();
 			unsigned int srcId = lc->getSrcId();
 
-			lc->setOVCM(m_ovcm == DMR_OVCM_RX_ON || m_ovcm == DMR_OVCM_ON);
-			m_netLC = lc;
+			if (m_ovcm == DMR_OVCM_RX_ON || m_ovcm == DMR_OVCM_ON)
+				lc->setOVCM(true);
+			else if (m_ovcm == DMR_OVCM_FORCE_OFF)
+				lc->setOVCM(false);
 
-			if (m_ovcm == DMR_OVCM_FORCE_OFF) {
-				lc->clearOVCM();
-				m_netLC = lc;
-			}
+			m_netLC = lc;
 
 			m_lastFrameValid = false;
 
@@ -1330,13 +1327,13 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 			unsigned int dstId = lc->getDstId();
 			unsigned int srcId = lc->getSrcId();
 
-			lc->setOVCM(m_ovcm == DMR_OVCM_RX_ON || m_ovcm == DMR_OVCM_ON);
+			if (m_ovcm == DMR_OVCM_RX_ON || m_ovcm == DMR_OVCM_ON)
+				lc->setOVCM(true);
+			else if (m_ovcm == DMR_OVCM_FORCE_OFF)
+				lc->setOVCM(false);
+
 			m_netLC = lc;
 
-			if (m_ovcm == DMR_OVCM_FORCE_OFF) {
-				lc->clearOVCM();
-				m_netLC = lc;
-			}
 			// The standby LC data
 			m_netEmbeddedLC.setLC(*m_netLC);
 			m_netEmbeddedData[0U].setLC(*m_netLC);
@@ -1595,10 +1592,10 @@ void CDMRSlot::writeNetwork(const CDMRData& dmrData)
 			return;
 
 		// set the OVCM bit for the supported csbk
-		csbk.setOVCM(m_ovcm == DMR_OVCM_RX_ON || m_ovcm == DMR_OVCM_ON);
-
-		if (m_ovcm == DMR_OVCM_FORCE_OFF)
-			csbk.clearOVCM();
+		if (m_ovcm == DMR_OVCM_RX_ON || m_ovcm == DMR_OVCM_ON)
+			csbk.setOVCM(true);
+		else if (m_ovcm == DMR_OVCM_FORCE_OFF)
+			csbk.setOVCM(false);
 
 		bool gi = csbk.getGI();
 		unsigned int srcId = csbk.getSrcId();
