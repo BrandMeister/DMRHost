@@ -40,7 +40,7 @@ protected:
 
 	virtual void writeDMRInt(unsigned int slotNo, const std::string& src, bool group, const std::string& dst, const char* type) override;
 	virtual void writeDMRRSSIInt(unsigned int slotNo, unsigned char rssi) override;
-	virtual void writeDMRTAInt(unsigned int slotNo, unsigned char* talkerAlias, const char* type) override;
+	virtual void writeDMRTAInt(unsigned int slotNo, const unsigned char* talkerAlias, const char* type) override;
 	virtual void writeDMRBERInt(unsigned int slotNo, float ber) override;
 	virtual void clearDMRInt(unsigned int slotNo) override;
 

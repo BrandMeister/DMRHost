@@ -119,7 +119,7 @@ void CNetDisplay::writeDMRRSSIInt(unsigned int slotNo, unsigned char rssi)
 	write(data, 3);
 }
 
-void CNetDisplay::writeDMRTAInt(unsigned int slotNo, unsigned char* talkerAlias, const char* type)
+void CNetDisplay::writeDMRTAInt(unsigned int slotNo, const unsigned char* talkerAlias, const char* type)
 {
 	unsigned char data[100U];
 	data[0]  = 0x06;
