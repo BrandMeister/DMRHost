@@ -1,0 +1,88 @@
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build-amd64:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    runs-on: docker
+    steps:
+      - name: Build
+        uses: actions/checkout@v4
+      - uses: https://github.com/addnab/docker-run-action@v3
+        with:
+          image: bookworm-amd64-runner:latest
+          options: -v ${{ github.workspace }}:/work
+          run: |
+            chown 0:0 work
+            cd work
+            ./debian/make_debian_changelog.sh
+            PATH=$PATH:/opt/x86_64-linux-musl-cross/bin CXXFLAGS="-static" DEB_BUILD_OPTIONS=parallel=$(nproc) dpkg-buildpackage --post-clean --no-sign -aamd64 -t x86_64-linux-musl -i -I -b
+            mkdir build
+            mv ../*.deb build/
+      - name: Upload packages artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: packages
+          path: build
+
+  build-arm64:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    runs-on: docker
+    steps:
+      - name: Build
+        uses: actions/checkout@v4
+      - uses: https://github.com/addnab/docker-run-action@v3
+        with:
+          image: bookworm-amd64-runner:latest
+          options: -v ${{ github.workspace }}:/work
+          run: |
+            chown 0:0 work
+            cd work
+            ./debian/make_debian_changelog.sh
+            PATH=$PATH:/opt/aarch64-linux-musl-cross/bin CXXFLAGS="-static" DEB_BUILD_OPTIONS=parallel=$(nproc) dpkg-buildpackage --post-clean --no-sign -aarm64 -t aarch64-linux-musl -i -I -b
+            mkdir build
+            mv ../*.deb build/
+      - name: Upload packages artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: packages
+          path: build
+
+  build-armhf:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    runs-on: docker
+    steps:
+      - name: Build
+        uses: actions/checkout@v4
+      - uses: https://github.com/addnab/docker-run-action@v3
+        with:
+          image: bookworm-amd64-runner:latest
+          options: -v ${{ github.workspace }}:/work
+          run: |
+            chown 0:0 work
+            cd work
+            ./debian/make_debian_changelog.sh
+            PATH=$PATH:/opt/arm-linux-musleabihf-cross/bin CXXFLAGS="-static" DEB_BUILD_OPTIONS=parallel=$(nproc) dpkg-buildpackage --post-clean --no-sign -aarmhf -t arm-linux-musleabihf -i -I -b
+            mkdir build
+            mv ../*.deb build/
+      - name: Upload packages artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: packages
+          path: build
+
+  publish:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    needs: build-amd64
+    runs-on: dmrhost-deploy
+    steps:
+      - name: Download packages artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: packages
+          path: build
+      - name: Publish to repo
+        run: |
+          reprepro -b /var/www/repo/dmrhost --ignore=wrongdistribution includedeb stable build/dmrhost_*.deb
