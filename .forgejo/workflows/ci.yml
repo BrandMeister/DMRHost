@@ -75,7 +75,7 @@ jobs:
 
   publish:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
-    needs: build-amd64
+    needs: [build-amd64,build-arm64,build-armhf]
     runs-on: dmrhost-deploy
     steps:
       - name: Download packages artifacts
