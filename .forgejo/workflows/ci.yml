@@ -62,7 +62,7 @@ jobs:
           run: |
             cd work
             ./debian/make_debian_changelog.sh
-            PATH=$PATH:/opt/arm-linux-musleabihf-cross/bin CXXFLAGS="-static" DEB_BUILD_OPTIONS=parallel=$(nproc) dpkg-buildpackage --post-clean --no-sign -aarmhf -t arm-linux-musleabihf -i -I -b
+            PATH=$PATH:/opt/arm-linux-musleabihf-cross/bin CXXFLAGS="-mcpu=arm1176jzf-s -static" DEB_BUILD_OPTIONS=parallel=$(nproc) dpkg-buildpackage --post-clean --no-sign -aarmhf -t arm-linux-musleabihf -i -I -b
             mv ../*.deb .
       - name: Upload packages artifacts
         uses: actions/upload-artifact@v3
