@@ -79,7 +79,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: packages
-          path: "*.deb"
       - name: Publish to repo
         run: |
           reprepro -b /var/www/repo/dmrhost --ignore=wrongdistribution includedeb stable *.deb
