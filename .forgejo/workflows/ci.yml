@@ -2,10 +2,10 @@ on:
   push:
     branches:
       - dev
+  workflow_dispatch:
 
 jobs:
   build-amd64:
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
     runs-on: docker
     steps:
       - name: Checkout
@@ -27,7 +27,6 @@ jobs:
           path: "*.deb"
 
   build-arm64:
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
     runs-on: docker
     steps:
       - name: Checkout
@@ -49,7 +48,6 @@ jobs:
           path: "*.deb"
 
   build-armhf:
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
     runs-on: docker
     steps:
       - name: Checkout
@@ -71,7 +69,6 @@ jobs:
           path: "*.deb"
 
   publish:
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
     needs: [build-amd64,build-arm64,build-armhf]
     runs-on: dmrhost-deploy
     steps:
