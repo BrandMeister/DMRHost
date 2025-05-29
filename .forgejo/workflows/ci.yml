@@ -13,7 +13,7 @@ jobs:
       - name: Build
         uses: https://github.com/addnab/docker-run-action@v3
         with:
-          image: bookworm-amd64-runner:latest
+          image: trixie-amd64-musl-runner:latest
           options: -v ${{ github.workspace }}:/work
           run: |
             cd work
@@ -21,7 +21,7 @@ jobs:
             PATH=$PATH:/opt/x86_64-linux-musl-cross/bin CXXFLAGS="-static" DEB_BUILD_OPTIONS=parallel=$(nproc) dpkg-buildpackage --post-clean --no-sign -aamd64 -t x86_64-linux-musl -i -I -b
             mv ../*.deb .
       - name: Upload packages artifacts
-        uses: actions/upload-artifact@v3
+        uses: https://code.forgejo.org/forgejo/upload-artifact@v3
         with:
           name: packages
           path: "*.deb"
@@ -34,7 +34,7 @@ jobs:
       - name: Build
         uses: https://github.com/addnab/docker-run-action@v3
         with:
-          image: bookworm-amd64-runner:latest
+          image: trixie-amd64-musl-runner:latest
           options: -v ${{ github.workspace }}:/work
           run: |
             cd work
@@ -42,7 +42,7 @@ jobs:
             PATH=$PATH:/opt/aarch64-linux-musl-cross/bin CXXFLAGS="-static" DEB_BUILD_OPTIONS=parallel=$(nproc) dpkg-buildpackage --post-clean --no-sign -aarm64 -t aarch64-linux-musl -i -I -b
             mv ../*.deb .
       - name: Upload packages artifacts
-        uses: actions/upload-artifact@v3
+        uses: https://code.forgejo.org/forgejo/upload-artifact@v3
         with:
           name: packages
           path: "*.deb"
@@ -55,7 +55,7 @@ jobs:
       - name: Build
         uses: https://github.com/addnab/docker-run-action@v3
         with:
-          image: bookworm-amd64-runner:latest
+          image: trixie-amd64-musl-runner:latest
           options: -v ${{ github.workspace }}:/work
           run: |
             cd work
@@ -63,7 +63,7 @@ jobs:
             PATH=$PATH:/opt/arm-linux-musleabihf-cross/bin CXXFLAGS="-mcpu=arm1176jzf-s -static" DEB_BUILD_OPTIONS=parallel=$(nproc) dpkg-buildpackage --post-clean --no-sign -aarmhf -t arm-linux-musleabihf -i -I -b
             mv ../*.deb .
       - name: Upload packages artifacts
-        uses: actions/upload-artifact@v3
+        uses: https://code.forgejo.org/forgejo/upload-artifact@v3
         with:
           name: packages
           path: "*.deb"
