@@ -13,7 +13,7 @@ jobs:
       - name: Build
         uses: actions/docker-run-action@bm3
         with:
-          image: trixie-amd64-musl-runner:latest
+          image: trixie-amd64-runner:latest
           options: -v ${{ github.workspace }}:/work
           run: |
             cd work
@@ -34,7 +34,7 @@ jobs:
       - name: Build
         uses: actions/docker-run-action@bm3
         with:
-          image: trixie-amd64-musl-runner:latest
+          image: trixie-amd64-runner:latest
           options: -v ${{ github.workspace }}:/work
           run: |
             cd work
@@ -55,7 +55,7 @@ jobs:
       - name: Build
         uses: actions/docker-run-action@bm3
         with:
-          image: trixie-amd64-musl-runner:latest
+          image: trixie-amd64-runner:latest
           options: -v ${{ github.workspace }}:/work
           run: |
             cd work
